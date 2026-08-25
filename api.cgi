@@ -493,8 +493,12 @@ EOF
         LINK_SIGNAL=""
         LINK_FREQ=""
         LINK_BITRATE=""
+        LINK_TX_RATE=""
+        LINK_RX_RATE=""
         LINK_NOISE="-96 dBm"
         LINK_CCQ="98%"
+        LINK_SNR="0 dB"
+        LINK_QUALITY="0%"
 
         if [ "$WIFI_MODE" = "sta" ]; then
             LINK_RAW=$(iw dev "$WIFI_IFACE" link 2>/dev/null)
@@ -505,6 +509,31 @@ EOF
                 LINK_SIGNAL=$(echo "$LINK_RAW" | grep -i "signal:" | awk '{print $2}' | tr -d '\n\r')
                 LINK_FREQ=$(echo "$LINK_RAW" | grep -i "freq:" | awk '{print $2}' | tr -d '\n\r')
                 LINK_BITRATE=$(echo "$LINK_RAW" | grep -i "tx bitrate:" | sed 's/^[ \t]*tx bitrate: //' | tr -d '\n\r')
+                LINK_TX_RATE="$LINK_BITRATE"
+            fi
+
+            # Extract hardware station stats (retries, failed, exact CCQ & rx/tx bitrate)
+            STA_RAW=$(iw dev "$WIFI_IFACE" station dump 2>/dev/null)
+            if [ -n "$STA_RAW" ]; then
+                STA_TX_PKTS=$(echo "$STA_RAW" | grep -i "tx packets:" | awk '{print $3}' | tr -cd '0-9')
+                STA_TX_RETRIES=$(echo "$STA_RAW" | grep -i "tx retries:" | awk '{print $3}' | tr -cd '0-9')
+                STA_TX_FAILED=$(echo "$STA_RAW" | grep -i "tx failed:" | awk '{print $3}' | tr -cd '0-9')
+                STA_RX_BITRATE=$(echo "$STA_RAW" | grep -i "rx bitrate:" | sed 's/^[ \t]*rx bitrate: //' | tr -d '\n\r')
+                STA_TX_BITRATE=$(echo "$STA_RAW" | grep -i "tx bitrate:" | sed 's/^[ \t]*tx bitrate: //' | tr -d '\n\r')
+                
+                [ -n "$STA_TX_BITRATE" ] && LINK_TX_RATE="$STA_TX_BITRATE"
+                [ -n "$STA_RX_BITRATE" ] && LINK_RX_RATE="$STA_RX_BITRATE"
+                [ -z "$LINK_RX_RATE" ] && LINK_RX_RATE="$LINK_TX_RATE"
+                
+                if [ -n "$STA_TX_PKTS" ] && [ "$STA_TX_PKTS" -gt 0 ] 2>/dev/null; then
+                    TOTAL_ATTEMPTS=$((STA_TX_PKTS + ${STA_TX_RETRIES:-0} + ${STA_TX_FAILED:-0}))
+                    if [ "$TOTAL_ATTEMPTS" -gt 0 ]; then
+                        CALC_CCQ=$((STA_TX_PKTS * 100 / TOTAL_ATTEMPTS))
+                        [ "$CALC_CCQ" -gt 100 ] && CALC_CCQ=100
+                        [ "$CALC_CCQ" -lt 15 ] && CALC_CCQ=15
+                        LINK_CCQ="${CALC_CCQ}%"
+                    fi
+                fi
             fi
 
             IWINFO_FULL=$(iwinfo "$WIFI_IFACE" info 2>/dev/null)
@@ -520,18 +549,31 @@ EOF
                 [ -z "$NOISE_NUM" ] && NOISE_NUM=96
                 [ -z "$SIG_NUM" ] && SIG_NUM=55
                 SNR=$((NOISE_NUM - SIG_NUM))
-                if [ "$SNR" -gt 0 ]; then
-                    CALC_CCQ=$((SNR * 100 / 40))
-                    [ "$CALC_CCQ" -gt 99 ] && CALC_CCQ=98
-                    [ "$CALC_CCQ" -lt 15 ] && CALC_CCQ=15
-                    LINK_CCQ="${CALC_CCQ}%"
-                fi
+                [ "$SNR" -lt 0 ] && SNR=0
+                LINK_SNR="${SNR} dB"
+
+                LQ=$((SNR * 100 / 50))
+                [ "$LQ" -gt 100 ] && LQ=100
+                [ "$LQ" -lt 0 ] && LQ=0
+                LINK_QUALITY="${LQ}%"
             else
                 LINK_CCQ="0%"
+                LINK_SNR="0 dB"
+                LINK_QUALITY="0%"
             fi
         fi
 
         WIFI_KEY=$(uci -q get wireless.$IFACE_SEC.key || echo "")
+        PRIMARY_SSID=$(uci -q get wireless.$IFACE_SEC.primary_ssid || uci -q get wireless.$IFACE_SEC.ssid || echo "")
+        BACKUP_SSID=$(uci -q get wireless.$IFACE_SEC.backup_ssid || echo "")
+        BACKUP_KEY=$(uci -q get wireless.$IFACE_SEC.backup_key || echo "")
+        AUTO_FAILOVER=$(uci -q get wireless.$IFACE_SEC.auto_failover || echo "0")
+        FAILOVER_ACTIVE=false
+        ACTIVE_TOWER="primary"
+        if [ -f "/tmp/delta_failover_active" ]; then
+            FAILOVER_ACTIVE=true
+            ACTIVE_TOWER="backup"
+        fi
 
         cat <<EOF
 {
@@ -576,8 +618,18 @@ EOF
     "link_signal": "$LINK_SIGNAL",
     "link_noise": "$LINK_NOISE",
     "link_ccq": "$LINK_CCQ",
+    "link_snr": "$LINK_SNR",
+    "link_quality": "$LINK_QUALITY",
     "link_freq": "$LINK_FREQ",
-    "link_bitrate": "$LINK_BITRATE"
+    "link_bitrate": "$LINK_BITRATE",
+    "link_tx_rate": "$LINK_TX_RATE",
+    "link_rx_rate": "$LINK_RX_RATE",
+    "primary_ssid": "$PRIMARY_SSID",
+    "backup_ssid": "$BACKUP_SSID",
+    "backup_key": "$BACKUP_KEY",
+    "auto_failover": $AUTO_FAILOVER,
+    "failover_active": $FAILOVER_ACTIVE,
+    "active_tower": "$ACTIVE_TOWER"
 }
 EOF
         ;;
@@ -704,6 +756,11 @@ EOF
         HTMODE=$(get_query_val "htmode")
         COUNTRY=$(get_query_val "country")
         WIRELESS_PROTO=$(get_query_val "wireless_protocol")
+        BACKUP_SSID=$(get_query_val "backup_ssid")
+        BACKUP_SSID=$(echo "$BACKUP_SSID" | sed -e 's/^"//' -e 's/"$//' -e "s/^'//" -e "s/'$//" -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')
+        BACKUP_KEY=$(get_query_val "backup_key")
+        AUTO_FAILOVER=$(get_query_val "auto_failover")
+        [ -z "$AUTO_FAILOVER" ] && AUTO_FAILOVER="0"
         
         [ -z "$COUNTRY" ] && COUNTRY="US"
         [ -z "$HTMODE" ] && HTMODE="HT40"
@@ -731,7 +788,13 @@ EOF
             uci set wireless.$sec.disabled=0 2>/dev/null
             uci set wireless.$sec.device="radio0" 2>/dev/null
             [ -n "$SSID" ] && uci set wireless.$sec.ssid="$SSID" 2>/dev/null
+            [ -n "$SSID" ] && uci set wireless.$sec.primary_ssid="$SSID" 2>/dev/null
+            [ -n "$KEY" ] && uci set wireless.$sec.primary_key="$KEY" 2>/dev/null
+            uci set wireless.$sec.backup_ssid="$BACKUP_SSID" 2>/dev/null
+            uci set wireless.$sec.backup_key="$BACKUP_KEY" 2>/dev/null
+            uci set wireless.$sec.auto_failover="$AUTO_FAILOVER" 2>/dev/null
             uci del wireless.$sec.bssid 2>/dev/null
+            rm -f /tmp/delta_failover_active 2>/dev/null
 
             if [ "$MODE" = "sta" ]; then
                 uci set wireless.$sec.mode="sta" 2>/dev/null

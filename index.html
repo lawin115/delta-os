@@ -1462,7 +1462,7 @@
                         <span id="wifi-link-badge" class="badge badge-warning">STANDBY</span>
                     </div>
 
-                    <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));gap:10px;margin-top:10px;">
+                    <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(180px, 1fr));gap:10px;margin-top:10px;">
                         <div style="background:linear-gradient(135deg, #F8FAFC, #EFF6FF);padding:12px;border-radius:10px;border:1px solid #E2E8F0;text-align:center;">
                             <div class="radar-box scanning" id="radar-spectrum-box">
                                 <div class="radar-sweep-arm" id="radar-sweep-arm"></div>
@@ -1488,6 +1488,35 @@
                                 <div id="wifi-link-signal-bar" class="progress-bar-fill" style="width:0%;"></div>
                             </div>
                             <div style="font-size:0.68rem;color:var(--text-muted);margin-top:5px;" id="wifi-link-bitrate-val">5GHz High Speed</div>
+                        </div>
+                    </div>
+
+                    <!-- ADVANCED LINK QUALITY & HARDWARE CCQ METRICS GRID -->
+                    <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(130px, 1fr));gap:8px;margin-top:10px;">
+                        <div style="background:#FFFFFF;border:1px solid #E2E8F0;border-radius:8px;padding:10px;text-align:center;">
+                            <div style="font-size:0.65rem;color:var(--text-muted);font-weight:800;text-transform:uppercase;">CCQ Quality</div>
+                            <div id="wifi-link-ccq-val" style="font-size:1.15rem;font-weight:900;color:#059669;margin-top:2px;">--%</div>
+                            <div style="font-size:0.62rem;color:#059669;font-weight:700;" id="wifi-link-ccq-status">Optimal Link</div>
+                        </div>
+                        <div style="background:#FFFFFF;border:1px solid #E2E8F0;border-radius:8px;padding:10px;text-align:center;">
+                            <div style="font-size:0.65rem;color:var(--text-muted);font-weight:800;text-transform:uppercase;">SNR / Noise</div>
+                            <div id="wifi-link-snr-val" style="font-size:1.15rem;font-weight:900;color:#2563EB;margin-top:2px;">-- dB</div>
+                            <div style="font-size:0.62rem;color:var(--text-muted);" id="wifi-link-noise-val">Noise: -96 dBm</div>
+                        </div>
+                        <div style="background:#FFFFFF;border:1px solid #E2E8F0;border-radius:8px;padding:10px;text-align:center;">
+                            <div style="font-size:0.65rem;color:var(--text-muted);font-weight:800;text-transform:uppercase;">TX Bitrate</div>
+                            <div id="wifi-link-txrate-val" style="font-size:1.05rem;font-weight:800;color:#0F172A;margin-top:2px;">-- Mbps</div>
+                            <div style="font-size:0.62rem;color:var(--text-muted);">Transmit Speed</div>
+                        </div>
+                        <div style="background:#FFFFFF;border:1px solid #E2E8F0;border-radius:8px;padding:10px;text-align:center;">
+                            <div style="font-size:0.65rem;color:var(--text-muted);font-weight:800;text-transform:uppercase;">RX Bitrate</div>
+                            <div id="wifi-link-rxrate-val" style="font-size:1.05rem;font-weight:800;color:#0F172A;margin-top:2px;">-- Mbps</div>
+                            <div style="font-size:0.62rem;color:var(--text-muted);">Receive Speed</div>
+                        </div>
+                        <div style="background:#FFFFFF;border:1px solid #E2E8F0;border-radius:8px;padding:10px;text-align:center;">
+                            <div style="font-size:0.65rem;color:var(--text-muted);font-weight:800;text-transform:uppercase;">Active Tower</div>
+                            <div id="wifi-active-tower-val" style="font-size:1.05rem;font-weight:900;color:#059669;margin-top:2px;">PRIMARY</div>
+                            <div style="font-size:0.62rem;color:var(--text-muted);" id="wifi-failover-badge">Failover: Standby</div>
                         </div>
                     </div>
 
@@ -1649,6 +1678,34 @@
                                 </select>
                             </div>
                         </div>
+
+                        <!-- MULTI-TOWER AUTO-FAILOVER CONFIGURATION -->
+                        <div style="background:#F8FAFC;border:1px solid #E2E8F0;border-radius:10px;padding:12px;margin-top:14px;">
+                            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;flex-wrap:wrap;gap:6px;">
+                                <div style="display:flex;align-items:center;gap:8px;">
+                                    <div style="width:8px;height:8px;border-radius:50%;background:#0284C7;"></div>
+                                    <strong style="font-size:0.85rem;color:#0F172A;">Multi-Tower Auto-Failover (Backup AP)</strong>
+                                </div>
+                                <label style="display:flex;align-items:center;gap:6px;font-size:0.75rem;cursor:pointer;font-weight:700;margin:0;">
+                                    <input type="checkbox" id="radio-auto-failover" style="cursor:pointer;width:15px;height:15px;">
+                                    Enable Auto-Failover
+                                </label>
+                            </div>
+                            <div style="font-size:0.72rem;color:var(--text-muted);margin-bottom:10px;">
+                                If connection to the Primary Tower drops for &gt;10 seconds, Delta OS automatically switches to this Backup Tower and reverts when Primary is healthy.
+                            </div>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label>Backup Tower SSID</label>
+                                    <input type="text" class="form-control" id="radio-backup-ssid" placeholder="Enter secondary AP SSID">
+                                </div>
+                                <div class="form-group">
+                                    <label>Backup Tower Password</label>
+                                    <input type="password" class="form-control" id="radio-backup-key" placeholder="Enter backup AP password (if any)">
+                                </div>
+                            </div>
+                        </div>
+
                         <div style="display:flex;align-items:center;gap:12px;margin-top:12px;flex-wrap:wrap;">
                             <button type="button" onclick="saveRadioSettings(event)" id="btn-save-radio" class="btn btn-primary" style="font-weight:700;">
                                 <svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:currentColor;">
@@ -3304,6 +3361,41 @@
                         document.getElementById('dash-wifi-status-badge').className = 'badge badge-success';
                         document.getElementById('dash-wifi-status-badge').innerText = 'CONNECTED';
                         document.getElementById('dash-wifi-ssid').innerText = `${data.link_ssid || data.wifi_ssid} (${data.link_signal || '-50'} dBm)`;
+
+                        // Update CCQ, SNR, Noise, TX/RX Bitrate & Active Tower
+                        const ccqInt = parseInt(data.link_ccq) || 98;
+                        const ccqElem = document.getElementById('wifi-link-ccq-val');
+                        const ccqStatus = document.getElementById('wifi-link-ccq-status');
+                        if (ccqElem) ccqElem.innerText = `${ccqInt}%`;
+                        if (ccqStatus) {
+                            if (ccqInt >= 90) { ccqStatus.innerText = 'Optimal Link'; ccqStatus.style.color = '#059669'; }
+                            else if (ccqInt >= 75) { ccqStatus.innerText = 'Good Quality'; ccqStatus.style.color = '#2563EB'; }
+                            else { ccqStatus.innerText = 'Interference / Retrying'; ccqStatus.style.color = '#DC2626'; }
+                        }
+
+                        const snrElem = document.getElementById('wifi-link-snr-val');
+                        const noiseElem = document.getElementById('wifi-link-noise-val');
+                        if (snrElem) snrElem.innerText = data.link_snr || `${Math.abs(parseInt(data.link_noise||-96) - parseInt(data.link_signal||-50))} dB`;
+                        if (noiseElem) noiseElem.innerText = `Noise: ${data.link_noise || '-96 dBm'}`;
+
+                        const txRateElem = document.getElementById('wifi-link-txrate-val');
+                        const rxRateElem = document.getElementById('wifi-link-rxrate-val');
+                        if (txRateElem) txRateElem.innerText = data.link_tx_rate || data.link_bitrate || '150.0 Mbps';
+                        if (rxRateElem) rxRateElem.innerText = data.link_rx_rate || data.link_bitrate || '150.0 Mbps';
+
+                        const towerElem = document.getElementById('wifi-active-tower-val');
+                        const failoverBadge = document.getElementById('wifi-failover-badge');
+                        if (towerElem) {
+                            if (data.failover_active) {
+                                towerElem.innerText = 'BACKUP AP';
+                                towerElem.style.color = '#D97706';
+                                if (failoverBadge) { failoverBadge.innerText = 'Failover Active'; failoverBadge.style.color = '#D97706'; }
+                            } else {
+                                towerElem.innerText = 'PRIMARY AP';
+                                towerElem.style.color = '#059669';
+                                if (failoverBadge) { failoverBadge.innerText = data.auto_failover ? 'Failover: Armed' : 'Failover: Standby'; failoverBadge.style.color = 'var(--text-muted)'; }
+                            }
+                        }
                     } else {
                         // Disconnected / Searching: Keep radar spinning actively
                         if (radarArm) radarArm.classList.remove('locked');
@@ -3325,6 +3417,17 @@
                         document.getElementById('dash-wifi-status-badge').className = 'badge badge-warning';
                         document.getElementById('dash-wifi-status-badge').innerText = 'SEARCHING';
                         document.getElementById('dash-wifi-ssid').innerText = 'Searching 5GHz frequencies...';
+
+                        const ccqElem = document.getElementById('wifi-link-ccq-val');
+                        if (ccqElem) ccqElem.innerText = '--%';
+                        const snrElem = document.getElementById('wifi-link-snr-val');
+                        if (snrElem) snrElem.innerText = '-- dB';
+                        const txRateElem = document.getElementById('wifi-link-txrate-val');
+                        if (txRateElem) txRateElem.innerText = '-- Mbps';
+                        const rxRateElem = document.getElementById('wifi-link-rxrate-val');
+                        if (rxRateElem) rxRateElem.innerText = '-- Mbps';
+                        const towerElem = document.getElementById('wifi-active-tower-val');
+                        if (towerElem) { towerElem.innerText = 'SEARCHING'; towerElem.style.color = '#0284C7'; }
                     }
 
                     // Populate Radio Configuration Form inputs if user is not currently typing
@@ -3333,9 +3436,12 @@
                     const rMode = document.getElementById('radio-mode');
                     const rHt = document.getElementById('radio-htmode');
                     const rCountry = document.getElementById('radio-country');
+                    const rBackupSsid = document.getElementById('radio-backup-ssid');
+                    const rBackupKey = document.getElementById('radio-backup-key');
+                    const rAutoFo = document.getElementById('radio-auto-failover');
 
                     if (rSsid && document.activeElement !== rSsid && !rSsid.value) {
-                        rSsid.value = data.wifi_ssid || '';
+                        rSsid.value = data.primary_ssid || data.wifi_ssid || '';
                     }
                     if (rKey && document.activeElement !== rKey && !rKey.value) {
                         rKey.value = data.wifi_key || '';
@@ -3349,6 +3455,15 @@
                     }
                     if (rCountry && document.activeElement !== rCountry && data.wifi_country) {
                         rCountry.value = data.wifi_country;
+                    }
+                    if (rBackupSsid && document.activeElement !== rBackupSsid && !rBackupSsid.value && data.backup_ssid) {
+                        rBackupSsid.value = data.backup_ssid;
+                    }
+                    if (rBackupKey && document.activeElement !== rBackupKey && !rBackupKey.value && data.backup_key) {
+                        rBackupKey.value = data.backup_key;
+                    }
+                    if (rAutoFo && document.activeElement !== rAutoFo && data.auto_failover !== undefined) {
+                        rAutoFo.checked = (data.auto_failover === 1 || data.auto_failover === '1' || data.auto_failover === true);
                     }
 
                     // Ethernet Status & Link Speed Negotiation
@@ -3463,6 +3578,9 @@
             const key = encodeURIComponent(document.getElementById('radio-key').value);
             const htmode = document.getElementById('radio-htmode').value;
             const country = document.getElementById('radio-country').value;
+            const backupSsid = encodeURIComponent(document.getElementById('radio-backup-ssid')?.value.trim() || '');
+            const backupKey = encodeURIComponent(document.getElementById('radio-backup-key')?.value || '');
+            const autoFo = document.getElementById('radio-auto-failover')?.checked ? '1' : '0';
             const btn = document.getElementById('btn-save-radio');
             const msg = document.getElementById('radio-save-msg');
 
@@ -3477,7 +3595,7 @@
             }
 
             try {
-                const res = await fetch(`${API_URL}?action=wifi_set&ssid=${ssid}&key=${key}&mode=${mode}&wireless_protocol=${protocol}&htmode=${htmode}&country=${country}&token=${authToken}`);
+                const res = await fetch(`${API_URL}?action=wifi_set&ssid=${ssid}&key=${key}&mode=${mode}&wireless_protocol=${protocol}&htmode=${htmode}&country=${country}&backup_ssid=${backupSsid}&backup_key=${backupKey}&auto_failover=${autoFo}&token=${authToken}`);
                 const data = await res.json();
                 if (msg) {
                     msg.style.color = '#059669';
