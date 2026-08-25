@@ -49,7 +49,7 @@
         body {
             font-family: var(--font-sans);
             background: linear-gradient(135deg, #F0F7FF 0%, #E0F2FE 40%, #F8FAFC 100%);
-            background-attachment: fixed;
+            
             color: var(--text-main);
             display: flex;
             height: 100vh;
@@ -252,8 +252,8 @@
             width: 100vw;
             height: 100vh;
             background: rgba(15, 23, 42, 0.3);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
+            
+            -webkit-
             z-index: 999;
             opacity: 0;
             pointer-events: none;
@@ -587,10 +587,13 @@
         /* CONTENT AREA */
         .content-area {
             padding: 18px 20px;
-            overflow-y: auto;
+            overflow-y: scroll;
             flex-grow: 1;
             padding-bottom: 40px;
             -webkit-overflow-scrolling: touch;
+            overscroll-behavior-y: contain;
+            transform: translateZ(0);
+            will-change: scroll-position;
         }
 
         .tab-pane {
@@ -648,7 +651,7 @@
 
         .btn-secondary {
             background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(10px);
+            
             color: #0284C7;
             border: 1px solid rgba(255, 255, 255, 0.9);
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
@@ -686,8 +689,7 @@
         /* FROSTED WATER GLASS CARDS & TABLES */
         .card {
             background: rgba(255, 255, 255, 0.72);
-            backdrop-filter: blur(20px) saturate(180%);
-            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            
             border: 1px solid rgba(255, 255, 255, 0.85);
             border-radius: 16px;
             padding: 18px;
@@ -724,7 +726,7 @@
             border-radius: 12px;
             border: 1px solid rgba(255, 255, 255, 0.8);
             background: rgba(255, 255, 255, 0.5);
-            backdrop-filter: blur(10px);
+            
         }
 
         table {
@@ -824,7 +826,7 @@
             font-family: var(--font-sans);
             color: #0F172A;
             background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(10px);
+            
             outline: none;
             transition: all 0.2s ease;
             box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.03);
@@ -846,8 +848,7 @@
 
         .stat-card {
             background: rgba(255, 255, 255, 0.75);
-            backdrop-filter: blur(20px) saturate(180%);
-            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            
             border: 1px solid rgba(255, 255, 255, 0.9);
             border-radius: 16px;
             padding: 16px 18px;
@@ -1440,22 +1441,22 @@
 
                         <!-- 4 High Precision Metrics -->
                         <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
-                            <div style="background:rgba(255,255,255,0.7);backdrop-filter:blur(10px);border:1px solid rgba(255, 255, 255, 0.9);border-radius:12px;padding:12px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,0.02);">
+                            <div style="background:rgba(255,255,255,0.7);border:1px solid rgba(255, 255, 255, 0.9);border-radius:12px;padding:12px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,0.02);">
                                 <div style="font-size:0.67rem;color:#64748B;text-transform:uppercase;font-weight:800;">CCQ Quality</div>
                                 <div id="align-ccq-val" style="font-size:1.3rem;font-weight:900;color:#0284C7;margin-top:2px;">--%</div>
                                 <div style="font-size:0.64rem;color:#64748B;">Packet Success</div>
                             </div>
-                            <div style="background:rgba(255,255,255,0.7);backdrop-filter:blur(10px);border:1px solid rgba(255, 255, 255, 0.9);border-radius:12px;padding:12px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,0.02);">
+                            <div style="background:rgba(255,255,255,0.7);border:1px solid rgba(255, 255, 255, 0.9);border-radius:12px;padding:12px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,0.02);">
                                 <div style="font-size:0.67rem;color:#64748B;text-transform:uppercase;font-weight:800;">Noise Floor</div>
                                 <div id="align-noise-val" style="font-size:1.3rem;font-weight:900;color:#D97706;margin-top:2px;">-- dBm</div>
                                 <div style="font-size:0.64rem;color:#64748B;">RF Spectrum</div>
                             </div>
-                            <div style="background:rgba(255,255,255,0.7);backdrop-filter:blur(10px);border:1px solid rgba(255, 255, 255, 0.9);border-radius:12px;padding:12px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,0.02);">
+                            <div style="background:rgba(255,255,255,0.7);border:1px solid rgba(255, 255, 255, 0.9);border-radius:12px;padding:12px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,0.02);">
                                 <div style="font-size:0.67rem;color:#64748B;text-transform:uppercase;font-weight:800;">SNR Ratio</div>
                                 <div id="align-snr-val" style="font-size:1.3rem;font-weight:900;color:#7C3AED;margin-top:2px;">-- dB</div>
                                 <div style="font-size:0.64rem;color:#64748B;">Signal / Noise</div>
                             </div>
-                            <div style="background:rgba(255,255,255,0.7);backdrop-filter:blur(10px);border:1px solid rgba(255, 255, 255, 0.9);border-radius:12px;padding:12px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,0.02);">
+                            <div style="background:rgba(255,255,255,0.7);border:1px solid rgba(255, 255, 255, 0.9);border-radius:12px;padding:12px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,0.02);">
                                 <div style="font-size:0.67rem;color:#64748B;text-transform:uppercase;font-weight:800;">Frequency</div>
                                 <div id="align-freq-val" style="font-size:1.3rem;font-weight:900;color:#059669;margin-top:2px;">-- MHz</div>
                                 <div style="font-size:0.64rem;color:#64748B;">Operating Band</div>
@@ -1478,7 +1479,7 @@
                     </div>
 
                     <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(180px, 1fr));gap:10px;margin-top:10px;">
-                        <div style="background:rgba(255,255,255,0.65);backdrop-filter:blur(12px);padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,0.85);box-shadow:0 2px 8px rgba(2,132,199,0.04);text-align:center;">
+                        <div style="background:rgba(255,255,255,0.65);padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,0.85);box-shadow:0 2px 8px rgba(2,132,199,0.04);text-align:center;">
                             <div class="radar-box scanning" id="radar-spectrum-box">
                                 <div class="radar-sweep-arm" id="radar-sweep-arm"></div>
                                 <svg style="width:22px;height:22px;fill:#FFFFFF;z-index:2;position:relative;" viewBox="0 0 24 24">
@@ -1488,13 +1489,13 @@
                             <div id="radar-spectrum-lbl" style="font-size:0.7rem;font-weight:700;color:#0284C7;margin-top:6px;">5GHz Spectrum: Scanning...</div>
                         </div>
 
-                        <div style="background:rgba(255,255,255,0.65);backdrop-filter:blur(12px);padding:12px 14px;border-radius:10px;border:1px solid rgba(255,255,255,0.85);box-shadow:0 2px 8px rgba(2,132,199,0.04);">
+                        <div style="background:rgba(255,255,255,0.65);padding:12px 14px;border-radius:10px;border:1px solid rgba(255,255,255,0.85);box-shadow:0 2px 8px rgba(2,132,199,0.04);">
                             <div style="font-size:0.68rem;color:var(--text-muted);text-transform:uppercase;font-weight:700;">Target SSID</div>
                             <div id="wifi-link-ssid-val" style="font-size:1.05rem;font-weight:800;color:#F8FAFC;margin-top:2px;">Not Connected</div>
                             <div style="font-size:0.68rem;color:var(--text-muted);margin-top:3px;" id="wifi-link-bssid-val">BSSID: --:--:--:--:--:--</div>
                         </div>
 
-                        <div style="background:rgba(255,255,255,0.65);backdrop-filter:blur(12px);padding:12px 14px;border-radius:10px;border:1px solid rgba(255,255,255,0.85);box-shadow:0 2px 8px rgba(2,132,199,0.04);">
+                        <div style="background:rgba(255,255,255,0.65);padding:12px 14px;border-radius:10px;border:1px solid rgba(255,255,255,0.85);box-shadow:0 2px 8px rgba(2,132,199,0.04);">
                             <div style="display:flex;justify-content:space-between;align-items:center;">
                                 <div style="font-size:0.68rem;color:var(--text-muted);text-transform:uppercase;font-weight:700;">Signal Level</div>
                                 <div id="wifi-link-signal-val" style="font-size:1rem;font-weight:800;color:#059669;">-- dBm</div>
@@ -1508,27 +1509,27 @@
 
                     <!-- ADVANCED LINK QUALITY & HARDWARE CCQ METRICS GRID -->
                     <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(130px, 1fr));gap:8px;margin-top:10px;">
-                        <div style="background:rgba(255,255,255,0.65);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.85);box-shadow:0 2px 8px rgba(2,132,199,0.04);border-radius:8px;padding:10px;text-align:center;">
+                        <div style="background:rgba(255,255,255,0.65);border:1px solid rgba(255,255,255,0.85);box-shadow:0 2px 8px rgba(2,132,199,0.04);border-radius:8px;padding:10px;text-align:center;">
                             <div style="font-size:0.65rem;color:var(--text-muted);font-weight:800;text-transform:uppercase;">CCQ Quality</div>
                             <div id="wifi-link-ccq-val" style="font-size:1.15rem;font-weight:900;color:#059669;margin-top:2px;">--%</div>
                             <div style="font-size:0.62rem;color:#059669;font-weight:700;" id="wifi-link-ccq-status">Optimal Link</div>
                         </div>
-                        <div style="background:rgba(255,255,255,0.65);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.85);box-shadow:0 2px 8px rgba(2,132,199,0.04);border-radius:8px;padding:10px;text-align:center;">
+                        <div style="background:rgba(255,255,255,0.65);border:1px solid rgba(255,255,255,0.85);box-shadow:0 2px 8px rgba(2,132,199,0.04);border-radius:8px;padding:10px;text-align:center;">
                             <div style="font-size:0.65rem;color:var(--text-muted);font-weight:800;text-transform:uppercase;">SNR / Noise</div>
                             <div id="wifi-link-snr-val" style="font-size:1.15rem;font-weight:900;color:#2563EB;margin-top:2px;">-- dB</div>
                             <div style="font-size:0.62rem;color:var(--text-muted);" id="wifi-link-noise-val">Noise: -96 dBm</div>
                         </div>
-                        <div style="background:rgba(255,255,255,0.65);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.85);box-shadow:0 2px 8px rgba(2,132,199,0.04);border-radius:8px;padding:10px;text-align:center;">
+                        <div style="background:rgba(255,255,255,0.65);border:1px solid rgba(255,255,255,0.85);box-shadow:0 2px 8px rgba(2,132,199,0.04);border-radius:8px;padding:10px;text-align:center;">
                             <div style="font-size:0.65rem;color:var(--text-muted);font-weight:800;text-transform:uppercase;">TX Bitrate</div>
                             <div id="wifi-link-txrate-val" style="font-size:1.05rem;font-weight:800;color:#F8FAFC;margin-top:2px;">-- Mbps</div>
                             <div style="font-size:0.62rem;color:var(--text-muted);">Transmit Speed</div>
                         </div>
-                        <div style="background:rgba(255,255,255,0.65);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.85);box-shadow:0 2px 8px rgba(2,132,199,0.04);border-radius:8px;padding:10px;text-align:center;">
+                        <div style="background:rgba(255,255,255,0.65);border:1px solid rgba(255,255,255,0.85);box-shadow:0 2px 8px rgba(2,132,199,0.04);border-radius:8px;padding:10px;text-align:center;">
                             <div style="font-size:0.65rem;color:var(--text-muted);font-weight:800;text-transform:uppercase;">RX Bitrate</div>
                             <div id="wifi-link-rxrate-val" style="font-size:1.05rem;font-weight:800;color:#F8FAFC;margin-top:2px;">-- Mbps</div>
                             <div style="font-size:0.62rem;color:var(--text-muted);">Receive Speed</div>
                         </div>
-                        <div style="background:rgba(255,255,255,0.65);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.85);box-shadow:0 2px 8px rgba(2,132,199,0.04);border-radius:8px;padding:10px;text-align:center;">
+                        <div style="background:rgba(255,255,255,0.65);border:1px solid rgba(255,255,255,0.85);box-shadow:0 2px 8px rgba(2,132,199,0.04);border-radius:8px;padding:10px;text-align:center;">
                             <div style="font-size:0.65rem;color:var(--text-muted);font-weight:800;text-transform:uppercase;">Active Tower</div>
                             <div id="wifi-active-tower-val" style="font-size:1.05rem;font-weight:900;color:#059669;margin-top:2px;">PRIMARY</div>
                             <div style="font-size:0.62rem;color:var(--text-muted);" id="wifi-failover-badge">Failover: Standby</div>
@@ -1536,7 +1537,7 @@
                     </div>
 
                     <!-- REAL-TIME WIRELESS DOWNLOAD & UPLOAD THROUGHPUT CARD -->
-                    <div style="background:rgba(255,255,255,0.65);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.85);box-shadow:0 2px 8px rgba(2,132,199,0.04);border-radius:10px;padding:12px;margin-top:10px;">
+                    <div style="background:rgba(255,255,255,0.65);border:1px solid rgba(255,255,255,0.85);box-shadow:0 2px 8px rgba(2,132,199,0.04);border-radius:10px;padding:12px;margin-top:10px;">
                         <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:8px;">
                             <div style="font-size:0.8rem;font-weight:800;color:#F8FAFC;">Real-Time Throughput (RX / TX)</div>
                             <div style="display:flex;gap:10px;font-size:0.72rem;font-weight:700;">
@@ -1550,12 +1551,12 @@
                         </div>
 
                         <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;">
-                            <div style="background:rgba(255,255,255,0.65);backdrop-filter:blur(12px);border:1px solid rgba(14,165,233,0.3);border-radius:8px;padding:10px;">
+                            <div style="background:rgba(255,255,255,0.65);border:1px solid rgba(14,165,233,0.3);border-radius:8px;padding:10px;">
                                 <div style="font-size:0.65rem;font-weight:700;color:#0284C7;text-transform:uppercase;">Download (RX)</div>
                                 <div id="wifi-rx-rate" style="font-size:1.15rem;font-weight:800;color:#F8FAFC;font-family:var(--font-mono);margin-top:2px;">0.00 KB/s</div>
                                 <div id="wifi-rx-total" style="font-size:0.68rem;color:var(--text-muted);margin-top:2px;">Total: 0 MB</div>
                             </div>
-                            <div style="background:rgba(255,255,255,0.65);backdrop-filter:blur(12px);border:1px solid rgba(16,185,129,0.3);border-radius:8px;padding:10px;">
+                            <div style="background:rgba(255,255,255,0.65);border:1px solid rgba(16,185,129,0.3);border-radius:8px;padding:10px;">
                                 <div style="font-size:0.65rem;font-weight:700;color:#059669;text-transform:uppercase;">Upload (TX)</div>
                                 <div id="wifi-tx-rate" style="font-size:1.15rem;font-weight:800;color:#F8FAFC;font-family:var(--font-mono);margin-top:2px;">0.00 KB/s</div>
                                 <div id="wifi-tx-total" style="font-size:0.68rem;color:var(--text-muted);margin-top:2px;">Total: 0 MB</div>
@@ -1657,7 +1658,7 @@
                         </div>
 
                         <!-- MULTI-TOWER AUTO-FAILOVER CONFIGURATION -->
-                        <div style="background:rgba(255,255,255,0.65);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.85);box-shadow:0 2px 8px rgba(2,132,199,0.04);border-radius:10px;padding:12px;margin-top:14px;">
+                        <div style="background:rgba(255,255,255,0.65);border:1px solid rgba(255,255,255,0.85);box-shadow:0 2px 8px rgba(2,132,199,0.04);border-radius:10px;padding:12px;margin-top:14px;">
                             <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;flex-wrap:wrap;gap:6px;">
                                 <div style="display:flex;align-items:center;gap:8px;">
                                     <div style="width:8px;height:8px;border-radius:50%;background:#0284C7;"></div>
@@ -1758,7 +1759,7 @@
                     <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(240px, 1fr));gap:10px;">
 
                         <!-- 1. WIRELESS 5G LINK TILE -->
-                        <div style="background:rgba(255,255,255,0.65);backdrop-filter:blur(12px);border:1px solid rgba(14,165,233,0.3);border-radius:10px;padding:12px;box-shadow:var(--card-shadow);">
+                        <div style="background:rgba(255,255,255,0.65);border:1px solid rgba(14,165,233,0.3);border-radius:10px;padding:12px;box-shadow:var(--card-shadow);">
                             <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
                                 <div style="display:flex;align-items:center;gap:6px;">
                                     <div class="stat-icon blue" style="width:30px;height:30px;border-radius:6px;">
@@ -1774,7 +1775,7 @@
                                 <span id="dash-wifi-status-badge" class="badge badge-warning">STANDBY</span>
                             </div>
 
-                            <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;background:rgba(255,255,255,0.65);backdrop-filter:blur(12px);padding:8px;border-radius:6px;border:1px solid rgba(255,255,255,0.85);box-shadow:0 2px 8px rgba(2,132,199,0.04);">
+                            <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;background:rgba(255,255,255,0.65);padding:8px;border-radius:6px;border:1px solid rgba(255,255,255,0.85);box-shadow:0 2px 8px rgba(2,132,199,0.04);">
                                 <div>
                                     <div style="font-size:0.64rem;font-weight:700;color:#2563EB;text-transform:uppercase;">Download</div>
                                     <div id="dash-wifi-rx-rate" style="font-size:0.95rem;font-weight:800;color:#F8FAFC;font-family:var(--font-mono);">0.00 KB/s</div>
@@ -1789,7 +1790,7 @@
                         </div>
 
                         <!-- 2. ETHERNET LAN TILE -->
-                        <div style="background:rgba(255,255,255,0.65);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:12px;box-shadow:var(--card-shadow);">
+                        <div style="background:rgba(255,255,255,0.65);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:12px;box-shadow:var(--card-shadow);">
                             <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
                                 <div style="display:flex;align-items:center;gap:6px;">
                                     <div class="stat-icon purple" style="width:30px;height:30px;border-radius:6px;">
@@ -1805,7 +1806,7 @@
                                 <span id="dash-eth-status-badge" class="badge badge-success">100M FULL</span>
                             </div>
 
-                            <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;background:rgba(255,255,255,0.65);backdrop-filter:blur(12px);padding:8px;border-radius:6px;border:1px solid rgba(255,255,255,0.85);box-shadow:0 2px 8px rgba(2,132,199,0.04);">
+                            <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;background:rgba(255,255,255,0.65);padding:8px;border-radius:6px;border:1px solid rgba(255,255,255,0.85);box-shadow:0 2px 8px rgba(2,132,199,0.04);">
                                 <div>
                                     <div style="font-size:0.64rem;font-weight:700;color:#2563EB;text-transform:uppercase;">Download</div>
                                     <div id="dash-eth-rx-rate" style="font-size:0.95rem;font-weight:800;color:#F8FAFC;font-family:var(--font-mono);">0.00 KB/s</div>
@@ -1820,7 +1821,7 @@
                         </div>
 
                         <!-- 3. PPPOE CLIENT TILE -->
-                        <div style="background:rgba(255,255,255,0.65);backdrop-filter:blur(12px);border:1px solid #FED7AA;border-radius:10px;padding:12px;box-shadow:var(--card-shadow);">
+                        <div style="background:rgba(255,255,255,0.65);border:1px solid #FED7AA;border-radius:10px;padding:12px;box-shadow:var(--card-shadow);">
                             <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
                                 <div style="display:flex;align-items:center;gap:6px;">
                                     <div class="stat-icon orange" style="width:30px;height:30px;border-radius:6px;">
@@ -1836,7 +1837,7 @@
                                 <span id="dash-pppoe-status-badge" class="badge badge-danger">DISCONNECTED</span>
                             </div>
 
-                            <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;background:rgba(255,255,255,0.65);backdrop-filter:blur(12px);padding:8px;border-radius:6px;border:1px solid rgba(255,255,255,0.85);box-shadow:0 2px 8px rgba(2,132,199,0.04);">
+                            <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;background:rgba(255,255,255,0.65);padding:8px;border-radius:6px;border:1px solid rgba(255,255,255,0.85);box-shadow:0 2px 8px rgba(2,132,199,0.04);">
                                 <div>
                                     <div style="font-size:0.64rem;font-weight:700;color:#2563EB;text-transform:uppercase;">Download</div>
                                     <div id="dash-pppoe-rx-rate" style="font-size:0.95rem;font-weight:800;color:#F8FAFC;font-family:var(--font-mono);">0.00 KB/s</div>
@@ -1954,29 +1955,29 @@
                         </div>
                     </div>
 
-                    <div id="dhcpc-empty-notice" style="display:none;background:rgba(255,255,255,0.65);backdrop-filter:blur(12px);border:1px dashed #CBD5E1;border-radius:10px;padding:20px;text-align:center;margin-top:8px;">
+                    <div id="dhcpc-empty-notice" style="display:none;background:rgba(255,255,255,0.65);border:1px dashed #CBD5E1;border-radius:10px;padding:20px;text-align:center;margin-top:8px;">
                         <div style="font-size:0.95rem;font-weight:700;color:#64748B;">DHCP Client is Currently Stopped</div>
                         <div style="font-size:0.76rem;color:var(--text-muted);margin-top:4px;">Click <b>'Start'</b> above to obtain an IP from the wireless link.</div>
                     </div>
 
                     <div id="dhcpc-active-panel" style="display:grid;grid-template-columns:repeat(auto-fit, minmax(180px, 1fr));gap:10px;margin-top:10px;">
-                        <div style="background:rgba(255,255,255,0.65);backdrop-filter:blur(12px);padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,0.85);box-shadow:0 2px 8px rgba(2,132,199,0.04);">
+                        <div style="background:rgba(255,255,255,0.65);padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,0.85);box-shadow:0 2px 8px rgba(2,132,199,0.04);">
                             <div style="font-size:0.68rem;color:var(--text-muted);text-transform:uppercase;font-weight:700;">Interface</div>
                             <div style="font-size:1rem;font-weight:800;color:#F8FAFC;margin-top:2px;" id="dhcpc-iface">wan (wlan0)</div>
                             <div style="margin-top:4px;"><span id="dhcpc-status-badge" class="badge badge-warning">DISABLED</span></div>
                         </div>
 
-                        <div style="background:rgba(255,255,255,0.65);backdrop-filter:blur(12px);padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,0.85);box-shadow:0 2px 8px rgba(2,132,199,0.04);">
+                        <div style="background:rgba(255,255,255,0.65);padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,0.85);box-shadow:0 2px 8px rgba(2,132,199,0.04);">
                             <div style="font-size:0.68rem;color:var(--text-muted);text-transform:uppercase;font-weight:700;">Assigned IP</div>
                             <div style="font-size:1.05rem;font-weight:800;color:#2563EB;font-family:var(--font-mono);margin-top:2px;" id="dhcpc-ip">--</div>
                         </div>
 
-                        <div style="background:rgba(255,255,255,0.65);backdrop-filter:blur(12px);padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,0.85);box-shadow:0 2px 8px rgba(2,132,199,0.04);">
+                        <div style="background:rgba(255,255,255,0.65);padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,0.85);box-shadow:0 2px 8px rgba(2,132,199,0.04);">
                             <div style="font-size:0.68rem;color:var(--text-muted);text-transform:uppercase;font-weight:700;">Gateway Router</div>
                             <div style="font-size:1rem;font-weight:700;color:#F8FAFC;font-family:var(--font-mono);margin-top:2px;" id="dhcpc-gw">--</div>
                         </div>
 
-                        <div style="background:rgba(255,255,255,0.65);backdrop-filter:blur(12px);padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,0.85);box-shadow:0 2px 8px rgba(2,132,199,0.04);">
+                        <div style="background:rgba(255,255,255,0.65);padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,0.85);box-shadow:0 2px 8px rgba(2,132,199,0.04);">
                             <div style="font-size:0.68rem;color:var(--text-muted);text-transform:uppercase;font-weight:700;">DNS Servers</div>
                             <div style="font-size:0.85rem;font-weight:700;color:#F8FAFC;font-family:var(--font-mono);margin-top:2px;" id="dhcpc-dns">8.8.8.8, 1.1.1.1</div>
                         </div>
@@ -2328,14 +2329,14 @@
                     </div>
 
                     <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(240px, 1fr));gap:12px;">
-                        <div style="background:rgba(255,255,255,0.65);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.85);box-shadow:0 2px 8px rgba(2,132,199,0.04);border-radius:10px;padding:14px;">
+                        <div style="background:rgba(255,255,255,0.65);border:1px solid rgba(255,255,255,0.85);box-shadow:0 2px 8px rgba(2,132,199,0.04);border-radius:10px;padding:14px;">
                             <div style="font-size:0.75rem;font-weight:700;color:#64748B;text-transform:uppercase;">Portal URL</div>
                             <div style="font-family:var(--font-mono);font-size:0.88rem;color:#2563EB;margin-top:4px;">http://192.168.88.1/client.html</div>
                             <a href="/client.html" target="_blank" class="btn btn-secondary" style="margin-top:10px;text-decoration:none;">
                                 Open Client Page
                             </a>
                         </div>
-                        <div style="background:rgba(255,255,255,0.65);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.85);box-shadow:0 2px 8px rgba(2,132,199,0.04);border-radius:10px;padding:14px;">
+                        <div style="background:rgba(255,255,255,0.65);border:1px solid rgba(255,255,255,0.85);box-shadow:0 2px 8px rgba(2,132,199,0.04);border-radius:10px;padding:14px;">
                             <div style="font-size:0.75rem;font-weight:700;color:#64748B;text-transform:uppercase;">Protection Mode</div>
                             <div style="font-size:0.82rem;color:#F8FAFC;margin-top:4px;">
                                 When locked, all requests to <code>/client</code> or <code>/client.html</code> will be immediately rejected and blocked.
@@ -2388,7 +2389,7 @@
 
                 <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(340px, 1fr));gap:20px;">
                     <!-- CARD 1: FLASH FIRMWARE IMAGE (PRIMARY) -->
-                    <div class="card" style="border:1px solid rgba(255,255,255,0.1);border-radius:14px;padding:20px;box-shadow:0 4px 16px rgba(0,0,0,0.04);background:rgba(255,255,255,0.65);backdrop-filter:blur(12px);">
+                    <div class="card" style="border:1px solid rgba(255,255,255,0.1);border-radius:14px;padding:20px;box-shadow:0 4px 16px rgba(0,0,0,0.04);background:rgba(255,255,255,0.65);">
                         <div class="card-header" style="margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid #F1F5F9;">
                             <div style="display:flex;align-items:center;gap:10px;">
                                 <div style="width:32px;height:32px;border-radius:8px;background:#EFF6FF;display:flex;align-items:center;justify-content:center;">
@@ -2408,9 +2409,9 @@
                         </p>
 
                         <!-- FILE UPLOAD DROPZONE / PICKER -->
-                        <div style="border:2px dashed #93C5FD;background:rgba(255,255,255,0.65);backdrop-filter:blur(12px);border-radius:12px;padding:16px;text-align:center;margin-bottom:14px;transition:border-color 0.2s;" id="flash-dropzone">
+                        <div style="border:2px dashed #93C5FD;background:rgba(255,255,255,0.65);border-radius:12px;padding:16px;text-align:center;margin-bottom:14px;transition:border-color 0.2s;" id="flash-dropzone">
                             <input type="file" id="tab-firmware-file-input" accept=".bin" style="display:none;" onchange="handleFirmwareFileSelect(this)">
-                            <button type="button" onclick="document.getElementById('tab-firmware-file-input').click()" class="btn btn-secondary" style="background:rgba(255,255,255,0.65);backdrop-filter:blur(12px);border-color:#CBD5E1;color:#F8FAFC;font-weight:700;margin-bottom:8px;">
+                            <button type="button" onclick="document.getElementById('tab-firmware-file-input').click()" class="btn btn-secondary" style="background:rgba(255,255,255,0.65);border-color:#CBD5E1;color:#F8FAFC;font-weight:700;margin-bottom:8px;">
                                 <svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:#2563EB;">
                                     <path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM14 13v4h-4v-4H7l5-5 5 5h-3z" />
                                 </svg>
@@ -2434,7 +2435,7 @@
                     </div>
 
                     <!-- CARD 2: 1-CLICK TFTP FLASH FROM PC -->
-                    <div class="card" style="border:1px solid rgba(255,255,255,0.1);border-radius:14px;padding:20px;box-shadow:0 4px 16px rgba(0,0,0,0.04);background:rgba(255,255,255,0.65);backdrop-filter:blur(12px);">
+                    <div class="card" style="border:1px solid rgba(255,255,255,0.1);border-radius:14px;padding:20px;box-shadow:0 4px 16px rgba(0,0,0,0.04);background:rgba(255,255,255,0.65);">
                         <div class="card-header" style="margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid #F1F5F9;">
                             <div style="display:flex;align-items:center;gap:10px;">
                                 <div style="width:32px;height:32px;border-radius:8px;background:#FFFBEB;display:flex;align-items:center;justify-content:center;">
@@ -4946,7 +4947,7 @@
                 <button onclick="closeGitHubUpdateModal()" style="background:none;border:none;font-size:1.4rem;color:#94A3B8;cursor:pointer;">&times;</button>
             </div>
 
-            <div style="background:rgba(255,255,255,0.65);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.85);box-shadow:0 2px 8px rgba(2,132,199,0.04);border-radius:10px;padding:14px;margin-bottom:16px;">
+            <div style="background:rgba(255,255,255,0.65);border:1px solid rgba(255,255,255,0.85);box-shadow:0 2px 8px rgba(2,132,199,0.04);border-radius:10px;padding:14px;margin-bottom:16px;">
                 <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;font-size:0.8rem;">
                     <span style="color:#64748B;font-weight:600;">Current Running Version:</span>
                     <span id="update-cur-ver" class="badge badge-success">v2.5 (Latest)</span>
@@ -4993,10 +4994,10 @@
                 </div>
 
                 <!-- SECTION 1: DOWNLOAD CONFIGURATION BACKUP -->
-                <div style="background:rgba(255,255,255,0.65);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.85);box-shadow:0 2px 8px rgba(2,132,199,0.04);border-radius:10px;padding:14px;margin-bottom:16px;">
+                <div style="background:rgba(255,255,255,0.65);border:1px solid rgba(255,255,255,0.85);box-shadow:0 2px 8px rgba(2,132,199,0.04);border-radius:10px;padding:14px;margin-bottom:16px;">
                     <h4 style="font-size:0.85rem;font-weight:700;color:#F8FAFC;margin-bottom:6px;">1. Download System Backup</h4>
                     <p style="font-size:0.76rem;color:#64748B;margin-bottom:12px;">Export all NVRAM configurations, network settings, and Wi-Fi profiles into a compressed backup file.</p>
-                    <button onclick="downloadBackupConfig()" class="btn btn-secondary" style="background:rgba(255,255,255,0.65);backdrop-filter:blur(12px);border-color:#10B981;color:#059669;font-weight:700;">
+                    <button onclick="downloadBackupConfig()" class="btn btn-secondary" style="background:rgba(255,255,255,0.65);border-color:#10B981;color:#059669;font-weight:700;">
                         <svg viewBox="0 0 24 24" style="width:14px;height:14px;fill:currentColor;">
                             <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z" />
                         </svg>
@@ -5005,7 +5006,7 @@
                 </div>
 
                 <!-- SECTION 2: MANUAL FLASH FIRMWARE (sysupgrade.bin) -->
-                <div style="background:rgba(255,255,255,0.65);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.85);box-shadow:0 2px 8px rgba(2,132,199,0.04);border-radius:10px;padding:14px;margin-bottom:16px;">
+                <div style="background:rgba(255,255,255,0.65);border:1px solid rgba(255,255,255,0.85);box-shadow:0 2px 8px rgba(2,132,199,0.04);border-radius:10px;padding:14px;margin-bottom:16px;">
                     <h4 style="font-size:0.85rem;font-weight:700;color:#F8FAFC;margin-bottom:6px;">2. Flash Firmware Image (sysupgrade.bin)</h4>
                     <p style="font-size:0.76rem;color:#64748B;margin-bottom:12px;">Select a new <code>sysupgrade.bin</code> file from your computer to flash permanently to device Flash memory.</p>
 
