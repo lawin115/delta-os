@@ -15,27 +15,27 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-body: #F8FAFC;
-            --bg-sidebar: #FFFFFF;
-            --bg-card: #FFFFFF;
-            --bg-card-hover: #F1F5F9;
-            --bg-input: #FFFFFF;
-            --border-color: #E2E8F0;
-            --border-focus: #2563EB;
-            --primary: #2563EB;
-            --primary-hover: #1D4ED8;
-            --primary-glow: rgba(37, 99, 235, 0.2);
-            --accent: #0284C7;
-            --accent-glow: rgba(2, 132, 199, 0.15);
+            --bg-body: #080C14;
+            --bg-sidebar: #0C1220;
+            --bg-card: #0F172A;
+            --bg-card-hover: #1E293B;
+            --bg-input: #080C14;
+            --border-color: rgba(255, 255, 255, 0.08);
+            --border-focus: #0EA5E9;
+            --primary: #0EA5E9;
+            --primary-hover: #0284C7;
+            --primary-glow: rgba(14, 165, 233, 0.25);
+            --accent: #38BDF8;
+            --accent-glow: rgba(56, 189, 248, 0.2);
             --success: #10B981;
             --warning: #F59E0B;
             --danger: #EF4444;
-            --text-main: #0F172A;
-            --text-muted: #64748B;
+            --text-main: #F8FAFC;
+            --text-muted: #94A3B8;
             --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             --font-mono: 'JetBrains Mono', monospace;
             --safe-bottom: env(safe-area-inset-bottom, 0px);
-            --card-shadow: 0 1px 3px rgba(15, 23, 42, 0.05), 0 6px 16px -4px rgba(15, 23, 42, 0.03);
+            --card-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.06);
         }
 
         * {
@@ -54,6 +54,7 @@
             height: 100dvh;
             overflow: hidden;
             -webkit-font-smoothing: antialiased;
+            background-image: radial-gradient(circle at 50% 0%, rgba(14, 165, 233, 0.06) 0%, transparent 60%);
         }
 
         ::-webkit-scrollbar {
@@ -62,11 +63,11 @@
         }
 
         ::-webkit-scrollbar-track {
-            background: #F1F5F9;
+            background: #080C14;
         }
 
         ::-webkit-scrollbar-thumb {
-            background: #CBD5E1;
+            background: #1E293B;
             border-radius: 4px;
         }
 
@@ -81,7 +82,7 @@
             left: 0;
             width: 100vw;
             height: 100vh;
-            background: linear-gradient(135deg, #0F172A 0%, #1E293B 50%, #0F172A 100%);
+            background: radial-gradient(circle at 50% 30%, #1E293B 0%, #080C14 80%);
             z-index: 99999;
             display: flex;
             align-items: center;
@@ -90,12 +91,12 @@
         }
 
         .login-card {
-            background: #FFFFFF;
+            background: #0F172A;
             border-radius: 18px;
             width: 100%;
             max-width: 400px;
             padding: 28px 24px;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.1);
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.1);
             animation: loginEntrance 0.3s cubic-bezier(0.16, 1, 0.3, 1);
             text-align: center;
         }
@@ -116,12 +117,13 @@
             width: 54px;
             height: 54px;
             border-radius: 14px;
-            background: #EFF6FF;
+            background: rgba(14, 165, 233, 0.15);
+            border: 1px solid rgba(14, 165, 233, 0.3);
             display: flex;
             align-items: center;
             justify-content: center;
             margin: 0 auto 12px;
-            box-shadow: 0 4px 14px rgba(37, 99, 235, 0.18);
+            box-shadow: 0 4px 14px rgba(14, 165, 233, 0.25);
         }
 
         .login-logo img {
@@ -133,7 +135,7 @@
         .login-title {
             font-size: 1.25rem;
             font-weight: 800;
-            color: #0F172A;
+            color: #F8FAFC;
             letter-spacing: -0.3px;
         }
 
@@ -145,9 +147,9 @@
         }
 
         .login-alert {
-            background: #FEF2F2;
-            border: 1px solid #FCA5A5;
-            color: #DC2626;
+            background: rgba(239, 68, 68, 0.15);
+            border: 1px solid rgba(239, 68, 68, 0.35);
+            color: #F87171;
             padding: 10px 12px;
             border-radius: 8px;
             font-size: 0.78rem;
@@ -163,21 +165,9 @@
         }
 
         @keyframes alertShake {
-
-            0%,
-            100% {
-                transform: translateX(0);
-            }
-
-            20%,
-            60% {
-                transform: translateX(-6px);
-            }
-
-            40%,
-            80% {
-                transform: translateX(6px);
-            }
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-6px); }
+            40%, 80% { transform: translateX(6px); }
         }
 
         .input-password-wrapper {
@@ -202,30 +192,30 @@
         }
 
         .password-toggle-btn:hover {
-            color: #0F172A;
+            color: #F8FAFC;
         }
 
         .caps-lock-badge {
             display: none;
             font-size: 0.68rem;
             font-weight: 700;
-            color: #B45309;
-            background: #FEF3C7;
+            color: #FBBF24;
+            background: rgba(245, 158, 11, 0.15);
             padding: 2px 6px;
             border-radius: 4px;
-            border: 1px solid #FDE68A;
+            border: 1px solid rgba(245, 158, 11, 0.3);
         }
 
         .security-badge-footer {
             margin-top: 18px;
             padding-top: 14px;
-            border-top: 1px solid #F1F5F9;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 14px;
             font-size: 0.7rem;
-            color: #64748B;
+            color: #94A3B8;
         }
 
         .security-badge-item {
@@ -238,7 +228,7 @@
         .pass-strength-bar {
             height: 4px;
             border-radius: 2px;
-            background: #E2E8F0;
+            background: #1E293B;
             margin-top: 6px;
             overflow: hidden;
         }
@@ -256,8 +246,8 @@
             left: 0;
             width: 100vw;
             height: 100vh;
-            background: rgba(15, 23, 42, 0.5);
-            backdrop-filter: blur(4px);
+            background: rgba(0, 0, 0, 0.65);
+            backdrop-filter: blur(8px);
             z-index: 999;
             opacity: 0;
             pointer-events: none;
@@ -286,7 +276,7 @@
             align-items: center;
             justify-content: space-between;
             border-bottom: 1px solid var(--border-color);
-            background: #FFFFFF;
+            background: #0C1220;
         }
 
         .brand-header-flex {
@@ -299,13 +289,14 @@
             width: 34px;
             height: 34px;
             border-radius: 9px;
-            background: #EFF6FF;
+            background: rgba(14, 165, 233, 0.15);
+            border: 1px solid rgba(14, 165, 233, 0.3);
             display: flex;
             align-items: center;
             justify-content: center;
             flex-shrink: 0;
             overflow: hidden;
-            box-shadow: 0 2px 6px rgba(37, 99, 235, 0.12);
+            box-shadow: 0 2px 8px rgba(14, 165, 233, 0.2);
         }
 
         .brand-logo img {
@@ -317,7 +308,7 @@
         .brand-text h2 {
             font-size: 0.95rem;
             font-weight: 800;
-            color: #0F172A;
+            color: #F8FAFC;
             letter-spacing: -0.2px;
             line-height: 1.1;
         }
@@ -325,14 +316,14 @@
         .brand-text span {
             font-size: 0.65rem;
             font-weight: 700;
-            color: #2563EB;
+            color: #38BDF8;
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
 
         .sidebar-close-btn {
             display: none;
-            background: #F1F5F9;
+            background: #1E293B;
             border: none;
             width: 28px;
             height: 28px;
@@ -340,7 +331,7 @@
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            color: #64748B;
+            color: #94A3B8;
         }
 
         .nav-list {
@@ -354,7 +345,7 @@
             font-size: 0.65rem;
             font-weight: 800;
             text-transform: uppercase;
-            color: #94A3B8;
+            color: #64748B;
             padding: 10px 10px 4px;
             letter-spacing: 0.8px;
         }
@@ -369,7 +360,7 @@
             gap: 10px;
             padding: 8px 10px;
             border-radius: 8px;
-            color: #475569;
+            color: #94A3B8;
             text-decoration: none;
             font-size: 0.82rem;
             font-weight: 600;
@@ -387,22 +378,23 @@
         }
 
         .nav-link:hover {
-            background: #F1F5F9;
-            color: #0F172A;
+            background: rgba(255, 255, 255, 0.05);
+            color: #F8FAFC;
         }
 
         .nav-link:hover svg {
-            fill: var(--primary);
+            fill: #38BDF8;
         }
 
         .nav-link.active {
-            background: #EFF6FF;
-            color: var(--primary);
+            background: rgba(14, 165, 233, 0.14);
+            color: #38BDF8;
             font-weight: 700;
+            border: 1px solid rgba(14, 165, 233, 0.25);
         }
 
         .nav-link.active svg {
-            fill: var(--primary);
+            fill: #38BDF8;
         }
 
         /* ACCORDION / SUBMENU */
@@ -450,25 +442,25 @@
         }
 
         .sub-nav-link:hover {
-            color: #0F172A;
-            background: #F8FAFC;
+            color: #F8FAFC;
+            background: rgba(255, 255, 255, 0.04);
         }
 
         .sub-nav-link.active {
-            color: var(--primary);
+            color: #38BDF8;
             font-weight: 700;
-            background: #EFF6FF;
+            background: rgba(14, 165, 233, 0.1);
         }
 
         .sub-nav-bullet {
             width: 4px;
             height: 4px;
             border-radius: 50%;
-            background: #CBD5E1;
+            background: #475569;
         }
 
         .sub-nav-link.active .sub-nav-bullet {
-            background: var(--primary);
+            background: #38BDF8;
         }
 
         /* MAIN CONTAINER */
@@ -482,10 +474,10 @@
             min-width: 0;
         }
 
-        /* ULTRA-CLEAN MODERN TOPBAR */
+        /* TOPBAR */
         .topbar {
             height: 54px;
-            background: #FFFFFF;
+            background: #0C1220;
             border-bottom: 1px solid var(--border-color);
             display: flex;
             align-items: center;
@@ -506,7 +498,7 @@
 
         .mobile-menu-btn {
             display: none;
-            background: #F8FAFC;
+            background: #1E293B;
             border: 1px solid var(--border-color);
             cursor: pointer;
             padding: 7px;
@@ -519,7 +511,7 @@
         .mobile-menu-btn span {
             width: 18px;
             height: 2px;
-            background: #0F172A;
+            background: rgba(255,255,255,0.03);
             border-radius: 2px;
         }
 
@@ -531,7 +523,7 @@
         .topbar-title h1 {
             font-size: 0.96rem;
             font-weight: 800;
-            color: #0F172A;
+            color: #F8FAFC;
             letter-spacing: -0.2px;
             white-space: nowrap;
             overflow: hidden;
@@ -550,12 +542,12 @@
             align-items: center;
             gap: 6px;
             padding: 5px 10px;
-            background: #EFF6FF;
-            border: 1px solid #BFDBFE;
+            background: rgba(14, 165, 233, 0.12);
+            border: 1px solid rgba(14, 165, 233, 0.25);
             border-radius: 16px;
             font-size: 0.72rem;
             font-weight: 700;
-            color: #1D4ED8;
+            color: #38BDF8;
             letter-spacing: 0.3px;
             white-space: nowrap;
         }
@@ -565,26 +557,15 @@
             height: 7px;
             border-radius: 50%;
             background: #10B981;
-            box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.25);
+            box-shadow: 0 0 8px #10B981;
             animation: livePulse 2s infinite;
             flex-shrink: 0;
         }
 
         @keyframes livePulse {
-            0% {
-                transform: scale(0.95);
-                opacity: 0.8;
-            }
-
-            50% {
-                transform: scale(1.15);
-                opacity: 1;
-            }
-
-            100% {
-                transform: scale(0.95);
-                opacity: 0.8;
-            }
+            0% { transform: scale(0.95); opacity: 0.8; }
+            50% { transform: scale(1.15); opacity: 1; }
+            100% { transform: scale(0.95); opacity: 0.8; }
         }
 
         /* CONTENT AREA */
@@ -606,15 +587,8 @@
         }
 
         @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(4px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(4px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         /* BUTTONS */
@@ -646,29 +620,30 @@
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, var(--primary), var(--primary-hover));
+            background: linear-gradient(135deg, #0EA5E9, #0284C7);
             color: #FFFFFF;
-            box-shadow: 0 3px 10px var(--primary-glow);
+            box-shadow: 0 3px 10px rgba(14, 165, 233, 0.35);
         }
 
         .btn-primary:hover {
-            box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3);
+            box-shadow: 0 4px 14px rgba(14, 165, 233, 0.5);
         }
 
         .btn-secondary {
-            background: #F1F5F9;
-            color: var(--accent);
-            border: 1px solid #CBD5E1;
+            background: #1E293B;
+            color: #38BDF8;
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .btn-secondary:hover {
-            background: #E2E8F0;
-            color: #0369A1;
+            background: #334155;
+            color: #F8FAFC;
         }
 
         .btn-success {
             background: #10B981;
             color: #FFFFFF;
+            box-shadow: 0 3px 10px rgba(16, 185, 129, 0.3);
         }
 
         .btn-success:hover {
@@ -676,20 +651,20 @@
         }
 
         .btn-danger {
-            background: #FEF2F2;
-            color: var(--danger);
-            border: 1px solid #FCA5A5;
+            background: rgba(239, 68, 68, 0.15);
+            color: #F87171;
+            border: 1px solid rgba(239, 68, 68, 0.3);
         }
 
         .btn-danger:hover {
-            background: var(--danger);
+            background: #EF4444;
             color: #FFFFFF;
         }
 
         /* CARDS & TABLES */
         .card {
-            background: #FFFFFF;
-            border: 1px solid var(--border-color);
+            background: #0F172A;
+            border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 12px;
             padding: 16px;
             margin-bottom: 14px;
@@ -702,7 +677,7 @@
             justify-content: space-between;
             margin-bottom: 14px;
             padding-bottom: 10px;
-            border-bottom: 1px solid #F1F5F9;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
             flex-wrap: wrap;
             gap: 8px;
         }
@@ -710,14 +685,15 @@
         .card-header h2 {
             font-size: 0.92rem;
             font-weight: 700;
-            color: #0F172A;
+            color: #F8FAFC;
         }
 
         .table-responsive {
             overflow-x: auto;
             -webkit-overflow-scrolling: touch;
             border-radius: 8px;
-            border: 1px solid #F1F5F9;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(15, 23, 42, 0.5);
         }
 
         table {
@@ -729,26 +705,26 @@
         }
 
         th {
-            background: #F8FAFC;
-            color: #475569;
+            background: rgba(255, 255, 255, 0.04);
+            color: #94A3B8;
             padding: 10px 12px;
             font-weight: 700;
             text-transform: uppercase;
             font-size: 0.67rem;
             letter-spacing: 0.5px;
-            border-bottom: 1px solid var(--border-color);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
             white-space: nowrap;
         }
 
         td {
             padding: 10px 12px;
-            border-bottom: 1px solid #F1F5F9;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
             white-space: nowrap;
-            color: #0F172A;
+            color: #F8FAFC;
         }
 
         tr:hover td {
-            background: #F8FAFC;
+            background: rgba(255, 255, 255, 0.03);
         }
 
         .badge {
@@ -763,27 +739,27 @@
         }
 
         .badge-success {
-            background: #ECFDF5;
-            color: #059669;
-            border: 1px solid #A7F3D0;
+            background: rgba(16, 185, 129, 0.15);
+            color: #34D399;
+            border: 1px solid rgba(16, 185, 129, 0.3);
         }
 
         .badge-danger {
-            background: #FEF2F2;
-            color: #DC2626;
-            border: 1px solid #FCA5A5;
+            background: rgba(239, 68, 68, 0.15);
+            color: #F87171;
+            border: 1px solid rgba(239, 68, 68, 0.3);
         }
 
         .badge-info {
-            background: #F0F9FF;
-            color: #0284C7;
-            border: 1px solid #BAE6FD;
+            background: rgba(14, 165, 233, 0.15);
+            color: #38BDF8;
+            border: 1px solid rgba(14, 165, 233, 0.3);
         }
 
         .badge-warning {
-            background: #FFFBEB;
-            color: #D97706;
-            border: 1px solid #FDE68A;
+            background: rgba(245, 158, 11, 0.15);
+            color: #FBBF24;
+            border: 1px solid rgba(245, 158, 11, 0.3);
         }
 
         /* FORMS */
@@ -801,7 +777,7 @@
             display: block;
             font-size: 0.74rem;
             font-weight: 700;
-            color: #475569;
+            color: #94A3B8;
             margin-bottom: 5px;
             text-transform: uppercase;
             letter-spacing: 0.4px;
@@ -811,12 +787,12 @@
             width: 100%;
             min-height: 38px;
             padding: 6px 10px;
-            border: 1px solid var(--border-color);
+            border: 1px solid rgba(255, 255, 255, 0.12);
             border-radius: 7px;
             font-size: 0.84rem;
             font-family: var(--font-sans);
-            color: #0F172A;
-            background: var(--bg-input);
+            color: #F8FAFC;
+            background: #080C14;
             outline: none;
             transition: all 0.18s ease;
         }
@@ -835,8 +811,8 @@
         }
 
         .stat-card {
-            background: #FFFFFF;
-            border: 1px solid var(--border-color);
+            background: #0F172A;
+            border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 12px;
             padding: 14px 16px;
             display: flex;
@@ -847,7 +823,7 @@
         }
 
         .stat-card:hover {
-            border-color: #BFDBFE;
+            border-color: rgba(14, 165, 233, 0.4);
             transform: translateY(-2px);
         }
 
@@ -867,21 +843,10 @@
             fill: #FFFFFF;
         }
 
-        .stat-icon.blue {
-            background: linear-gradient(135deg, #2563EB, #38BDF8);
-        }
-
-        .stat-icon.green {
-            background: linear-gradient(135deg, #10B981, #34D399);
-        }
-
-        .stat-icon.purple {
-            background: linear-gradient(135deg, #8B5CF6, #EC4899);
-        }
-
-        .stat-icon.orange {
-            background: linear-gradient(135deg, #F59E0B, #EF4444);
-        }
+        .stat-icon.blue { background: linear-gradient(135deg, #0EA5E9, #0284C7); }
+        .stat-icon.green { background: linear-gradient(135deg, #10B981, #059669); }
+        .stat-icon.purple { background: linear-gradient(135deg, #8B5CF6, #6366F1); }
+        .stat-icon.orange { background: linear-gradient(135deg, #F59E0B, #D97706); }
 
         .stat-info {
             min-width: 0;
@@ -890,7 +855,7 @@
 
         .stat-info h3 {
             font-size: 0.68rem;
-            color: #64748B;
+            color: #94A3B8;
             text-transform: uppercase;
             letter-spacing: 0.4px;
             margin-bottom: 2px;
@@ -899,7 +864,7 @@
         .stat-info .stat-value {
             font-size: 1.15rem;
             font-weight: 700;
-            color: #0F172A;
+            color: #F8FAFC;
             font-family: var(--font-mono);
             white-space: nowrap;
             overflow: hidden;
@@ -908,7 +873,7 @@
 
         .stat-desc {
             font-size: 0.7rem;
-            color: var(--text-muted);
+            color: #64748B;
             margin-top: 2px;
             white-space: nowrap;
             overflow: hidden;
@@ -918,7 +883,7 @@
         .progress-bar-container {
             width: 100%;
             height: 6px;
-            background: #E2E8F0;
+            background: #1E293B;
             border-radius: 3px;
             overflow: hidden;
             margin-top: 4px;
@@ -926,7 +891,7 @@
 
         .progress-bar-fill {
             height: 100%;
-            background: linear-gradient(90deg, #2563EB, #0284C7);
+            background: linear-gradient(90deg, #0EA5E9, #38BDF8);
             border-radius: 3px;
             transition: width 0.5s ease;
         }
@@ -937,7 +902,7 @@
             width: 76px;
             height: 76px;
             border-radius: 50%;
-            background: radial-gradient(circle, #0284C7 0%, #0F172A 70%);
+            background: radial-gradient(circle, #0284C7 0%, #080C14 70%);
             margin: 0 auto;
             display: flex;
             align-items: center;
@@ -948,12 +913,12 @@
         }
 
         .radar-box.locked {
-            background: radial-gradient(circle, #10B981 0%, #064E3B 70%) !important;
+            background: radial-gradient(circle, #10B981 0%, #080C14 70%) !important;
             box-shadow: 0 0 16px rgba(16, 185, 129, 0.45) !important;
         }
 
         .radar-box.scanning {
-            background: radial-gradient(circle, #0284C7 0%, #0F172A 70%) !important;
+            background: radial-gradient(circle, #0284C7 0%, #080C14 70%) !important;
             box-shadow: 0 0 14px rgba(2, 132, 199, 0.4) !important;
         }
 
@@ -975,47 +940,8 @@
         }
 
         @keyframes radarSweep {
-            0% {
-                transform: rotate(0deg);
-            }
-
-            100% {
-                transform: rotate(360deg);
-            }
-        }
-
-        /* LIVE THROUGHPUT PULSE CHART */
-        .wifi-throughput-wrapper {
-            display: flex;
-            align-items: flex-end;
-            gap: 4px;
-            height: 48px;
-            padding: 6px 0;
-            border-bottom: 1px dashed #CBD5E1;
-        }
-
-        .wifi-throughput-col {
-            flex-grow: 1;
-            display: flex;
-            align-items: flex-end;
-            justify-content: center;
-            gap: 2px;
-            height: 100%;
-        }
-
-        .wifi-pill {
-            width: 6px;
-            border-radius: 2px 2px 0 0;
-            transition: height 0.4s ease;
-            min-height: 3px;
-        }
-
-        .wifi-pill.rx {
-            background: linear-gradient(180deg, #2563EB, #60A5FA);
-        }
-
-        .wifi-pill.tx {
-            background: linear-gradient(180deg, #10B981, #34D399);
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
         /* MODAL */
@@ -1025,8 +951,8 @@
             left: 0;
             width: 100vw;
             height: 100vh;
-            background: rgba(15, 23, 42, 0.45);
-            backdrop-filter: blur(5px);
+            background: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(8px);
             display: none;
             align-items: center;
             justify-content: center;
@@ -1039,28 +965,21 @@
         }
 
         .modal-card {
-            background: #FFFFFF;
+            background: #0F172A;
             border-radius: 14px;
             width: 100%;
             max-width: 480px;
             padding: 20px;
-            box-shadow: 0 20px 50px rgba(15, 23, 42, 0.15);
-            border: 1px solid var(--border-color);
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             animation: modalPop 0.22s ease;
             max-height: 90vh;
             overflow-y: auto;
         }
 
         @keyframes modalPop {
-            from {
-                opacity: 0;
-                transform: scale(0.96) translateY(8px);
-            }
-
-            to {
-                opacity: 1;
-                transform: scale(1) translateY(0);
-            }
+            from { opacity: 0; transform: scale(0.96) translateY(8px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
         }
 
         .modal-header {
@@ -1069,13 +988,13 @@
             justify-content: space-between;
             margin-bottom: 12px;
             padding-bottom: 8px;
-            border-bottom: 1px solid #F1F5F9;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
         }
 
         .modal-header h3 {
             font-size: 0.95rem;
             font-weight: 800;
-            color: #0F172A;
+            color: #F8FAFC;
         }
 
         .modal-close {
@@ -1088,7 +1007,7 @@
         }
 
         .modal-close:hover {
-            color: #0F172A;
+            color: #F8FAFC;
         }
 
         /* MOBILE RESPONSIVE TUNING */
@@ -1512,7 +1431,7 @@
                     </div>
 
                     <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(180px, 1fr));gap:10px;margin-top:10px;">
-                        <div style="background:linear-gradient(135deg, #F8FAFC, #EFF6FF);padding:12px;border-radius:10px;border:1px solid #E2E8F0;text-align:center;">
+                        <div style="background:rgba(255,255,255,0.03);padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,0.08);text-align:center;">
                             <div class="radar-box scanning" id="radar-spectrum-box">
                                 <div class="radar-sweep-arm" id="radar-sweep-arm"></div>
                                 <svg style="width:22px;height:22px;fill:#FFFFFF;z-index:2;position:relative;" viewBox="0 0 24 24">
@@ -1522,13 +1441,13 @@
                             <div id="radar-spectrum-lbl" style="font-size:0.7rem;font-weight:700;color:#0284C7;margin-top:6px;">5GHz Spectrum: Scanning...</div>
                         </div>
 
-                        <div style="background:#F8FAFC;padding:12px 14px;border-radius:10px;border:1px solid #E2E8F0;">
+                        <div style="background:rgba(255,255,255,0.03);padding:12px 14px;border-radius:10px;border:1px solid rgba(255,255,255,0.08);">
                             <div style="font-size:0.68rem;color:var(--text-muted);text-transform:uppercase;font-weight:700;">Target SSID</div>
-                            <div id="wifi-link-ssid-val" style="font-size:1.05rem;font-weight:800;color:#0F172A;margin-top:2px;">Not Connected</div>
+                            <div id="wifi-link-ssid-val" style="font-size:1.05rem;font-weight:800;color:#F8FAFC;margin-top:2px;">Not Connected</div>
                             <div style="font-size:0.68rem;color:var(--text-muted);margin-top:3px;" id="wifi-link-bssid-val">BSSID: --:--:--:--:--:--</div>
                         </div>
 
-                        <div style="background:#F8FAFC;padding:12px 14px;border-radius:10px;border:1px solid #E2E8F0;">
+                        <div style="background:rgba(255,255,255,0.03);padding:12px 14px;border-radius:10px;border:1px solid rgba(255,255,255,0.08);">
                             <div style="display:flex;justify-content:space-between;align-items:center;">
                                 <div style="font-size:0.68rem;color:var(--text-muted);text-transform:uppercase;font-weight:700;">Signal Level</div>
                                 <div id="wifi-link-signal-val" style="font-size:1rem;font-weight:800;color:#059669;">-- dBm</div>
@@ -1542,27 +1461,27 @@
 
                     <!-- ADVANCED LINK QUALITY & HARDWARE CCQ METRICS GRID -->
                     <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(130px, 1fr));gap:8px;margin-top:10px;">
-                        <div style="background:#FFFFFF;border:1px solid #E2E8F0;border-radius:8px;padding:10px;text-align:center;">
+                        <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:10px;text-align:center;">
                             <div style="font-size:0.65rem;color:var(--text-muted);font-weight:800;text-transform:uppercase;">CCQ Quality</div>
                             <div id="wifi-link-ccq-val" style="font-size:1.15rem;font-weight:900;color:#059669;margin-top:2px;">--%</div>
                             <div style="font-size:0.62rem;color:#059669;font-weight:700;" id="wifi-link-ccq-status">Optimal Link</div>
                         </div>
-                        <div style="background:#FFFFFF;border:1px solid #E2E8F0;border-radius:8px;padding:10px;text-align:center;">
+                        <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:10px;text-align:center;">
                             <div style="font-size:0.65rem;color:var(--text-muted);font-weight:800;text-transform:uppercase;">SNR / Noise</div>
                             <div id="wifi-link-snr-val" style="font-size:1.15rem;font-weight:900;color:#2563EB;margin-top:2px;">-- dB</div>
                             <div style="font-size:0.62rem;color:var(--text-muted);" id="wifi-link-noise-val">Noise: -96 dBm</div>
                         </div>
-                        <div style="background:#FFFFFF;border:1px solid #E2E8F0;border-radius:8px;padding:10px;text-align:center;">
+                        <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:10px;text-align:center;">
                             <div style="font-size:0.65rem;color:var(--text-muted);font-weight:800;text-transform:uppercase;">TX Bitrate</div>
-                            <div id="wifi-link-txrate-val" style="font-size:1.05rem;font-weight:800;color:#0F172A;margin-top:2px;">-- Mbps</div>
+                            <div id="wifi-link-txrate-val" style="font-size:1.05rem;font-weight:800;color:#F8FAFC;margin-top:2px;">-- Mbps</div>
                             <div style="font-size:0.62rem;color:var(--text-muted);">Transmit Speed</div>
                         </div>
-                        <div style="background:#FFFFFF;border:1px solid #E2E8F0;border-radius:8px;padding:10px;text-align:center;">
+                        <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:10px;text-align:center;">
                             <div style="font-size:0.65rem;color:var(--text-muted);font-weight:800;text-transform:uppercase;">RX Bitrate</div>
-                            <div id="wifi-link-rxrate-val" style="font-size:1.05rem;font-weight:800;color:#0F172A;margin-top:2px;">-- Mbps</div>
+                            <div id="wifi-link-rxrate-val" style="font-size:1.05rem;font-weight:800;color:#F8FAFC;margin-top:2px;">-- Mbps</div>
                             <div style="font-size:0.62rem;color:var(--text-muted);">Receive Speed</div>
                         </div>
-                        <div style="background:#FFFFFF;border:1px solid #E2E8F0;border-radius:8px;padding:10px;text-align:center;">
+                        <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:10px;text-align:center;">
                             <div style="font-size:0.65rem;color:var(--text-muted);font-weight:800;text-transform:uppercase;">Active Tower</div>
                             <div id="wifi-active-tower-val" style="font-size:1.05rem;font-weight:900;color:#059669;margin-top:2px;">PRIMARY</div>
                             <div style="font-size:0.62rem;color:var(--text-muted);" id="wifi-failover-badge">Failover: Standby</div>
@@ -1570,9 +1489,9 @@
                     </div>
 
                     <!-- REAL-TIME WIRELESS DOWNLOAD & UPLOAD THROUGHPUT CARD -->
-                    <div style="background:#F8FAFC;border:1px solid #E2E8F0;border-radius:10px;padding:12px;margin-top:10px;">
+                    <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:12px;margin-top:10px;">
                         <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:8px;">
-                            <div style="font-size:0.8rem;font-weight:800;color:#0F172A;">Real-Time Throughput (RX / TX)</div>
+                            <div style="font-size:0.8rem;font-weight:800;color:#F8FAFC;">Real-Time Throughput (RX / TX)</div>
                             <div style="display:flex;gap:10px;font-size:0.72rem;font-weight:700;">
                                 <div style="display:flex;align-items:center;gap:4px;">
                                     <div style="width:8px;height:8px;border-radius:2px;background:#0EA5E9;"></div><span>Download (RX)</span>
@@ -1584,14 +1503,14 @@
                         </div>
 
                         <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;">
-                            <div style="background:#FFFFFF;border:1px solid #BFDBFE;border-radius:8px;padding:10px;">
+                            <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(14,165,233,0.3);border-radius:8px;padding:10px;">
                                 <div style="font-size:0.65rem;font-weight:700;color:#0284C7;text-transform:uppercase;">Download (RX)</div>
-                                <div id="wifi-rx-rate" style="font-size:1.15rem;font-weight:800;color:#0F172A;font-family:var(--font-mono);margin-top:2px;">0.00 KB/s</div>
+                                <div id="wifi-rx-rate" style="font-size:1.15rem;font-weight:800;color:#F8FAFC;font-family:var(--font-mono);margin-top:2px;">0.00 KB/s</div>
                                 <div id="wifi-rx-total" style="font-size:0.68rem;color:var(--text-muted);margin-top:2px;">Total: 0 MB</div>
                             </div>
-                            <div style="background:#FFFFFF;border:1px solid #A7F3D0;border-radius:8px;padding:10px;">
+                            <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(16,185,129,0.3);border-radius:8px;padding:10px;">
                                 <div style="font-size:0.65rem;font-weight:700;color:#059669;text-transform:uppercase;">Upload (TX)</div>
-                                <div id="wifi-tx-rate" style="font-size:1.15rem;font-weight:800;color:#0F172A;font-family:var(--font-mono);margin-top:2px;">0.00 KB/s</div>
+                                <div id="wifi-tx-rate" style="font-size:1.15rem;font-weight:800;color:#F8FAFC;font-family:var(--font-mono);margin-top:2px;">0.00 KB/s</div>
                                 <div id="wifi-tx-total" style="font-size:0.68rem;color:var(--text-muted);margin-top:2px;">Total: 0 MB</div>
                             </div>
                         </div>
@@ -1691,11 +1610,11 @@
                         </div>
 
                         <!-- MULTI-TOWER AUTO-FAILOVER CONFIGURATION -->
-                        <div style="background:#F8FAFC;border:1px solid #E2E8F0;border-radius:10px;padding:12px;margin-top:14px;">
+                        <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:12px;margin-top:14px;">
                             <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;flex-wrap:wrap;gap:6px;">
                                 <div style="display:flex;align-items:center;gap:8px;">
                                     <div style="width:8px;height:8px;border-radius:50%;background:#0284C7;"></div>
-                                    <strong style="font-size:0.85rem;color:#0F172A;">Multi-Tower Auto-Failover (Backup AP)</strong>
+                                    <strong style="font-size:0.85rem;color:#F8FAFC;">Multi-Tower Auto-Failover (Backup AP)</strong>
                                 </div>
                                 <label style="display:flex;align-items:center;gap:6px;font-size:0.75rem;cursor:pointer;font-weight:700;margin:0;">
                                     <input type="checkbox" id="radio-auto-failover" style="cursor:pointer;width:15px;height:15px;">
@@ -1792,7 +1711,7 @@
                     <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(240px, 1fr));gap:10px;">
 
                         <!-- 1. WIRELESS 5G LINK TILE -->
-                        <div style="background:#FFFFFF;border:1px solid #BFDBFE;border-radius:10px;padding:12px;box-shadow:var(--card-shadow);">
+                        <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(14,165,233,0.3);border-radius:10px;padding:12px;box-shadow:var(--card-shadow);">
                             <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
                                 <div style="display:flex;align-items:center;gap:6px;">
                                     <div class="stat-icon blue" style="width:30px;height:30px;border-radius:6px;">
@@ -1801,29 +1720,29 @@
                                         </svg>
                                     </div>
                                     <div>
-                                        <div style="font-weight:800;font-size:0.84rem;color:#0F172A;">Wireless 5G (wlan0)</div>
+                                        <div style="font-weight:800;font-size:0.84rem;color:#F8FAFC;">Wireless 5G (wlan0)</div>
                                         <div style="font-size:0.67rem;color:var(--text-muted);" id="dash-wifi-ssid">Target: Disconnected</div>
                                     </div>
                                 </div>
                                 <span id="dash-wifi-status-badge" class="badge badge-warning">STANDBY</span>
                             </div>
 
-                            <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;background:#F8FAFC;padding:8px;border-radius:6px;border:1px solid #E2E8F0;">
+                            <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;background:rgba(255,255,255,0.03);padding:8px;border-radius:6px;border:1px solid rgba(255,255,255,0.08);">
                                 <div>
                                     <div style="font-size:0.64rem;font-weight:700;color:#2563EB;text-transform:uppercase;">Download</div>
-                                    <div id="dash-wifi-rx-rate" style="font-size:0.95rem;font-weight:800;color:#0F172A;font-family:var(--font-mono);">0.00 KB/s</div>
+                                    <div id="dash-wifi-rx-rate" style="font-size:0.95rem;font-weight:800;color:#F8FAFC;font-family:var(--font-mono);">0.00 KB/s</div>
                                     <div id="dash-wifi-rx-tot" style="font-size:0.64rem;color:var(--text-muted);">0 MB</div>
                                 </div>
                                 <div>
                                     <div style="font-size:0.64rem;font-weight:700;color:#059669;text-transform:uppercase;">Upload</div>
-                                    <div id="dash-wifi-tx-rate" style="font-size:0.95rem;font-weight:800;color:#0F172A;font-family:var(--font-mono);">0.00 KB/s</div>
+                                    <div id="dash-wifi-tx-rate" style="font-size:0.95rem;font-weight:800;color:#F8FAFC;font-family:var(--font-mono);">0.00 KB/s</div>
                                     <div id="dash-wifi-tx-tot" style="font-size:0.64rem;color:var(--text-muted);">0 MB</div>
                                 </div>
                             </div>
                         </div>
 
                         <!-- 2. ETHERNET LAN TILE -->
-                        <div style="background:#FFFFFF;border:1px solid #CBD5E1;border-radius:10px;padding:12px;box-shadow:var(--card-shadow);">
+                        <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:12px;box-shadow:var(--card-shadow);">
                             <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
                                 <div style="display:flex;align-items:center;gap:6px;">
                                     <div class="stat-icon purple" style="width:30px;height:30px;border-radius:6px;">
@@ -1832,29 +1751,29 @@
                                         </svg>
                                     </div>
                                     <div>
-                                        <div style="font-weight:800;font-size:0.84rem;color:#0F172A;">Ethernet LAN (eth0)</div>
+                                        <div style="font-weight:800;font-size:0.84rem;color:#F8FAFC;">Ethernet LAN (eth0)</div>
                                         <div style="font-size:0.67rem;color:var(--text-muted);" id="dash-eth-speed-label">Speed: 100 Mbps (Full Duplex) | 192.168.88.1</div>
                                     </div>
                                 </div>
                                 <span id="dash-eth-status-badge" class="badge badge-success">100M FULL</span>
                             </div>
 
-                            <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;background:#F8FAFC;padding:8px;border-radius:6px;border:1px solid #E2E8F0;">
+                            <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;background:rgba(255,255,255,0.03);padding:8px;border-radius:6px;border:1px solid rgba(255,255,255,0.08);">
                                 <div>
                                     <div style="font-size:0.64rem;font-weight:700;color:#2563EB;text-transform:uppercase;">Download</div>
-                                    <div id="dash-eth-rx-rate" style="font-size:0.95rem;font-weight:800;color:#0F172A;font-family:var(--font-mono);">0.00 KB/s</div>
+                                    <div id="dash-eth-rx-rate" style="font-size:0.95rem;font-weight:800;color:#F8FAFC;font-family:var(--font-mono);">0.00 KB/s</div>
                                     <div id="dash-eth-rx-tot" style="font-size:0.64rem;color:var(--text-muted);">0 MB</div>
                                 </div>
                                 <div>
                                     <div style="font-size:0.64rem;font-weight:700;color:#059669;text-transform:uppercase;">Upload</div>
-                                    <div id="dash-eth-tx-rate" style="font-size:0.95rem;font-weight:800;color:#0F172A;font-family:var(--font-mono);">0.00 KB/s</div>
+                                    <div id="dash-eth-tx-rate" style="font-size:0.95rem;font-weight:800;color:#F8FAFC;font-family:var(--font-mono);">0.00 KB/s</div>
                                     <div id="dash-eth-tx-tot" style="font-size:0.64rem;color:var(--text-muted);">0 MB</div>
                                 </div>
                             </div>
                         </div>
 
                         <!-- 3. PPPOE CLIENT TILE -->
-                        <div style="background:#FFFFFF;border:1px solid #FED7AA;border-radius:10px;padding:12px;box-shadow:var(--card-shadow);">
+                        <div style="background:rgba(255,255,255,0.03);border:1px solid #FED7AA;border-radius:10px;padding:12px;box-shadow:var(--card-shadow);">
                             <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
                                 <div style="display:flex;align-items:center;gap:6px;">
                                     <div class="stat-icon orange" style="width:30px;height:30px;border-radius:6px;">
@@ -1863,22 +1782,22 @@
                                         </svg>
                                     </div>
                                     <div>
-                                        <div style="font-weight:800;font-size:0.84rem;color:#0F172A;">PPPoE (pppoe-wan)</div>
+                                        <div style="font-weight:800;font-size:0.84rem;color:#F8FAFC;">PPPoE (pppoe-wan)</div>
                                         <div style="font-size:0.67rem;color:var(--text-muted);" id="dash-pppoe-user">Session Inactive</div>
                                     </div>
                                 </div>
                                 <span id="dash-pppoe-status-badge" class="badge badge-danger">DISCONNECTED</span>
                             </div>
 
-                            <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;background:#F8FAFC;padding:8px;border-radius:6px;border:1px solid #E2E8F0;">
+                            <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;background:rgba(255,255,255,0.03);padding:8px;border-radius:6px;border:1px solid rgba(255,255,255,0.08);">
                                 <div>
                                     <div style="font-size:0.64rem;font-weight:700;color:#2563EB;text-transform:uppercase;">Download</div>
-                                    <div id="dash-pppoe-rx-rate" style="font-size:0.95rem;font-weight:800;color:#0F172A;font-family:var(--font-mono);">0.00 KB/s</div>
+                                    <div id="dash-pppoe-rx-rate" style="font-size:0.95rem;font-weight:800;color:#F8FAFC;font-family:var(--font-mono);">0.00 KB/s</div>
                                     <div id="dash-pppoe-rx-tot" style="font-size:0.64rem;color:var(--text-muted);">0 MB</div>
                                 </div>
                                 <div>
                                     <div style="font-size:0.64rem;font-weight:700;color:#059669;text-transform:uppercase;">Upload</div>
-                                    <div id="dash-pppoe-tx-rate" style="font-size:0.95rem;font-weight:800;color:#0F172A;font-family:var(--font-mono);">0.00 KB/s</div>
+                                    <div id="dash-pppoe-tx-rate" style="font-size:0.95rem;font-weight:800;color:#F8FAFC;font-family:var(--font-mono);">0.00 KB/s</div>
                                     <div id="dash-pppoe-tx-tot" style="font-size:0.64rem;color:var(--text-muted);">0 MB</div>
                                 </div>
                             </div>
@@ -1988,31 +1907,31 @@
                         </div>
                     </div>
 
-                    <div id="dhcpc-empty-notice" style="display:none;background:#F8FAFC;border:1px dashed #CBD5E1;border-radius:10px;padding:20px;text-align:center;margin-top:8px;">
+                    <div id="dhcpc-empty-notice" style="display:none;background:rgba(255,255,255,0.03);border:1px dashed #CBD5E1;border-radius:10px;padding:20px;text-align:center;margin-top:8px;">
                         <div style="font-size:0.95rem;font-weight:700;color:#64748B;">DHCP Client is Currently Stopped</div>
                         <div style="font-size:0.76rem;color:var(--text-muted);margin-top:4px;">Click <b>'Start'</b> above to obtain an IP from the wireless link.</div>
                     </div>
 
                     <div id="dhcpc-active-panel" style="display:grid;grid-template-columns:repeat(auto-fit, minmax(180px, 1fr));gap:10px;margin-top:10px;">
-                        <div style="background:#F8FAFC;padding:12px;border-radius:10px;border:1px solid #E2E8F0;">
+                        <div style="background:rgba(255,255,255,0.03);padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,0.08);">
                             <div style="font-size:0.68rem;color:var(--text-muted);text-transform:uppercase;font-weight:700;">Interface</div>
-                            <div style="font-size:1rem;font-weight:800;color:#0F172A;margin-top:2px;" id="dhcpc-iface">wan (wlan0)</div>
+                            <div style="font-size:1rem;font-weight:800;color:#F8FAFC;margin-top:2px;" id="dhcpc-iface">wan (wlan0)</div>
                             <div style="margin-top:4px;"><span id="dhcpc-status-badge" class="badge badge-warning">DISABLED</span></div>
                         </div>
 
-                        <div style="background:#F8FAFC;padding:12px;border-radius:10px;border:1px solid #E2E8F0;">
+                        <div style="background:rgba(255,255,255,0.03);padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,0.08);">
                             <div style="font-size:0.68rem;color:var(--text-muted);text-transform:uppercase;font-weight:700;">Assigned IP</div>
                             <div style="font-size:1.05rem;font-weight:800;color:#2563EB;font-family:var(--font-mono);margin-top:2px;" id="dhcpc-ip">--</div>
                         </div>
 
-                        <div style="background:#F8FAFC;padding:12px;border-radius:10px;border:1px solid #E2E8F0;">
+                        <div style="background:rgba(255,255,255,0.03);padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,0.08);">
                             <div style="font-size:0.68rem;color:var(--text-muted);text-transform:uppercase;font-weight:700;">Gateway Router</div>
-                            <div style="font-size:1rem;font-weight:700;color:#0F172A;font-family:var(--font-mono);margin-top:2px;" id="dhcpc-gw">--</div>
+                            <div style="font-size:1rem;font-weight:700;color:#F8FAFC;font-family:var(--font-mono);margin-top:2px;" id="dhcpc-gw">--</div>
                         </div>
 
-                        <div style="background:#F8FAFC;padding:12px;border-radius:10px;border:1px solid #E2E8F0;">
+                        <div style="background:rgba(255,255,255,0.03);padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,0.08);">
                             <div style="font-size:0.68rem;color:var(--text-muted);text-transform:uppercase;font-weight:700;">DNS Servers</div>
-                            <div style="font-size:0.85rem;font-weight:700;color:#0F172A;font-family:var(--font-mono);margin-top:2px;" id="dhcpc-dns">8.8.8.8, 1.1.1.1</div>
+                            <div style="font-size:0.85rem;font-weight:700;color:#F8FAFC;font-family:var(--font-mono);margin-top:2px;" id="dhcpc-dns">8.8.8.8, 1.1.1.1</div>
                         </div>
                     </div>
                 </div>
@@ -2171,7 +2090,7 @@
                             </div>
                             <div class="form-group">
                                 <label>Dynamic Servers (Learned)</label>
-                                <input type="text" class="form-control" id="dns-dynamic-servers" readonly style="background:#F1F5F9;color:#64748B;font-family:var(--font-mono);">
+                                <input type="text" class="form-control" id="dns-dynamic-servers" readonly style="background:rgba(255,255,255,0.05);color:#64748B;font-family:var(--font-mono);">
                             </div>
                             <div class="form-group">
                                 <label>Cache Size</label>
@@ -2362,16 +2281,16 @@
                     </div>
 
                     <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(240px, 1fr));gap:12px;">
-                        <div style="background:#FFFFFF;border:1px solid #E2E8F0;border-radius:10px;padding:14px;">
+                        <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:14px;">
                             <div style="font-size:0.75rem;font-weight:700;color:#64748B;text-transform:uppercase;">Portal URL</div>
                             <div style="font-family:var(--font-mono);font-size:0.88rem;color:#2563EB;margin-top:4px;">http://192.168.88.1/client.html</div>
                             <a href="/client.html" target="_blank" class="btn btn-secondary" style="margin-top:10px;text-decoration:none;">
                                 Open Client Page
                             </a>
                         </div>
-                        <div style="background:#FFFFFF;border:1px solid #E2E8F0;border-radius:10px;padding:14px;">
+                        <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:14px;">
                             <div style="font-size:0.75rem;font-weight:700;color:#64748B;text-transform:uppercase;">Protection Mode</div>
-                            <div style="font-size:0.82rem;color:#0F172A;margin-top:4px;">
+                            <div style="font-size:0.82rem;color:#F8FAFC;margin-top:4px;">
                                 When locked, all requests to <code>/client</code> or <code>/client.html</code> will be immediately rejected and blocked.
                             </div>
                         </div>
@@ -2422,7 +2341,7 @@
 
                 <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(340px, 1fr));gap:20px;">
                     <!-- CARD 1: FLASH FIRMWARE IMAGE (PRIMARY) -->
-                    <div class="card" style="border:1px solid #CBD5E1;border-radius:14px;padding:20px;box-shadow:0 4px 16px rgba(0,0,0,0.04);background:#FFFFFF;">
+                    <div class="card" style="border:1px solid rgba(255,255,255,0.1);border-radius:14px;padding:20px;box-shadow:0 4px 16px rgba(0,0,0,0.04);background:rgba(255,255,255,0.03);">
                         <div class="card-header" style="margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid #F1F5F9;">
                             <div style="display:flex;align-items:center;gap:10px;">
                                 <div style="width:32px;height:32px;border-radius:8px;background:#EFF6FF;display:flex;align-items:center;justify-content:center;">
@@ -2431,20 +2350,20 @@
                                     </svg>
                                 </div>
                                 <div>
-                                    <h2 style="font-size:1.02rem;font-weight:800;color:#0F172A;margin:0;">1. Flash Firmware (sysupgrade.bin)</h2>
+                                    <h2 style="font-size:1.02rem;font-weight:800;color:#F8FAFC;margin:0;">1. Flash Firmware (sysupgrade.bin)</h2>
                                     <span style="font-size:0.75rem;color:#64748B;">Permanent SPI Flash Memory Upgrade</span>
                                 </div>
                             </div>
                         </div>
 
-                        <p style="font-size:0.8rem;color:#475569;margin-bottom:14px;line-height:1.5;">
+                        <p style="font-size:0.8rem;color:#94A3B8;margin-bottom:14px;line-height:1.5;">
                             Upload <strong>sysupgrade.bin</strong> to permanently flash to SPI Flash memory. The device automatically executes <code>sysupgrade -F -n -v</code> and reboots into the updated firmware.
                         </p>
 
                         <!-- FILE UPLOAD DROPZONE / PICKER -->
-                        <div style="border:2px dashed #93C5FD;background:#F8FAFC;border-radius:12px;padding:16px;text-align:center;margin-bottom:14px;transition:border-color 0.2s;" id="flash-dropzone">
+                        <div style="border:2px dashed #93C5FD;background:rgba(255,255,255,0.03);border-radius:12px;padding:16px;text-align:center;margin-bottom:14px;transition:border-color 0.2s;" id="flash-dropzone">
                             <input type="file" id="tab-firmware-file-input" accept=".bin" style="display:none;" onchange="handleFirmwareFileSelect(this)">
-                            <button type="button" onclick="document.getElementById('tab-firmware-file-input').click()" class="btn btn-secondary" style="background:#FFFFFF;border-color:#CBD5E1;color:#0F172A;font-weight:700;margin-bottom:8px;">
+                            <button type="button" onclick="document.getElementById('tab-firmware-file-input').click()" class="btn btn-secondary" style="background:rgba(255,255,255,0.03);border-color:#CBD5E1;color:#F8FAFC;font-weight:700;margin-bottom:8px;">
                                 <svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:#2563EB;">
                                     <path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM14 13v4h-4v-4H7l5-5 5 5h-3z" />
                                 </svg>
@@ -2468,7 +2387,7 @@
                     </div>
 
                     <!-- CARD 2: 1-CLICK TFTP FLASH FROM PC -->
-                    <div class="card" style="border:1px solid #CBD5E1;border-radius:14px;padding:20px;box-shadow:0 4px 16px rgba(0,0,0,0.04);background:#FFFFFF;">
+                    <div class="card" style="border:1px solid rgba(255,255,255,0.1);border-radius:14px;padding:20px;box-shadow:0 4px 16px rgba(0,0,0,0.04);background:rgba(255,255,255,0.03);">
                         <div class="card-header" style="margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid #F1F5F9;">
                             <div style="display:flex;align-items:center;gap:10px;">
                                 <div style="width:32px;height:32px;border-radius:8px;background:#FFFBEB;display:flex;align-items:center;justify-content:center;">
@@ -2477,13 +2396,13 @@
                                     </svg>
                                 </div>
                                 <div>
-                                    <h2 style="font-size:1.02rem;font-weight:800;color:#0F172A;margin:0;">2. 1-Click TFTP Flash (LAN Direct)</h2>
+                                    <h2 style="font-size:1.02rem;font-weight:800;color:#F8FAFC;margin:0;">2. 1-Click TFTP Flash (LAN Direct)</h2>
                                     <span style="font-size:0.75rem;color:#64748B;">Pull directly from <code>C:\tftp\sysupgrade.bin</code></span>
                                 </div>
                             </div>
                         </div>
 
-                        <p style="font-size:0.8rem;color:#475569;margin-bottom:12px;line-height:1.5;">
+                        <p style="font-size:0.8rem;color:#94A3B8;margin-bottom:12px;line-height:1.5;">
                             Directly download <code>sysupgrade.bin</code> from your local PC TFTP server (tftpd64) over Gigabit Ethernet and write to SPI Flash without web browser upload delay.
                         </p>
 
@@ -2514,7 +2433,7 @@
                             <span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:#10B981;box-shadow:0 0 8px #10B981;"></span>
                             <span style="font-family:var(--font-mono);font-weight:700;font-size:0.82rem;color:#38BDF8;">sysupgrade / flash output monitor</span>
                         </div>
-                        <button class="btn btn-secondary" style="padding:4px 10px;font-size:0.72rem;background:#1E293B;color:#CBD5E1;border-color:#475569;" onclick="checkLiveFlashStatus(true)">Refresh Logs</button>
+                        <button class="btn btn-secondary" style="padding:4px 10px;font-size:0.72rem;background:#1E293B;color:#CBD5E1;border-color:#94A3B8;" onclick="checkLiveFlashStatus(true)">Refresh Logs</button>
                     </div>
                     <pre id="tab-flash-log-output" style="background:#020617;color:#38BDF8;padding:14px;border-radius:10px;font-family:var(--font-mono);font-size:0.76rem;height:180px;overflow-y:auto;line-height:1.6;border:1px solid #1E293B;margin:0;">Awaiting firmware flash command...</pre>
                 </div>
@@ -3691,7 +3610,7 @@
                 if (data.status === 'success' && data.scan_results && data.scan_results.length > 0) {
                     tbody.innerHTML = data.scan_results.map(r => `
                         <tr>
-                            <td style="font-weight:700;color:#0F172A;">${escapeHtml(r.ssid)}</td>
+                            <td style="font-weight:700;color:#F8FAFC;">${escapeHtml(r.ssid)}</td>
                             <td style="font-family:var(--font-mono);">${r.bssid}</td>
                             <td><span class="badge badge-info">Ch ${r.channel}</span></td>
                             <td style="font-weight:700;color:#059669;">${r.signal} dBm</td>
@@ -3931,7 +3850,7 @@
                     currentDhcpServers = data.servers;
                     tbody.innerHTML = data.servers.map(s => `
                         <tr>
-                            <td style="font-weight:700;color:#0F172A;">${escapeHtml(s.name)}</td>
+                            <td style="font-weight:700;color:#F8FAFC;">${escapeHtml(s.name)}</td>
                             <td><span class="badge badge-info">${s.iface}</span></td>
                             <td style="font-family:var(--font-mono);font-weight:600;">${s.pool}</td>
                             <td style="font-family:var(--font-mono);color:#2563EB;">${s.dns}</td>
@@ -4695,7 +4614,7 @@
 
                 preview.innerHTML = `
                     <div style="display:flex;align-items:center;justify-content:center;gap:8px;margin-top:6px;flex-wrap:wrap;">
-                        <strong style="color:#0F172A;">${escapeHtml(file.name)}</strong>
+                        <strong style="color:#F8FAFC;">${escapeHtml(file.name)}</strong>
                         <span style="color:#64748B;">(${sizeMb} MB)</span>
                         ${badge}
                     </div>
@@ -4973,21 +4892,21 @@
                         </svg>
                     </div>
                     <div>
-                        <h3 style="font-size:1rem;font-weight:800;color:#0F172A;">System Auto-Update</h3>
+                        <h3 style="font-size:1rem;font-weight:800;color:#F8FAFC;">System Auto-Update</h3>
                         <span style="font-size:0.72rem;color:#64748B;">Delta OS Pro Cloud Firmware Manager</span>
                     </div>
                 </div>
                 <button onclick="closeGitHubUpdateModal()" style="background:none;border:none;font-size:1.4rem;color:#94A3B8;cursor:pointer;">&times;</button>
             </div>
 
-            <div style="background:#F8FAFC;border:1px solid #E2E8F0;border-radius:10px;padding:14px;margin-bottom:16px;">
+            <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:14px;margin-bottom:16px;">
                 <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;font-size:0.8rem;">
                     <span style="color:#64748B;font-weight:600;">Current Running Version:</span>
                     <span id="update-cur-ver" class="badge badge-success">v2.5 (Latest)</span>
                 </div>
                 <div style="display:flex;justify-content:space-between;align-items:center;font-size:0.8rem;">
                     <span style="color:#64748B;font-weight:600;">Target Hardware:</span>
-                    <span id="update-hw-model" style="font-weight:700;color:#0F172A;">Delta SXT 5nD r2</span>
+                    <span id="update-hw-model" style="font-weight:700;color:#F8FAFC;">Delta SXT 5nD r2</span>
                 </div>
             </div>
 
@@ -5019,7 +4938,7 @@
                             </svg>
                         </div>
                         <div>
-                            <h3 style="font-size:1rem;font-weight:800;color:#0F172A;">Backup / Flash Firmware</h3>
+                            <h3 style="font-size:1rem;font-weight:800;color:#F8FAFC;">Backup / Flash Firmware</h3>
                             <span style="font-size:0.72rem;color:#64748B;">System Configuration Backup & Manual Firmware Update</span>
                         </div>
                     </div>
@@ -5027,10 +4946,10 @@
                 </div>
 
                 <!-- SECTION 1: DOWNLOAD CONFIGURATION BACKUP -->
-                <div style="background:#F8FAFC;border:1px solid #E2E8F0;border-radius:10px;padding:14px;margin-bottom:16px;">
-                    <h4 style="font-size:0.85rem;font-weight:700;color:#0F172A;margin-bottom:6px;">1. Download System Backup</h4>
+                <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:14px;margin-bottom:16px;">
+                    <h4 style="font-size:0.85rem;font-weight:700;color:#F8FAFC;margin-bottom:6px;">1. Download System Backup</h4>
                     <p style="font-size:0.76rem;color:#64748B;margin-bottom:12px;">Export all NVRAM configurations, network settings, and Wi-Fi profiles into a compressed backup file.</p>
-                    <button onclick="downloadBackupConfig()" class="btn btn-secondary" style="background:#FFFFFF;border-color:#10B981;color:#059669;font-weight:700;">
+                    <button onclick="downloadBackupConfig()" class="btn btn-secondary" style="background:rgba(255,255,255,0.03);border-color:#10B981;color:#059669;font-weight:700;">
                         <svg viewBox="0 0 24 24" style="width:14px;height:14px;fill:currentColor;">
                             <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z" />
                         </svg>
@@ -5039,8 +4958,8 @@
                 </div>
 
                 <!-- SECTION 2: MANUAL FLASH FIRMWARE (sysupgrade.bin) -->
-                <div style="background:#F8FAFC;border:1px solid #E2E8F0;border-radius:10px;padding:14px;margin-bottom:16px;">
-                    <h4 style="font-size:0.85rem;font-weight:700;color:#0F172A;margin-bottom:6px;">2. Flash Firmware Image (sysupgrade.bin)</h4>
+                <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:14px;margin-bottom:16px;">
+                    <h4 style="font-size:0.85rem;font-weight:700;color:#F8FAFC;margin-bottom:6px;">2. Flash Firmware Image (sysupgrade.bin)</h4>
                     <p style="font-size:0.76rem;color:#64748B;margin-bottom:12px;">Select a new <code>sysupgrade.bin</code> file from your computer to flash permanently to device Flash memory.</p>
 
                     <div class="form-group" style="margin-bottom:12px;">
