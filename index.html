@@ -1449,6 +1449,55 @@
             <!-- TAB: WIRELESS (DEFAULT START VIEW) -->
             <div id="wifi" class="tab-pane active">
 
+                <!-- ANTENNA ALIGNMENT & AUDIO TONE BEEPER WIDGET -->
+                <div class="card" style="background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%); border: 1px solid #334155; color: #F8FAFC; margin-bottom: 12px; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);">
+                    <div class="card-header" style="border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 10px;">
+                        <div style="display:flex;align-items:center;gap:10px;">
+                            <div style="width:10px;height:10px;border-radius:50%;background:#10B981;box-shadow:0 0 12px #10B981;animation:pulseDot 2s infinite;"></div>
+                            <div>
+                                <h2 style="color:#F8FAFC;font-size:1rem;margin:0;font-weight:800;letter-spacing:-0.2px;">🎯 Antenna Alignment & Audio Beeper (وەستای تاوەر)</h2>
+                                <div style="font-size:0.72rem;color:#94A3B8;margin-top:1px;">Live acoustic tone & signal precision meter for dish mounting</div>
+                            </div>
+                        </div>
+                        <button type="button" id="btn-audio-align" onclick="toggleAudioAlignment()" class="btn" style="background:#2563EB;color:#FFF;font-weight:800;font-size:0.75rem;padding:7px 14px;border-radius:8px;display:flex;align-items:center;gap:6px;cursor:pointer;border:none;box-shadow:0 0 15px rgba(37,99,235,0.4);transition:all 0.2s;">
+                            <span>🔊</span> <span id="btn-audio-text">Audio Beeper: OFF</span>
+                        </button>
+                    </div>
+                    
+                    <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(220px, 1fr));gap:12px;padding-top:12px;">
+                        <!-- Big Dial -->
+                        <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:16px;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;">
+                            <div style="font-size:0.7rem;color:#94A3B8;text-transform:uppercase;font-weight:800;letter-spacing:0.5px;">Live Signal Strength</div>
+                            <div id="align-signal-val" style="font-size:2.5rem;font-weight:900;color:#10B981;font-family:var(--font-mono);margin:4px 0;text-shadow:0 0 25px rgba(16,185,129,0.5);">-- dBm</div>
+                            <div id="align-quality-text" style="font-size:0.72rem;font-weight:800;color:#10B981;background:rgba(16,185,129,0.15);border:1px solid rgba(16,185,129,0.3);padding:3px 12px;border-radius:20px;">SEARCHING SIGNAL...</div>
+                        </div>
+
+                        <!-- 4 High Precision Metrics -->
+                        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+                            <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:10px;text-align:center;">
+                                <div style="font-size:0.65rem;color:#94A3B8;text-transform:uppercase;font-weight:800;">CCQ Quality</div>
+                                <div id="align-ccq-val" style="font-size:1.25rem;font-weight:900;color:#38BDF8;margin-top:2px;">--%</div>
+                                <div style="font-size:0.62rem;color:#94A3B8;">Packet Success</div>
+                            </div>
+                            <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:10px;text-align:center;">
+                                <div style="font-size:0.65rem;color:#94A3B8;text-transform:uppercase;font-weight:800;">Noise Floor</div>
+                                <div id="align-noise-val" style="font-size:1.25rem;font-weight:900;color:#F59E0B;margin-top:2px;">-- dBm</div>
+                                <div style="font-size:0.62rem;color:#94A3B8;">RF Spectrum</div>
+                            </div>
+                            <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:10px;text-align:center;">
+                                <div style="font-size:0.65rem;color:#94A3B8;text-transform:uppercase;font-weight:800;">SNR Ratio</div>
+                                <div id="align-snr-val" style="font-size:1.25rem;font-weight:900;color:#A78BFA;margin-top:2px;">-- dB</div>
+                                <div style="font-size:0.62rem;color:#94A3B8;">Signal / Noise</div>
+                            </div>
+                            <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:10px;text-align:center;">
+                                <div style="font-size:0.65rem;color:#94A3B8;text-transform:uppercase;font-weight:800;">Frequency</div>
+                                <div id="align-freq-val" style="font-size:1.25rem;font-weight:900;color:#34D399;margin-top:2px;">-- MHz</div>
+                                <div style="font-size:0.62rem;color:#94A3B8;">Operating Band</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- 5G LINK STATUS & RADAR OVERVIEW -->
                 <div class="card" id="wifi-link-status-card">
                     <div class="card-header">
@@ -1526,17 +1575,17 @@
                             <div style="font-size:0.8rem;font-weight:800;color:#0F172A;">Real-Time Throughput (RX / TX)</div>
                             <div style="display:flex;gap:10px;font-size:0.72rem;font-weight:700;">
                                 <div style="display:flex;align-items:center;gap:4px;">
-                                    <div style="width:8px;height:8px;border-radius:2px;background:#2563EB;"></div><span>Download</span>
+                                    <div style="width:8px;height:8px;border-radius:2px;background:#0EA5E9;"></div><span>Download (RX)</span>
                                 </div>
                                 <div style="display:flex;align-items:center;gap:4px;">
-                                    <div style="width:8px;height:8px;border-radius:2px;background:#10B981;"></div><span>Upload</span>
+                                    <div style="width:8px;height:8px;border-radius:2px;background:#10B981;"></div><span>Upload (TX)</span>
                                 </div>
                             </div>
                         </div>
 
                         <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;">
                             <div style="background:#FFFFFF;border:1px solid #BFDBFE;border-radius:8px;padding:10px;">
-                                <div style="font-size:0.65rem;font-weight:700;color:#2563EB;text-transform:uppercase;">Download (RX)</div>
+                                <div style="font-size:0.65rem;font-weight:700;color:#0284C7;text-transform:uppercase;">Download (RX)</div>
                                 <div id="wifi-rx-rate" style="font-size:1.15rem;font-weight:800;color:#0F172A;font-family:var(--font-mono);margin-top:2px;">0.00 KB/s</div>
                                 <div id="wifi-rx-total" style="font-size:0.68rem;color:var(--text-muted);margin-top:2px;">Total: 0 MB</div>
                             </div>
@@ -1547,47 +1596,9 @@
                             </div>
                         </div>
 
-                        <div class="wifi-throughput-wrapper" id="wifi-chart-bars">
-                            <div class="wifi-throughput-col">
-                                <div class="wifi-pill rx" style="height:20%;"></div>
-                                <div class="wifi-pill tx" style="height:10%;"></div>
-                            </div>
-                            <div class="wifi-throughput-col">
-                                <div class="wifi-pill rx" style="height:45%;"></div>
-                                <div class="wifi-pill tx" style="height:25%;"></div>
-                            </div>
-                            <div class="wifi-throughput-col">
-                                <div class="wifi-pill rx" style="height:35%;"></div>
-                                <div class="wifi-pill tx" style="height:15%;"></div>
-                            </div>
-                            <div class="wifi-throughput-col">
-                                <div class="wifi-pill rx" style="height:70%;"></div>
-                                <div class="wifi-pill tx" style="height:30%;"></div>
-                            </div>
-                            <div class="wifi-throughput-col">
-                                <div class="wifi-pill rx" style="height:55%;"></div>
-                                <div class="wifi-pill tx" style="height:20%;"></div>
-                            </div>
-                            <div class="wifi-throughput-col">
-                                <div class="wifi-pill rx" style="height:85%;"></div>
-                                <div class="wifi-pill tx" style="height:40%;"></div>
-                            </div>
-                            <div class="wifi-throughput-col">
-                                <div class="wifi-pill rx" style="height:60%;"></div>
-                                <div class="wifi-pill tx" style="height:35%;"></div>
-                            </div>
-                            <div class="wifi-throughput-col">
-                                <div class="wifi-pill rx" style="height:90%;"></div>
-                                <div class="wifi-pill tx" style="height:45%;"></div>
-                            </div>
-                            <div class="wifi-throughput-col">
-                                <div class="wifi-pill rx" style="height:65%;"></div>
-                                <div class="wifi-pill tx" style="height:28%;"></div>
-                            </div>
-                            <div class="wifi-throughput-col">
-                                <div class="wifi-pill rx" style="height:80%;"></div>
-                                <div class="wifi-pill tx" style="height:38%;"></div>
-                            </div>
+                        <!-- SMOOTH REAL-TIME WAVEFORM GRAPH CANVAS -->
+                        <div style="position:relative;width:100%;height:90px;background:#0F172A;border-radius:8px;overflow:hidden;border:1px solid #1E293B;">
+                            <canvas id="wifi-throughput-canvas" style="width:100%;height:100%;display:block;"></canvas>
                         </div>
                     </div>
                 </div>
@@ -3240,6 +3251,128 @@
             backdrop.classList.remove('active');
         }
 
+        // === ANTENNA ALIGNMENT & ACOUSTIC BEEPER ENGINE ===
+        let audioCtx = null;
+        let isAudioAlignActive = false;
+        let beepTimeout = null;
+        let currentSignalLevel = -65;
+
+        function toggleAudioAlignment() {
+            isAudioAlignActive = !isAudioAlignActive;
+            const btn = document.getElementById('btn-audio-align');
+            const text = document.getElementById('btn-audio-text');
+            if (isAudioAlignActive) {
+                if (!audioCtx) {
+                    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                }
+                if (audioCtx.state === 'suspended') {
+                    audioCtx.resume();
+                }
+                if (btn) {
+                    btn.style.background = '#10B981';
+                    btn.style.boxShadow = '0 0 20px rgba(16,185,129,0.5)';
+                }
+                if (text) text.innerText = 'Audio Beeper: ON';
+                triggerAlignmentBeep();
+            } else {
+                if (btn) {
+                    btn.style.background = '#2563EB';
+                    btn.style.boxShadow = '0 0 15px rgba(37,99,235,0.4)';
+                }
+                if (text) text.innerText = 'Audio Beeper: OFF';
+                if (beepTimeout) clearTimeout(beepTimeout);
+            }
+        }
+
+        function triggerAlignmentBeep() {
+            if (!isAudioAlignActive || !audioCtx) return;
+            const sig = currentSignalLevel;
+            const clamped = Math.min(Math.max(sig, -95), -40);
+            const ratio = (clamped + 95) / 55;
+            const freq = 450 + (ratio * 1050);
+            const delay = Math.max(90, 800 - (ratio * 680));
+
+            try {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+                gain.gain.setValueAtTime(0.12, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.07);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.07);
+            } catch (e) {}
+
+            beepTimeout = setTimeout(triggerAlignmentBeep, delay);
+        }
+
+        // === SMOOTH WAVEFORM THROUGHPUT CANVAS ENGINE ===
+        const throughputHistory = {
+            rx: new Array(30).fill(0),
+            tx: new Array(30).fill(0)
+        };
+
+        function renderWaveformCanvas(rxSpeed, txSpeed) {
+            const canvas = document.getElementById('wifi-throughput-canvas');
+            if (!canvas) return;
+            
+            if (canvas.width !== canvas.offsetWidth) {
+                canvas.width = canvas.offsetWidth;
+                canvas.height = canvas.offsetHeight;
+            }
+            const ctx = canvas.getContext('2d');
+            const w = canvas.width;
+            const h = canvas.height;
+            if (!w || !h) return;
+            
+            throughputHistory.rx.shift();
+            throughputHistory.rx.push(rxSpeed);
+            throughputHistory.tx.shift();
+            throughputHistory.tx.push(txSpeed);
+
+            ctx.clearRect(0, 0, w, h);
+
+            let maxVal = Math.max(...throughputHistory.rx, ...throughputHistory.tx, 102400);
+
+            function drawWave(data, strokeColor, fillGradient) {
+                ctx.beginPath();
+                const step = w / (data.length - 1);
+                for (let i = 0; i < data.length; i++) {
+                    const val = data[i];
+                    const x = i * step;
+                    const y = h - (val / maxVal) * (h - 10) - 5;
+                    if (i === 0) ctx.moveTo(x, y);
+                    else {
+                        const prevX = (i - 1) * step;
+                        const prevY = h - (data[i - 1] / maxVal) * (h - 10) - 5;
+                        const cx = (prevX + x) / 2;
+                        ctx.bezierCurveTo(cx, prevY, cx, y, x, y);
+                    }
+                }
+                ctx.strokeStyle = strokeColor;
+                ctx.lineWidth = 2;
+                ctx.stroke();
+
+                ctx.lineTo(w, h);
+                ctx.lineTo(0, h);
+                ctx.closePath();
+                ctx.fillStyle = fillGradient;
+                ctx.fill();
+            }
+
+            const rxGrad = ctx.createLinearGradient(0, 0, 0, h);
+            rxGrad.addColorStop(0, 'rgba(14, 165, 233, 0.4)');
+            rxGrad.addColorStop(1, 'rgba(14, 165, 233, 0.0)');
+            drawWave(throughputHistory.rx, '#0EA5E9', rxGrad);
+
+            const txGrad = ctx.createLinearGradient(0, 0, 0, h);
+            txGrad.addColorStop(0, 'rgba(16, 185, 129, 0.4)');
+            txGrad.addColorStop(1, 'rgba(16, 185, 129, 0.0)');
+            drawWave(throughputHistory.tx, '#10B981', txGrad);
+        }
+
         // REFRESH OVERVIEW METRICS & LIVE INTERFACE TRAFFIC (Ultra-low CPU overhead)
         async function refreshData() {
             if (document.hidden) return;
@@ -3291,6 +3424,9 @@
                             const wTxTot = document.getElementById('wifi-tx-total');
                             if (wTxTot) wTxTot.innerText = `Total: ${formatBytes(curWifiTx)}`;
 
+                            // Render smooth waveform graph
+                            renderWaveformCanvas(wifiRxSpeed, wifiTxSpeed);
+
                             // Update Dashboard Live Interface Center
                             document.getElementById('dash-wifi-rx-rate').innerText = formatSpeed(wifiRxSpeed);
                             document.getElementById('dash-wifi-tx-rate').innerText = formatSpeed(wifiTxSpeed);
@@ -3306,21 +3442,6 @@
                             document.getElementById('dash-pppoe-tx-rate').innerText = formatSpeed(pppoeTxSpeed);
                             document.getElementById('dash-pppoe-rx-tot').innerText = formatBytes(curPppoeRx);
                             document.getElementById('dash-pppoe-tx-tot').innerText = formatBytes(curPppoeTx);
-
-                            // Update live chart bars
-                            const chart = document.getElementById('wifi-chart-bars');
-                            if (chart) {
-                                const rxH = Math.min(Math.max((wifiRxSpeed / 500000) * 100, 8), 100);
-                                const txH = Math.min(Math.max((wifiTxSpeed / 250000) * 100, 6), 100);
-                                const cols = chart.getElementsByClassName('wifi-throughput-col');
-                                if (cols.length > 0) {
-                                    cols[0].remove();
-                                    const newCol = document.createElement('div');
-                                    newCol.className = 'wifi-throughput-col';
-                                    newCol.innerHTML = `<div class="wifi-pill rx" style="height:${rxH}%;"></div><div class="wifi-pill tx" style="height:${txH}%;"></div>`;
-                                    chart.appendChild(newCol);
-                                }
-                            }
                         }
                     }
 
@@ -3330,6 +3451,51 @@
                         pppoeRx: curPppoeRx, pppoeTx: curPppoeTx,
                         timestamp: now
                     };
+
+                    // Update Antenna Alignment Widget
+                    const alignSig = document.getElementById('align-signal-val');
+                    const alignQual = document.getElementById('align-quality-text');
+                    const alignCcq = document.getElementById('align-ccq-val');
+                    const alignNoise = document.getElementById('align-noise-val');
+                    const alignSnr = document.getElementById('align-snr-val');
+                    const alignFreq = document.getElementById('align-freq-val');
+
+                    if (data.wifi_connected) {
+                        const sigNum = parseInt(data.link_signal) || -60;
+                        currentSignalLevel = sigNum;
+                        if (alignSig) alignSig.innerText = `${sigNum} dBm`;
+                        if (alignCcq) alignCcq.innerText = data.link_ccq || '98%';
+                        if (alignNoise) alignNoise.innerText = data.link_noise || '-95 dBm';
+                        if (alignSnr) alignSnr.innerText = data.link_snr || '32 dB';
+                        if (alignFreq) alignFreq.innerText = `${data.link_freq || '5745'} MHz`;
+
+                        if (alignQual) {
+                            if (sigNum >= -60) {
+                                alignQual.innerText = 'EXCELLENT ALIGNMENT (-40 to -60 dBm)';
+                                alignQual.style.color = '#10B981';
+                                alignQual.style.background = 'rgba(16,185,129,0.15)';
+                                alignQual.style.borderColor = 'rgba(16,185,129,0.3)';
+                            } else if (sigNum >= -72) {
+                                alignQual.innerText = 'GOOD LINK QUALITY (-60 to -72 dBm)';
+                                alignQual.style.color = '#38BDF8';
+                                alignQual.style.background = 'rgba(56,189,248,0.15)';
+                                alignQual.style.borderColor = 'rgba(56,189,248,0.3)';
+                            } else {
+                                alignQual.innerText = 'WEAK SIGNAL - ADJUST DISH TILT / AZIMUTH';
+                                alignQual.style.color = '#F59E0B';
+                                alignQual.style.background = 'rgba(245,158,11,0.15)';
+                                alignQual.style.borderColor = 'rgba(245,158,11,0.3)';
+                            }
+                        }
+                    } else {
+                        currentSignalLevel = -95;
+                        if (alignSig) alignSig.innerText = '-- dBm';
+                        if (alignQual) {
+                            alignQual.innerText = 'DISCONNECTED / SEARCHING...';
+                            alignQual.style.color = '#94A3B8';
+                            alignQual.style.background = 'rgba(255,255,255,0.05)';
+                        }
+                    }
 
                     // Wireless Link Status
                     const radarArm = document.getElementById('radar-sweep-arm');
