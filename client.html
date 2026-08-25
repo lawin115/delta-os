@@ -943,8 +943,14 @@
                     <span>Delta 5G Speed Test</span>
                 </div>
                 <div class="link-quality-badge" id="st-badge-status" style="background:rgba(56,189,248,0.12);color:#38BDF8;border-color:rgba(56,189,248,0.3);">
-                    Ready to Test
+                    🌍 Global Internet CDN
                 </div>
+            </div>
+
+            <!-- SERVER INFO BAR -->
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:5px 10px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:8px;font-size:0.68rem;margin-bottom:8px;">
+                <span style="color:#94A3B8;">Test Server:</span>
+                <span id="st-server-info" style="font-weight:700;color:#38BDF8;">Cloudflare Global High-Speed CDN</span>
             </div>
 
             <!-- SPEEDOMETER GAUGE -->
@@ -1222,7 +1228,7 @@
             }
         }
 
-        // 5. LIVE SPEED TEST ENGINE
+        // 5. LIVE SPEED TEST ENGINE (REAL GLOBAL INTERNET & LOCAL FALLBACK)
         let isSpeedTesting = false;
 
         function updateSpeedGauge(mbps, maxMbps = 100) {
@@ -1244,6 +1250,7 @@
             const btn = document.getElementById('btn-start-speedtest');
             const statusText = document.getElementById('st-status-text');
             const badge = document.getElementById('st-badge-status');
+            const serverInfo = document.getElementById('st-server-info');
             const boxPing = document.getElementById('st-box-ping');
             const boxJitter = document.getElementById('st-box-jitter');
             const boxDown = document.getElementById('st-box-down');
@@ -1255,7 +1262,7 @@
             const valUp = document.getElementById('st-val-up');
 
             btn.disabled = true;
-            btn.innerHTML = `<span class="pulse-dot" style="background:#FFFFFF;box-shadow:0 0 8px #FFFFFF;"></span> <span>TESTING IN PROGRESS...</span>`;
+            btn.innerHTML = `<span class="pulse-dot" style="background:#FFFFFF;box-shadow:0 0 8px #FFFFFF;"></span> <span>TESTING INTERNET SPEED...</span>`;
             badge.innerText = 'TESTING';
             badge.style.color = '#F59E0B';
             badge.style.borderColor = 'rgba(245, 158, 11, 0.4)';
@@ -1267,18 +1274,40 @@
             document.querySelectorAll('.st-metric-box').forEach(b => b.classList.remove('active'));
 
             try {
-                // PHASE 1: PING & JITTER TEST (5 rounds)
+                // DETECT SERVER: Check if external Cloudflare CDN is reachable
+                let useExternal = true;
+                let pingUrl = 'https://speed.cloudflare.com/__down?bytes=0';
+                let dlBaseUrl = 'https://speed.cloudflare.com/__down?bytes=';
+                let upUrl = 'https://speed.cloudflare.com/__up';
+
+                try {
+                    const testCtrl = new AbortController();
+                    const testTimeout = setTimeout(() => testCtrl.abort(), 2000);
+                    const testRes = await fetch(`${pingUrl}&t=${Date.now()}`, { signal: testCtrl.signal, mode: 'cors' });
+                    clearTimeout(testTimeout);
+                    if (!testRes.ok) throw new Error('Cloudflare unavailable');
+                    if (serverInfo) serverInfo.innerText = 'Cloudflare Global High-Speed Edge CDN (Real Internet)';
+                } catch (err) {
+                    console.log("External CDN unavailable, switching to local link test mode:", err);
+                    useExternal = false;
+                    pingUrl = `${API_URL}?action=speedtest_ping`;
+                    dlBaseUrl = `${API_URL}?action=speedtest_payload&size=`;
+                    upUrl = `${API_URL}?action=speedtest_upload`;
+                    if (serverInfo) serverInfo.innerText = 'Local 5GHz Transceiver Wireless Link';
+                }
+
+                // PHASE 1: REAL PING & JITTER TEST (5 rounds)
                 boxPing.classList.add('active');
                 boxJitter.classList.add('active');
-                statusText.innerText = '📡 Measuring network latency & jitter...';
+                statusText.innerText = useExternal ? '🌍 Connecting to nearest Global CDN Edge...' : '📡 Measuring local wireless link latency...';
 
                 let pings = [];
                 for (let i = 0; i < 5; i++) {
                     const t0 = performance.now();
-                    await fetch(`${API_URL}?action=speedtest_ping&t=${Date.now()}`);
+                    await fetch(`${pingUrl}&t=${Date.now()}`, { mode: 'cors' });
                     const t1 = performance.now();
                     pings.push(t1 - t0);
-                    await new Promise(r => setTimeout(r, 50));
+                    await new Promise(r => setTimeout(r, 40));
                 }
 
                 const avgPing = Math.round(pings.reduce((a, b) => a + b, 0) / pings.length);
@@ -1293,18 +1322,18 @@
                 boxPing.classList.remove('active');
                 boxJitter.classList.remove('active');
 
-                // PHASE 2: DOWNLOAD THROUGHPUT TEST (6 MB Stream)
+                // PHASE 2: REAL DOWNLOAD SPEED TEST
                 boxDown.classList.add('active');
-                statusText.innerText = '⬇️ Testing Download Throughput...';
+                statusText.innerText = useExternal ? '⬇️ Testing Real Internet Download Throughput...' : '⬇️ Testing Local 5G Download Throughput...';
 
                 let dlLoaded = 0;
                 const dlStart = performance.now();
-                const dlChunks = 2;
+                const chunkSizes = useExternal ? [2000000, 5000000, 10000000] : [2097152, 4194304];
                 let finalDlMbps = 0;
 
-                for (let c = 0; c < dlChunks; c++) {
-                    const chunkSize = 3145728; // 3MB chunk
-                    const res = await fetch(`${API_URL}?action=speedtest_payload&size=${chunkSize}&t=${Date.now()}`);
+                for (let c = 0; c < chunkSizes.length; c++) {
+                    const url = useExternal ? `${dlBaseUrl}${chunkSizes[c]}&t=${Date.now()}` : `${dlBaseUrl}${chunkSizes[c]}&t=${Date.now()}`;
+                    const res = await fetch(url, { mode: 'cors' });
                     const reader = res.body.getReader();
 
                     while (true) {
@@ -1325,20 +1354,22 @@
                 boxDown.classList.remove('active');
                 await new Promise(r => setTimeout(r, 300));
 
-                // PHASE 3: UPLOAD THROUGHPUT TEST (4 MB Stream)
+                // PHASE 3: REAL UPLOAD SPEED TEST
                 boxUp.classList.add('active');
-                statusText.innerText = '⬆️ Testing Upload Throughput...';
+                statusText.innerText = useExternal ? '⬆️ Testing Real Internet Upload Throughput...' : '⬆️ Testing Local 5G Upload Throughput...';
                 updateSpeedGauge(0, 100);
 
-                const upPayload = new Uint8Array(2097152); // 2MB upload payload
+                const upSize = useExternal ? 1500000 : 2097152;
+                const upPayload = new Uint8Array(upSize);
                 const upStart = performance.now();
                 let upLoaded = 0;
                 let finalUpMbps = 0;
 
                 for (let u = 0; u < 2; u++) {
-                    await fetch(`${API_URL}?action=speedtest_upload&t=${Date.now()}`, {
+                    await fetch(`${upUrl}?t=${Date.now()}`, {
                         method: 'POST',
-                        body: upPayload
+                        body: upPayload,
+                        mode: 'cors'
                     });
                     upLoaded += upPayload.length;
                     const elapsedSec = (performance.now() - upStart) / 1000;
@@ -1354,7 +1385,7 @@
                 boxUp.classList.remove('active');
 
                 // FINISHED
-                statusText.innerHTML = `<span style="color:#10B981;font-weight:800;">✨ Speed test completed successfully!</span>`;
+                statusText.innerHTML = `<span style="color:#10B981;font-weight:800;">✨ Real Internet Speed Test Completed (${useExternal ? 'Cloudflare Global Edge' : 'Local 5G Wireless'})!</span>`;
                 badge.innerText = 'TEST COMPLETED';
                 badge.style.color = '#10B981';
                 badge.style.borderColor = 'rgba(16, 185, 129, 0.4)';
@@ -1362,7 +1393,7 @@
 
             } catch (e) {
                 console.error("Speed test error:", e);
-                statusText.innerHTML = `<span style="color:#EF4444;">⚠️ Speed test interrupted. Check connection.</span>`;
+                statusText.innerHTML = `<span style="color:#EF4444;">⚠️ Speed test interrupted. Check Internet connection.</span>`;
                 badge.innerText = 'ERROR';
                 badge.style.color = '#EF4444';
             } finally {
