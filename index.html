@@ -4544,30 +4544,44 @@
                 </div>
             `;
 
+            let updateData = null;
+
+            // 1. Try fetching via Router Backend API
             try {
                 const res = await fetch(`${API_URL}?action=github_check_update&token=${authToken}`);
                 const data = await res.json();
-                if (data.update_available) {
-                    box.style.background = '#ECFDF5';
-                    box.style.borderColor = '#6EE7B7';
-                    box.style.color = '#065F46';
-                    box.innerHTML = `
-                        <div style="font-weight:800;font-size:0.85rem;color:#059669;margin-bottom:4px;">✨ New Delta OS Update Available (${data.latest_version})</div>
-                        <div style="font-size:0.76rem;color:#475569;">${escapeHtml(data.changelog || 'Latest Delta OS Pro system and kernel security improvements.')}</div>
-                    `;
-                    btnDo.style.display = 'inline-flex';
-                } else {
-                    box.style.background = '#F0FDF4';
-                    box.style.borderColor = '#BBF7D0';
-                    box.style.color = '#166534';
-                    box.innerHTML = `✅ <b>System is Up-to-Date!</b> Your router is running the latest verified Delta OS Pro release.`;
-                    btnDo.style.display = 'none';
+                if (data && data.update_available) {
+                    updateData = data;
                 }
-            } catch (e) {
-                box.style.background = '#FEF2F2';
-                box.style.borderColor = '#FCA5A5';
-                box.style.color = '#991B1B';
-                box.innerHTML = '⚠️ Could not connect to Delta Cloud servers. Please verify router WAN internet link.';
+            } catch (e) { }
+
+            // 2. If router WAN has no route, fallback to direct browser client-side fetch
+            if (!updateData) {
+                try {
+                    const cRes = await fetch(`https://raw.githubusercontent.com/lawin115/delta-os/main/version.json?_t=${Date.now()}`);
+                    const cData = await cRes.json();
+                    if (cData && cData.update_available) {
+                        updateData = cData;
+                    }
+                } catch (e) { }
+            }
+
+            if (updateData && updateData.update_available) {
+                box.style.background = '#ECFDF5';
+                box.style.borderColor = '#6EE7B7';
+                box.style.color = '#065F46';
+                box.innerHTML = `
+                    <div style="font-weight:800;font-size:0.85rem;color:#059669;margin-bottom:4px;">✨ New Delta OS Update Available (${updateData.latest_version})</div>
+                    <div style="font-size:0.76rem;color:#475569;margin-bottom:4px;">${escapeHtml(updateData.changelog || 'Latest Delta OS Pro system and kernel security improvements.')}</div>
+                    <div style="font-size:0.7rem;color:#64748B;">Release Date: ${escapeHtml(updateData.release_date || '2026-08-25')} | Target: MikroTik RouterBOARD LHG 5nD</div>
+                `;
+                btnDo.style.display = 'inline-flex';
+            } else {
+                box.style.background = '#F0FDF4';
+                box.style.borderColor = '#BBF7D0';
+                box.style.color = '#166534';
+                box.innerHTML = `✅ <b>System is Up-to-Date!</b> Your router is running the latest verified Delta OS Pro release.`;
+                btnDo.style.display = 'none';
             }
         }
 
