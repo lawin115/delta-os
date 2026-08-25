@@ -4534,7 +4534,15 @@
             const box = document.getElementById('update-status-box');
             const btnDo = document.getElementById('btn-do-update');
             box.style.display = 'block';
-            box.innerHTML = 'Connecting to GitHub... Checking version.json manifest...';
+            box.style.background = '#EFF6FF';
+            box.style.borderColor = '#93C5FD';
+            box.style.color = '#1E40AF';
+            box.innerHTML = `
+                <div style="display:flex;align-items:center;gap:8px;">
+                    <div style="width:8px;height:8px;border-radius:50%;background:#0284C7;box-shadow:0 0 8px #0284C7;animation:livePulse 1.5s infinite;"></div>
+                    <span>Connecting to <b>Delta Cloud</b>... Checking firmware manifest...</span>
+                </div>
+            `;
 
             try {
                 const res = await fetch(`${API_URL}?action=github_check_update&token=${authToken}`);
@@ -4543,25 +4551,28 @@
                     box.style.background = '#ECFDF5';
                     box.style.borderColor = '#6EE7B7';
                     box.style.color = '#065F46';
-                    box.innerHTML = `<b>New Release Found (${data.latest_version}):</b> ${escapeHtml(data.changelog || 'Performance and security updates')}`;
+                    box.innerHTML = `
+                        <div style="font-weight:800;font-size:0.85rem;color:#059669;margin-bottom:4px;">✨ New Delta OS Update Available (${data.latest_version})</div>
+                        <div style="font-size:0.76rem;color:#475569;">${escapeHtml(data.changelog || 'Latest Delta OS Pro system and kernel security improvements.')}</div>
+                    `;
                     btnDo.style.display = 'inline-flex';
                 } else {
-                    box.style.background = '#EFF6FF';
-                    box.style.borderColor = '#93C5FD';
-                    box.style.color = '#1E40AF';
-                    box.innerHTML = `✅ <b>System Up-to-Date!</b> You are running the latest Delta OS Pro firmware release.`;
+                    box.style.background = '#F0FDF4';
+                    box.style.borderColor = '#BBF7D0';
+                    box.style.color = '#166534';
+                    box.innerHTML = `✅ <b>System is Up-to-Date!</b> Your router is running the latest verified Delta OS Pro release.`;
                     btnDo.style.display = 'none';
                 }
             } catch (e) {
                 box.style.background = '#FEF2F2';
                 box.style.borderColor = '#FCA5A5';
                 box.style.color = '#991B1B';
-                box.innerHTML = '⚠️ Could not connect to GitHub. Please check router WAN internet connection.';
+                box.innerHTML = '⚠️ Could not connect to Delta Cloud servers. Please verify router WAN internet link.';
             }
         }
 
         async function executeGitHubUpdate() {
-            if (!confirm('Flash and install latest Delta OS Pro firmware from GitHub? Router will reboot upon completion.')) return;
+            if (!confirm('Flash and install latest Delta OS Pro firmware from Delta Cloud? Router will reboot upon completion.')) return;
 
             const box = document.getElementById('update-status-box');
             const wrap = document.getElementById('update-progress-wrap');
@@ -4582,9 +4593,9 @@
             } catch (e) { }
 
             let curPercent = 15;
-            bar.style.width = '15%';
-            num.innerText = '15%';
-            stage.innerText = 'Connecting to GitHub server...';
+            if (bar) bar.style.width = '15%';
+            if (num) num.innerText = '15%';
+            if (stage) stage.innerText = 'Connecting to Delta Cloud Server...';
 
             const poller = setInterval(async () => {
                 try {
@@ -4592,14 +4603,14 @@
                     const data = await res.json();
                     if (data && data.percent !== undefined) {
                         curPercent = Math.max(curPercent, data.percent);
-                        bar.style.width = curPercent + '%';
-                        num.innerText = curPercent + '%';
-                        if (data.stage) stage.innerText = data.stage;
+                        if (bar) bar.style.width = curPercent + '%';
+                        if (num) num.innerText = curPercent + '%';
+                        if (data.stage && stage) stage.innerText = data.stage;
 
                         if (curPercent >= 100 || data.status === 'rebooting') {
                             clearInterval(poller);
-                            stage.innerText = '🔄 Router is Rebooting...';
-                            desc.innerHTML = '<b style="color:#059669;">Flash complete! Reconnecting in <span id="reboot-countdown">30</span>s...</b>';
+                            if (stage) stage.innerText = '🔄 Router is Rebooting...';
+                            if (desc) desc.innerHTML = '<b style="color:#059669;">Flash complete! Reconnecting in <span id="reboot-countdown">30</span>s...</b>';
 
                             let cd = 30;
                             const cdTimer = setInterval(() => {
@@ -4613,18 +4624,20 @@
                             }, 1000);
                         } else if (data.status === 'error') {
                             clearInterval(poller);
-                            stage.innerText = '❌ Update Error';
-                            stage.style.color = '#DC2626';
-                            desc.innerText = data.stage || 'An error occurred during update.';
+                            if (stage) {
+                                stage.innerText = '❌ Update Error';
+                                stage.style.color = '#DC2626';
+                            }
+                            if (desc) desc.innerText = data.stage || 'An error occurred during update.';
                             if (btnCheck) btnCheck.disabled = false;
                         }
                     }
                 } catch (e) {
                     if (curPercent >= 75) {
                         curPercent = 100;
-                        bar.style.width = '100%';
-                        num.innerText = '100%';
-                        stage.innerText = '🔄 Flash Complete! Router Rebooting...';
+                        if (bar) bar.style.width = '100%';
+                        if (num) num.innerText = '100%';
+                        if (stage) stage.innerText = '🔄 Flash Complete! Router Rebooting...';
                         clearInterval(poller);
                         setTimeout(() => window.location.reload(), 25000);
                     }
@@ -4933,52 +4946,76 @@
         });
     </script>
 
-    <!-- SYSTEM AUTO-UPDATE MODAL -->
+    <!-- SYSTEM AUTO-UPDATE MODAL (DELTA CLOUD OTA) -->
     <div class="modal-overlay" id="github-update-modal">
-        <div class="modal-card" style="max-width:520px;border-top:4px solid #0284C7;">
-            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
-                <div style="display:flex;align-items:center;gap:10px;">
-                    <div style="width:36px;height:36px;border-radius:10px;background:#EFF6FF;display:flex;align-items:center;justify-content:center;">
-                        <svg viewBox="0 0 24 24" style="width:20px;height:20px;fill:#0284C7;">
-                            <path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z" />
+        <div class="modal-card" style="max-width:540px;border-top:4px solid #0284C7;border-radius:18px;box-shadow:0 25px 60px rgba(2,132,199,0.18);">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;padding-bottom:14px;border-bottom:1px solid #F1F5F9;">
+                <div style="display:flex;align-items:center;gap:12px;">
+                    <div style="width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,#EFF6FF,#DBEAFE);border:1px solid #BFDBFE;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(2,132,199,0.15);">
+                        <svg viewBox="0 0 24 24" style="width:22px;height:22px;fill:#0284C7;">
+                            <path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM14 13v4h-4v-4H7l5-5 5 5h-3z" />
                         </svg>
                     </div>
                     <div>
-                        <h3 style="font-size:1rem;font-weight:800;color:#0F172A;">System Auto-Update</h3>
-                        <span style="font-size:0.72rem;color:#64748B;">Delta OS Pro Cloud Firmware Manager</span>
+                        <h3 style="font-size:1.05rem;font-weight:800;color:#0F172A;letter-spacing:-0.2px;">Delta Cloud OTA Manager</h3>
+                        <span style="font-size:0.73rem;color:#64748B;">Delta OS Pro Automated Cloud Firmware Upgrade</span>
                     </div>
                 </div>
-                <button onclick="closeGitHubUpdateModal()" style="background:none;border:none;font-size:1.4rem;color:#64748B;cursor:pointer;">&times;</button>
+                <button onclick="closeGitHubUpdateModal()" style="background:#F1F5F9;border:1px solid #E2E8F0;border-radius:8px;width:30px;height:30px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;color:#64748B;cursor:pointer;">&times;</button>
             </div>
 
-            <div style="background:#F8FAFC;border:1px solid #E2E8F0;border-radius:10px;padding:14px;margin-bottom:16px;">
-                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;font-size:0.8rem;">
-                    <span style="color:#64748B;font-weight:600;">Current Running Version:</span>
-                    <span id="update-cur-ver" class="badge badge-success">v2.5 (Latest)</span>
+            <!-- HARDWARE & RUNNING VERSION INFO CARD -->
+            <div style="background:linear-gradient(135deg, #F8FAFC, #F0F9FF);border:1px solid #BAE6FD;border-radius:12px;padding:16px;margin-bottom:16px;">
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+                    <div>
+                        <div style="font-size:0.68rem;font-weight:700;color:#64748B;text-transform:uppercase;letter-spacing:0.5px;">Current Version</div>
+                        <div style="margin-top:4px;"><span id="update-cur-ver" class="badge badge-success" style="font-size:0.75rem;padding:4px 10px;">v2.5 (Kernel 5.15.167)</span></div>
+                    </div>
+                    <div>
+                        <div style="font-size:0.68rem;font-weight:700;color:#64748B;text-transform:uppercase;letter-spacing:0.5px;">Target Hardware</div>
+                        <div id="update-hw-model" style="font-size:0.86rem;font-weight:800;color:#0284C7;margin-top:4px;">MikroTik RouterBOARD LHG 5nD</div>
+                    </div>
                 </div>
-                <div style="display:flex;justify-content:space-between;align-items:center;font-size:0.8rem;">
-                    <span style="color:#64748B;font-weight:600;">Target Hardware:</span>
-                    <span id="update-hw-model" style="font-weight:700;color:#0F172A;">Delta SXT 5nD r2</span>
+                <div style="margin-top:12px;padding-top:10px;border-top:1px dashed #CBD5E1;display:flex;align-items:center;justify-content:space-between;font-size:0.75rem;">
+                    <span style="color:#64748B;font-weight:600;">Update Channel:</span>
+                    <span style="color:#0284C7;font-weight:700;display:flex;align-items:center;gap:4px;">
+                        <span style="width:6px;height:6px;border-radius:50%;background:#10B981;display:inline-block;"></span> Delta Cloud Stable (OTA)
+                    </span>
                 </div>
             </div>
 
-            <div id="update-status-box" style="display:none;background:#EFF6FF;border:1px solid #93C5FD;color:#1E40AF;padding:12px;border-radius:8px;font-size:0.8rem;margin-bottom:16px;">
-                Checking cloud server for firmware releases...
+            <!-- DYNAMIC STATUS & MANIFEST BOX -->
+            <div id="update-status-box" style="display:none;background:#EFF6FF;border:1px solid #93C5FD;color:#1E40AF;padding:14px;border-radius:10px;font-size:0.82rem;margin-bottom:16px;animation:fadeIn 0.2s ease;">
+                Connecting to Delta Cloud... Querying delta_version manifest...
             </div>
 
-            <div style="display:flex;gap:10px;justify-content:flex-end;">
-                <button onclick="closeGitHubUpdateModal()" class="btn btn-secondary">Cancel</button>
-                <button id="btn-check-update" onclick="checkForGitHubUpdate()" class="btn btn-primary" style="background:#0284C7;">
-                    <svg viewBox="0 0 24 24" style="width:14px;height:14px;fill:currentColor;">
+            <!-- PROGRESS WRAPPER -->
+            <div id="update-progress-wrap" style="display:none;background:#F8FAFC;border:1px solid #BAE6FD;border-radius:12px;padding:16px;margin-bottom:16px;">
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+                    <span id="update-progress-stage" style="font-size:0.82rem;font-weight:800;color:#0284C7;">Connecting to Delta Cloud Server...</span>
+                    <span id="update-progress-num" style="font-size:0.9rem;font-weight:900;color:#0284C7;font-family:var(--font-mono);">0%</span>
+                </div>
+                <div style="background:#E0F2FE;height:10px;border-radius:5px;overflow:hidden;margin-bottom:8px;">
+                    <div id="update-progress-bar" style="background:linear-gradient(90deg, #0284C7, #0EA5E9);height:100%;width:0%;transition:width 0.3s ease;"></div>
+                </div>
+                <div id="update-progress-desc" style="font-size:0.72rem;color:#64748B;">Direct Zero-RAM Stream into NOR Flash memory. Please keep router powered on.</div>
+            </div>
+
+            <!-- ACTION BUTTONS -->
+            <div style="display:flex;gap:10px;justify-content:flex-end;align-items:center;">
+                <button onclick="closeGitHubUpdateModal()" class="btn btn-secondary">Close</button>
+                <button id="btn-check-update" onclick="checkForGitHubUpdate()" class="btn btn-primary" style="background:linear-gradient(135deg, #0284C7, #0EA5E9);">
+                    <svg viewBox="0 0 24 24" style="width:15px;height:15px;fill:currentColor;">
                         <path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z" />
                     </svg>
                     Check for Updates
                 </button>
-                <button id="btn-do-update" onclick="executeGitHubUpdate()" class="btn btn-success" style="display:none;">
-                    🚀 Flash & Update Now
+                <button id="btn-do-update" onclick="executeGitHubUpdate()" class="btn btn-success" style="display:none;font-weight:700;">
+                    🚀 Flash & Update from Delta Cloud
                 </button>
             </div>
         </div>
+    </div>
         <!-- BACKUP & FLASH FIRMWARE MODAL -->
         <div class="modal-overlay" id="backup-flash-modal">
             <div class="modal-card" style="max-width:540px;border-top:4px solid #10B981;">
