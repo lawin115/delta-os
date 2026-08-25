@@ -1216,7 +1216,7 @@
                 </div>
                 <div class="brand-text">
                     <h2>Delta OS</h2>
-                    <span>Control Center 5G <span style="font-size:0.65rem;background:#2563EB;color:#fff;padding:1px 5px;border-radius:4px;font-weight:700;">v2.4.2</span></span>
+                    <span>Control Center 5G <span id="brand-version-badge" style="font-size:0.65rem;background:#0284C7;color:#fff;padding:1px 5px;border-radius:4px;font-weight:700;">v2.5</span></span>
                 </div>
             </div>
             <button class="sidebar-close-btn" onclick="toggleMobileMenu()" aria-label="Close menu">&times;</button>
@@ -3363,6 +3363,15 @@
                         if (um) um.innerText = data.model;
                         const btm = document.getElementById('backup-tab-hw-model');
                         if (btm) btm.innerText = data.model;
+                    }
+                    if (data.os_version) {
+                        document.title = `Delta OS Pro ${data.os_version} - Control Center`;
+                        const bvb = document.getElementById('brand-version-badge');
+                        if (bvb) bvb.innerText = data.os_version;
+                    }
+                    if (data.kernel && data.os_version) {
+                        const ucv = document.getElementById('update-cur-ver');
+                        if (ucv) ucv.innerText = `${data.os_version} (Kernel ${data.kernel})`;
                     }
                     document.getElementById('stat-wan-ip').innerText = data.wan_ip;
 

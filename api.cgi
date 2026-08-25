@@ -415,8 +415,11 @@ EOF
         CPU_NAME=$(grep -m1 'system type' /proc/cpuinfo 2>/dev/null | cut -d: -f2 | sed 's/^[ \t]*//' | tr -d '\r\n')
         [ -z "$CPU_NAME" ] && CPU_NAME="Atheros AR9344"
 
+        OS_VERSION=$(cat /etc/delta_version 2>/dev/null | tr -d '\r\n')
+        [ -z "$OS_VERSION" ] && OS_VERSION="v2.5"
         ARCH=$(uname -m 2>/dev/null || echo "mips")
-        KERNEL=$(uname -r 2>/dev/null || echo "6.6")
+        KERNEL=$(uname -r 2>/dev/null || echo "5.15.167")
+        KERNEL=$(echo "$KERNEL" | tr -d '\r\n')
         HOSTNAME=$(cat /proc/sys/kernel/hostname 2>/dev/null || uci -q get system.@system[0].hostname || echo "Delta")
 
         WAN_IP=$(ubus call network.interface.wan status 2>/dev/null | grep -A2 '"ipv4-address"' | grep '"address"' | cut -d'"' -f4)
@@ -580,6 +583,7 @@ EOF
     "status": "success",
     "hostname": "$HOSTNAME",
     "model": "$MODEL",
+    "os_version": "$OS_VERSION",
     "board_serial": "$BOARD_SERIAL",
     "arch": "$ARCH",
     "kernel": "$KERNEL",
