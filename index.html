@@ -1695,12 +1695,10 @@
                         </div>
                     </form>
                 </div>
-            </div>
 
-            
-                <!-- ADVANCED WIRELESS PROTOCOL & RF TUNING ENGINE -->
-                <div class="card" id="adv-wireless-card" style="border: 1px solid #BAE6FD; box-shadow: 0 4px 20px -2px rgba(2, 132, 199, 0.08);">
-                    <div class="card-header" style="border-bottom: 1px solid #F1F5F9; padding-bottom: 12px;">
+                <!-- ADVANCED WIRELESS PROTOCOL & RF PERFORMANCE ENGINE -->
+                <div class="card" id="adv-wireless-card" style="border: 1px solid #BAE6FD;">
+                    <div class="card-header">
                         <div style="display:flex;align-items:center;gap:10px;">
                             <div style="width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg, #EFF6FF, #DBEAFE);border:1px solid #BFDBFE;display:flex;align-items:center;justify-content:center;">
                                 <svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:#0284C7;">
@@ -1708,131 +1706,95 @@
                                 </svg>
                             </div>
                             <div>
-                                <h2 style="font-size:0.98rem;font-weight:800;color:#0F172A;margin:0;">🚀 Advanced Wireless Protocol & RF Engine (بەهێزکردنی وایەرلێس)</h2>
-                                <div style="font-size:0.72rem;color:#64748B;margin-top:1px;">ACK Distance Tuning, Frame Bursting, Adaptive Noise Immunity & 1-Click Profiles</div>
+                                <h2 style="font-size:0.96rem;font-weight:800;color:#0F172A;margin:0;">Advanced Wireless Protocol & RF Engine</h2>
+                                <div style="font-size:0.72rem;color:#64748B;margin-top:1px;">Hardware ACK Distance, Frame Bursting, ANI & Performance Profiles</div>
                             </div>
                         </div>
-                        <label style="display:flex;align-items:center;gap:8px;font-size:0.78rem;font-weight:700;color:#0284C7;cursor:pointer;background:#F0F9FF;padding:5px 12px;border-radius:20px;border:1px solid #BAE6FD;">
-                            <input type="checkbox" id="adv-wireless-master-toggle" onchange="toggleAdvWirelessEngine(this.checked)" style="width:16px;height:16px;cursor:pointer;" checked>
-                            Engine Active
+                        <label style="display:flex;align-items:center;gap:6px;font-size:0.75rem;font-weight:700;color:#0284C7;cursor:pointer;">
+                            <input type="checkbox" id="adv-wireless-master-toggle" onchange="toggleAdvWirelessEngine(this.checked)" style="width:15px;height:15px;cursor:pointer;" checked>
+                            Active
                         </label>
                     </div>
 
-                    <!-- 1-CLICK WIRELESS OPTIMIZATION PROFILES -->
-                    <div style="margin-top:12px;margin-bottom:14px;">
-                        <div style="font-size:0.72rem;font-weight:800;color:#64748B;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">1-Click Instant Optimization Profiles</div>
-                        <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));gap:10px;">
-                            <!-- Profile 1: Gaming -->
-                            <div onclick="selectWirelessProfile('gaming')" id="prof-card-gaming" style="background:#F8FAFC;border:2px solid #E2E8F0;border-radius:12px;padding:12px;cursor:pointer;transition:all 0.2s ease;">
-                                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
-                                    <strong style="font-size:0.85rem;color:#0F172A;">🎮 Low Latency & Gaming</strong>
-                                    <span class="badge badge-info" id="badge-prof-gaming" style="display:none;">ACTIVE</span>
-                                </div>
-                                <div style="font-size:0.72rem;color:#64748B;line-height:1.3;">HT20 clean band + Short GI + Bursting for rock-solid CCQ and lowest jitter.</div>
-                            </div>
-
-                            <!-- Profile 2: Max Speed -->
-                            <div onclick="selectWirelessProfile('max_speed')" id="prof-card-max_speed" style="background:#F8FAFC;border:2px solid #E2E8F0;border-radius:12px;padding:12px;cursor:pointer;transition:all 0.2s ease;">
-                                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
-                                    <strong style="font-size:0.85rem;color:#0F172A;">⚡ Max Bandwidth Turbo</strong>
-                                    <span class="badge badge-success" id="badge-prof-max_speed" style="display:none;">ACTIVE</span>
-                                </div>
-                                <div style="font-size:0.72rem;color:#64748B;line-height:1.3;">HT40 300Mbps MIMO + 28dBm Max TX Power + Packet Aggregation for top download speed.</div>
-                            </div>
-
-                            <!-- Profile 3: Long Range -->
-                            <div onclick="selectWirelessProfile('long_range')" id="prof-card-long_range" style="background:#F8FAFC;border:2px solid #E2E8F0;border-radius:12px;padding:12px;cursor:pointer;transition:all 0.2s ease;">
-                                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
-                                    <strong style="font-size:0.85rem;color:#0F172A;">🛡️ Anti-Interference / Long Range</strong>
-                                    <span class="badge badge-warning" id="badge-prof-long_range" style="display:none;">ACTIVE</span>
-                                </div>
-                                <div style="font-size:0.72rem;color:#64748B;line-height:1.3;">15km ACK timeout + Hardware Noise Immunity (ANI) against noisy towers.</div>
-                            </div>
-                        </div>
+                    <!-- 3 Instant 1-Click Optimization Profiles -->
+                    <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(180px, 1fr));gap:10px;margin-bottom:14px;">
+                        <button type="button" onclick="selectWirelessProfile('gaming')" id="prof-card-gaming" class="btn btn-secondary" style="padding:10px 12px;justify-content:space-between;border-radius:10px;font-weight:700;">
+                            <span>🎮 Low Latency (Gaming)</span>
+                            <span class="badge badge-info" id="badge-prof-gaming" style="display:none;">ON</span>
+                        </button>
+                        <button type="button" onclick="selectWirelessProfile('max_speed')" id="prof-card-max_speed" class="btn btn-secondary" style="padding:10px 12px;justify-content:space-between;border-radius:10px;font-weight:700;">
+                            <span>⚡ Max Speed (300M Turbo)</span>
+                            <span class="badge badge-success" id="badge-prof-max_speed" style="display:none;">ON</span>
+                        </button>
+                        <button type="button" onclick="selectWirelessProfile('long_range')" id="prof-card-long_range" class="btn btn-secondary" style="padding:10px 12px;justify-content:space-between;border-radius:10px;font-weight:700;">
+                            <span>🛡️ Anti-Noise (Long Range)</span>
+                            <span class="badge badge-warning" id="badge-prof-long_range" style="display:none;">ON</span>
+                        </button>
                     </div>
 
-                    <!-- DETAILED HARDWARE TUNERS -->
+                    <!-- Detailed Hardware Tuners (Sliders & Controls) -->
                     <div id="adv-wireless-tuners-panel" style="background:#F8FAFC;border:1px solid #E2E8F0;border-radius:12px;padding:14px;">
-                        <div class="form-grid">
-                            <!-- 1. Distance Slider (ACK Timeout) -->
-                            <div class="form-group" style="grid-column: 1 / -1;">
-                                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
-                                    <label style="margin:0;">🎯 Distance Tuning (ACK Timeout Calibration)</label>
-                                    <span id="adv-distance-display" style="font-weight:800;font-size:0.82rem;color:#0284C7;font-family:var(--font-mono);">3,000 m (3.0 km)</span>
+                        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:12px;">
+                            <!-- Distance Calibration Slider -->
+                            <div>
+                                <div style="display:flex;justify-content:space-between;font-size:0.75rem;font-weight:700;margin-bottom:4px;">
+                                    <span>Distance Calibration (ACK)</span>
+                                    <span id="adv-distance-display" style="color:#0284C7;font-family:var(--font-mono);font-weight:800;">3,000 m (3.0 km)</span>
                                 </div>
                                 <input type="range" id="adv-distance-slider" min="500" max="30000" step="500" value="3000" oninput="onDistanceSliderChange(this.value)" style="width:100%;cursor:pointer;accent-color:#0284C7;">
-                                <div style="display:flex;justify-content:space-between;font-size:0.65rem;color:#64748B;margin-top:2px;">
-                                    <span>500m (Close Tower)</span>
-                                    <span>5,000m (5 km)</span>
-                                    <span>15,000m (15 km)</span>
-                                    <span>30,000m (30 km Long-Range)</span>
-                                </div>
                             </div>
 
-                            <!-- 2. TX Output Power Slider -->
-                            <div class="form-group" style="grid-column: 1 / -1;">
-                                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
-                                    <label style="margin:0;">📶 Hardware TX Output Power</label>
-                                    <span id="adv-txpower-display" style="font-weight:800;font-size:0.82rem;color:#059669;font-family:var(--font-mono);">27 dBm (~500 mW)</span>
+                            <!-- TX Power Slider -->
+                            <div>
+                                <div style="display:flex;justify-content:space-between;font-size:0.75rem;font-weight:700;margin-bottom:4px;">
+                                    <span>TX Output Power</span>
+                                    <span id="adv-txpower-display" style="color:#059669;font-family:var(--font-mono);font-weight:800;">27 dBm (~500 mW)</span>
                                 </div>
                                 <input type="range" id="adv-txpower-slider" min="10" max="28" step="1" value="27" oninput="onTxPowerSliderChange(this.value)" style="width:100%;cursor:pointer;accent-color:#059669;">
-                                <div style="display:flex;justify-content:space-between;font-size:0.65rem;color:#64748B;margin-top:2px;">
-                                    <span>10 dBm (10 mW)</span>
-                                    <span>20 dBm (100 mW)</span>
-                                    <span>25 dBm (316 mW)</span>
-                                    <span>28 dBm (630 mW Max Power)</span>
-                                </div>
                             </div>
+                        </div>
 
-                            <!-- 3. Channel Bandwidth Mode -->
-                            <div class="form-group">
-                                <label>Channel Bandwidth (HT Mode)</label>
-                                <select class="form-control" id="adv-htmode-select">
-                                    <option value="HT40">HT40 - 40 MHz (300 Mbps Turbo)</option>
-                                    <option value="HT20">HT20 - 20 MHz (150 Mbps Standard Clean)</option>
+                        <!-- 4 Compact Dropdown Switches -->
+                        <div class="form-grid" style="gap:10px;">
+                            <div class="form-group" style="margin:0;">
+                                <label style="font-size:0.7rem;margin-bottom:3px;">Bandwidth</label>
+                                <select class="form-control" id="adv-htmode-select" style="min-height:34px;font-size:0.8rem;">
+                                    <option value="HT40">HT40 (300 Mbps Turbo)</option>
+                                    <option value="HT20">HT20 (150 Mbps Clean)</option>
                                 </select>
                             </div>
-
-                            <!-- 4. Toggle: Frame Bursting & Packet Aggregation -->
-                            <div class="form-group">
-                                <label>Packet Aggregation (Frame Bursting)</label>
-                                <select class="form-control" id="adv-bursting-select">
-                                    <option value="1">Enabled (A-MPDU / A-MSDU Bursting Active)</option>
-                                    <option value="0">Disabled (Standard Sequential Transmission)</option>
+                            <div class="form-group" style="margin:0;">
+                                <label style="font-size:0.7rem;margin-bottom:3px;">Frame Bursting (A-MPDU)</label>
+                                <select class="form-control" id="adv-bursting-select" style="min-height:34px;font-size:0.8rem;">
+                                    <option value="1">Enabled</option>
+                                    <option value="0">Disabled</option>
                                 </select>
                             </div>
-
-                            <!-- 5. Toggle: Hardware Adaptive Noise Immunity (ANI) -->
-                            <div class="form-group">
-                                <label>Adaptive Noise Immunity (ANI)</label>
-                                <select class="form-control" id="adv-ani-select">
-                                    <option value="1">Enabled (Atheros AR9344 Hardware Anti-Noise Filter)</option>
-                                    <option value="0">Disabled (Raw RF Receiver)</option>
+                            <div class="form-group" style="margin:0;">
+                                <label style="font-size:0.7rem;margin-bottom:3px;">Noise Immunity (ANI)</label>
+                                <select class="form-control" id="adv-ani-select" style="min-height:34px;font-size:0.8rem;">
+                                    <option value="1">Enabled</option>
+                                    <option value="0">Disabled</option>
                                 </select>
                             </div>
-
-                            <!-- 6. Toggle: Short Guard Interval (Short GI 400ns) -->
-                            <div class="form-group">
-                                <label>Short Guard Interval (Short GI)</label>
-                                <select class="form-control" id="adv-shortgi-select">
-                                    <option value="1">Enabled (400ns - Maximum Bitrate Throughput)</option>
-                                    <option value="0">Disabled (800ns - Robust Multipath Fallback)</option>
+                            <div class="form-group" style="margin:0;">
+                                <label style="font-size:0.7rem;margin-bottom:3px;">Short Guard Interval</label>
+                                <select class="form-control" id="adv-shortgi-select" style="min-height:34px;font-size:0.8rem;">
+                                    <option value="1">Enabled (400ns)</option>
+                                    <option value="0">Disabled (800ns)</option>
                                 </select>
                             </div>
                         </div>
 
-                        <div style="display:flex;align-items:center;gap:12px;margin-top:14px;flex-wrap:wrap;">
-                            <button type="button" onclick="saveWirelessAdvSettings()" class="btn btn-primary" style="font-weight:700;">
-                                <svg viewBox="0 0 24 24" style="width:15px;height:15px;fill:currentColor;">
-                                    <path d="M17 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V7l-4-4zm-5 16c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm3-10H5V5h10v4z" />
-                                </svg>
-                                Save & Apply Wireless Optimization
+                        <div style="display:flex;align-items:center;gap:12px;margin-top:12px;">
+                            <button type="button" onclick="saveWirelessAdvSettings()" class="btn btn-primary" style="font-weight:700;font-size:0.8rem;">
+                                Apply Wireless Optimization
                             </button>
-                            <span id="adv-wireless-save-msg" style="font-size:0.8rem;font-weight:700;display:none;"></span>
+                            <span id="adv-wireless-save-msg" style="font-size:0.75rem;font-weight:700;display:none;"></span>
                         </div>
                     </div>
                 </div>
-
+            </div>
 
             <!-- TAB: DASHBOARD OVERVIEW -->
             <div id="dashboard" class="tab-pane">
@@ -3158,7 +3120,6 @@
                     document.getElementById('login-screen').style.display = 'none';
                     switchTab('wifi');
                     refreshData();
-                        loadWirelessAdvSettings();
                     loadInterfaces();
                     setInterval(refreshData, 2000);
                     resetInactivityTimer();
@@ -3322,6 +3283,7 @@
                 const g = document.getElementById('group-firewall'); if (g) g.classList.add('open');
             }
 
+            if (tabId === 'wifi') loadWirelessAdvSettings();
             if (tabId === 'ip-addresses') loadIpList();
             if (tabId === 'dhcp-client') loadDhcpClientStatus();
             if (tabId === 'dhcp-server') { loadDhcpServers(); loadDhcpLeases(); }
@@ -3904,7 +3866,6 @@
 
             setTimeout(() => {
                 refreshData();
-                        loadWirelessAdvSettings();
                 if (msg) setTimeout(() => { msg.style.display = 'none'; }, 4000);
             }, 2000);
             return false;
@@ -3918,8 +3879,7 @@
             alert(`Connecting to ${decodeURIComponent(ssid)}...`);
 
             await fetch(`${API_URL}?action=wifi_set&ssid=${ssid}&key=${key}&mode=sta&htmode=HT40&country=US&token=${authToken}`);
-            setTimeout(() => { refreshData();
-                        loadWirelessAdvSettings(); switchTab('wifi'); }, 3000);
+            setTimeout(() => { refreshData(); switchTab('wifi'); }, 3000);
         }
 
         // IP ADDRESSES
@@ -4554,7 +4514,109 @@
             } catch (e) { console.error(e); }
         }
 
-        
+        // DIAGNOSTICS & PING
+        async function runPing() {
+            const target = encodeURIComponent(document.getElementById('ping-target').value);
+            const output = document.getElementById('ping-output');
+            output.innerText = `Pinging ${decodeURIComponent(target)}...`;
+            try {
+                const res = await fetch(`${API_URL}?action=ping&target=${target}&token=${authToken}`);
+                const data = await res.json();
+                output.innerText = data.output || 'No response from target.';
+            } catch (e) { output.innerText = 'Error running ping.'; }
+        }
+
+        async function loadLogs() {
+            const output = document.getElementById('logs-output');
+            output.innerText = 'Loading logs...';
+            try {
+                const res = await fetch(`${API_URL}?action=logs&token=${authToken}`);
+                const data = await res.json();
+                if (data.status === 'success') {
+                    output.innerText = [...(data.dmesg || []), ...(data.logread || [])].join('\n');
+                }
+            } catch (e) { output.innerText = 'Error fetching logs.'; }
+        }
+
+        // CLIENT PORTAL (/client) LOCK/UNLOCK MANAGER
+        async function loadClientPortalStatus() {
+            try {
+                const res = await fetch(`${API_URL}?action=get_client_portal&token=${authToken}`);
+                const data = await res.json();
+                if (data.status === 'success') {
+                    const isEnabled = data.enabled === true;
+                    const badge = document.getElementById('portal-mgr-status-badge');
+                    const desc = document.getElementById('portal-mgr-state-desc');
+                    const heroIcon = document.getElementById('portal-hero-icon');
+                    const heroSvg = document.getElementById('portal-hero-svg');
+                    const btnUnlock = document.getElementById('btn-unlock-portal');
+                    const btnLock = document.getElementById('btn-lock-portal');
+
+                    if (isEnabled) {
+                        if (badge) { badge.className = 'badge badge-success'; badge.innerText = 'UNLOCKED / ACTIVE'; }
+                        if (desc) { desc.innerHTML = '<span style="color:#34D399;font-weight:700;">UNLOCKED:</span> The client page is <b>PUBLIC and LIVE</b> at <code>http://192.168.88.1/client</code>'; }
+                        if (heroIcon) {
+                            heroIcon.style.background = 'rgba(16, 185, 129, 0.15)';
+                            heroIcon.style.borderColor = 'rgba(16, 185, 129, 0.35)';
+                            heroIcon.style.boxShadow = '0 0 15px rgba(16, 185, 129, 0.25)';
+                        }
+                        if (heroSvg) {
+                            heroSvg.style.fill = '#10B981';
+                            heroSvg.innerHTML = '<path d="M12 17c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm6-9h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6h1.9c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm0 12H6V10h12v10z"/>';
+                        }
+                        if (btnUnlock) {
+                            btnUnlock.style.background = '#10B981';
+                            btnUnlock.style.color = '#FFFFFF';
+                            btnUnlock.style.boxShadow = '0 3px 14px rgba(16, 185, 129, 0.4)';
+                            btnUnlock.style.border = 'none';
+                        }
+                        if (btnLock) {
+                            btnLock.style.background = 'transparent';
+                            btnLock.style.color = '#94A3B8';
+                            btnLock.style.boxShadow = 'none';
+                            btnLock.style.border = '1px solid rgba(255, 255, 255, 0.1)';
+                        }
+                    } else {
+                        if (badge) { badge.className = 'badge badge-danger'; badge.innerText = 'LOCKED / BLOCKED'; }
+                        if (desc) { desc.innerHTML = '<span style="color:#FCA5A5;font-weight:700;">LOCKED:</span> Access to <code>/client</code> is disabled and blocked with 403 Forbidden.'; }
+                        if (heroIcon) {
+                            heroIcon.style.background = 'rgba(239, 68, 68, 0.15)';
+                            heroIcon.style.borderColor = 'rgba(239, 68, 68, 0.35)';
+                            heroIcon.style.boxShadow = '0 0 15px rgba(239, 68, 68, 0.25)';
+                        }
+                        if (heroSvg) {
+                            heroSvg.style.fill = '#EF4444';
+                            heroSvg.innerHTML = '<path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/>';
+                        }
+                        if (btnUnlock) {
+                            btnUnlock.style.background = 'transparent';
+                            btnUnlock.style.color = '#94A3B8';
+                            btnUnlock.style.boxShadow = 'none';
+                            btnUnlock.style.border = '1px solid rgba(255, 255, 255, 0.1)';
+                        }
+                        if (btnLock) {
+                            btnLock.style.background = '#EF4444';
+                            btnLock.style.color = '#FFFFFF';
+                            btnLock.style.boxShadow = '0 3px 14px rgba(239, 68, 68, 0.4)';
+                            btnLock.style.border = 'none';
+                        }
+                    }
+                }
+            } catch (e) { console.error(e); }
+        }
+
+        async function setClientPortalState(enable) {
+            const enableVal = enable ? 1 : 0;
+            try {
+                const res = await fetch(`${API_URL}?action=set_client_portal&enabled=${enableVal}&token=${authToken}`);
+                const data = await res.json();
+                alert(data.message || (enable ? 'Client Portal Unlocked!' : 'Client Portal Locked!'));
+                loadClientPortalStatus();
+            } catch (e) {
+                alert('Error updating Client Portal lock status.');
+            }
+        }
+
         // ==========================================
         // ADVANCED WIRELESS RF ENGINE & TUNING LOGIC
         // ==========================================
@@ -4674,7 +4736,7 @@
             if (msgEl) {
                 msgEl.style.display = 'inline-block';
                 msgEl.style.color = '#0284C7';
-                msgEl.innerText = 'Applying RF Protocol & Calibration settings...';
+                msgEl.innerText = 'Applying Wireless Optimization...';
             }
 
             try {
@@ -4684,124 +4746,20 @@
                 if (data.status === 'success') {
                     if (msgEl) {
                         msgEl.style.color = '#059669';
-                        msgEl.innerText = '✅ Wireless Protocol Settings Applied Successfully!';
-                        setTimeout(() => { msgEl.style.display = 'none'; }, 4000);
+                        msgEl.innerText = '✅ Wireless Protocol Settings Applied!';
+                        setTimeout(() => { msgEl.style.display = 'none'; }, 3000);
                     }
                 } else {
                     if (msgEl) {
                         msgEl.style.color = '#DC2626';
-                        msgEl.innerText = '❌ Failed to apply settings: ' + (data.message || 'Unknown error');
+                        msgEl.innerText = '❌ Failed to apply: ' + (data.message || 'Error');
                     }
                 }
             } catch (e) {
                 if (msgEl) {
                     msgEl.style.color = '#DC2626';
-                    msgEl.innerText = '❌ Error communicating with router.';
+                    msgEl.innerText = '❌ Communication error.';
                 }
-            }
-        }
-
-
-        // DIAGNOSTICS & PING
-        async function runPing() {
-            const target = encodeURIComponent(document.getElementById('ping-target').value);
-            const output = document.getElementById('ping-output');
-            output.innerText = `Pinging ${decodeURIComponent(target)}...`;
-            try {
-                const res = await fetch(`${API_URL}?action=ping&target=${target}&token=${authToken}`);
-                const data = await res.json();
-                output.innerText = data.output || 'No response from target.';
-            } catch (e) { output.innerText = 'Error running ping.'; }
-        }
-
-        async function loadLogs() {
-            const output = document.getElementById('logs-output');
-            output.innerText = 'Loading logs...';
-            try {
-                const res = await fetch(`${API_URL}?action=logs&token=${authToken}`);
-                const data = await res.json();
-                if (data.status === 'success') {
-                    output.innerText = [...(data.dmesg || []), ...(data.logread || [])].join('\n');
-                }
-            } catch (e) { output.innerText = 'Error fetching logs.'; }
-        }
-
-        // CLIENT PORTAL (/client) LOCK/UNLOCK MANAGER
-        async function loadClientPortalStatus() {
-            try {
-                const res = await fetch(`${API_URL}?action=get_client_portal&token=${authToken}`);
-                const data = await res.json();
-                if (data.status === 'success') {
-                    const isEnabled = data.enabled === true;
-                    const badge = document.getElementById('portal-mgr-status-badge');
-                    const desc = document.getElementById('portal-mgr-state-desc');
-                    const heroIcon = document.getElementById('portal-hero-icon');
-                    const heroSvg = document.getElementById('portal-hero-svg');
-                    const btnUnlock = document.getElementById('btn-unlock-portal');
-                    const btnLock = document.getElementById('btn-lock-portal');
-
-                    if (isEnabled) {
-                        if (badge) { badge.className = 'badge badge-success'; badge.innerText = 'UNLOCKED / ACTIVE'; }
-                        if (desc) { desc.innerHTML = '<span style="color:#34D399;font-weight:700;">UNLOCKED:</span> The client page is <b>PUBLIC and LIVE</b> at <code>http://192.168.88.1/client</code>'; }
-                        if (heroIcon) {
-                            heroIcon.style.background = 'rgba(16, 185, 129, 0.15)';
-                            heroIcon.style.borderColor = 'rgba(16, 185, 129, 0.35)';
-                            heroIcon.style.boxShadow = '0 0 15px rgba(16, 185, 129, 0.25)';
-                        }
-                        if (heroSvg) {
-                            heroSvg.style.fill = '#10B981';
-                            heroSvg.innerHTML = '<path d="M12 17c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm6-9h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6h1.9c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm0 12H6V10h12v10z"/>';
-                        }
-                        if (btnUnlock) {
-                            btnUnlock.style.background = '#10B981';
-                            btnUnlock.style.color = '#FFFFFF';
-                            btnUnlock.style.boxShadow = '0 3px 14px rgba(16, 185, 129, 0.4)';
-                            btnUnlock.style.border = 'none';
-                        }
-                        if (btnLock) {
-                            btnLock.style.background = 'transparent';
-                            btnLock.style.color = '#94A3B8';
-                            btnLock.style.boxShadow = 'none';
-                            btnLock.style.border = '1px solid rgba(255, 255, 255, 0.1)';
-                        }
-                    } else {
-                        if (badge) { badge.className = 'badge badge-danger'; badge.innerText = 'LOCKED / BLOCKED'; }
-                        if (desc) { desc.innerHTML = '<span style="color:#FCA5A5;font-weight:700;">LOCKED:</span> Access to <code>/client</code> is disabled and blocked with 403 Forbidden.'; }
-                        if (heroIcon) {
-                            heroIcon.style.background = 'rgba(239, 68, 68, 0.15)';
-                            heroIcon.style.borderColor = 'rgba(239, 68, 68, 0.35)';
-                            heroIcon.style.boxShadow = '0 0 15px rgba(239, 68, 68, 0.25)';
-                        }
-                        if (heroSvg) {
-                            heroSvg.style.fill = '#EF4444';
-                            heroSvg.innerHTML = '<path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/>';
-                        }
-                        if (btnUnlock) {
-                            btnUnlock.style.background = 'transparent';
-                            btnUnlock.style.color = '#94A3B8';
-                            btnUnlock.style.boxShadow = 'none';
-                            btnUnlock.style.border = '1px solid rgba(255, 255, 255, 0.1)';
-                        }
-                        if (btnLock) {
-                            btnLock.style.background = '#EF4444';
-                            btnLock.style.color = '#FFFFFF';
-                            btnLock.style.boxShadow = '0 3px 14px rgba(239, 68, 68, 0.4)';
-                            btnLock.style.border = 'none';
-                        }
-                    }
-                }
-            } catch (e) { console.error(e); }
-        }
-
-        async function setClientPortalState(enable) {
-            const enableVal = enable ? 1 : 0;
-            try {
-                const res = await fetch(`${API_URL}?action=set_client_portal&enabled=${enableVal}&token=${authToken}`);
-                const data = await res.json();
-                alert(data.message || (enable ? 'Client Portal Unlocked!' : 'Client Portal Locked!'));
-                loadClientPortalStatus();
-            } catch (e) {
-                alert('Error updating Client Portal lock status.');
             }
         }
 
@@ -5247,7 +5205,6 @@
                         document.getElementById('login-screen').style.display = 'none';
                         switchTab('wifi');
                         refreshData();
-                        loadWirelessAdvSettings();
                         loadInterfaces();
                         setInterval(refreshData, 2000);
                         return;
