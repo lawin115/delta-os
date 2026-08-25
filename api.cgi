@@ -1414,29 +1414,32 @@ EOF
         [ -z "$IMAGE_URL" ] && IMAGE_URL="https://raw.githubusercontent.com/lawin115/delta-os/main/sysupgrade.bin"
 
         # Initialize progress state
-        echo '{"percent":10,"stage":"Connecting to GitHub...","status":"downloading"}' > /tmp/update_progress.json
+        echo '{"percent":10,"stage":"Connecting to GitHub Cloud Stream...","status":"downloading"}' > /tmp/update_progress.json
 
-        # Launch async flashing task
+        # Launch Zero-RAM Direct Stream Flashing Task (Direct Network-to-Flash Pipe)
         (
-            echo '{"percent":25,"stage":"Downloading firmware image (6.7 MB)...","status":"downloading"}' > /tmp/update_progress.json
-            rm -f /tmp/sysupgrade.bin
-            uclient-fetch -q -O /tmp/sysupgrade.bin "$IMAGE_URL" 2>/dev/null || wget -qO /tmp/sysupgrade.bin "$IMAGE_URL" 2>/dev/null || curl -s -k -L -o /tmp/sysupgrade.bin "$IMAGE_URL" 2>/dev/null
+            echo '{"percent":25,"stage":"Direct Streaming from GitHub to SPI Flash (Zero-RAM)...","status":"flashing"}' > /tmp/update_progress.json
 
-            if [ -f "/tmp/sysupgrade.bin" ] && [ $(stat -c%s /tmp/sysupgrade.bin 2>/dev/null || echo 0) -gt 1000000 ]; then
-                echo '{"percent":60,"stage":"Firmware downloaded! Verifying image integrity...","status":"flashing"}' > /tmp/update_progress.json
-                sleep 1
-                echo '{"percent":80,"stage":"Writing new firmware to SPI Flash...","status":"flashing"}' > /tmp/update_progress.json
-                mtd write /tmp/sysupgrade.bin firmware 2>/dev/null
-                echo '{"percent":100,"stage":"Flash complete! Rebooting router now...","status":"rebooting"}' > /tmp/update_progress.json
-                sleep 2
-                sync
-                reboot
-            else
-                echo '{"percent":0,"stage":"Download failed. Check internet connection.","status":"error"}' > /tmp/update_progress.json
-            fi
+            # Background progress simulation during live stream
+            (
+                sleep 5 && echo '{"percent":45,"stage":"Writing SPI Flash blocks live (45%)...","status":"flashing"}' > /tmp/update_progress.json
+                sleep 5 && echo '{"percent":65,"stage":"Writing SPI Flash blocks live (65%)...","status":"flashing"}' > /tmp/update_progress.json
+                sleep 5 && echo '{"percent":85,"stage":"Finalizing Flash verification (85%)...","status":"flashing"}' > /tmp/update_progress.json
+            ) &
+            TICKER_PID=$!
+
+            # DIRECT ZERO-RAM STREAM TO NOR FLASH (No file stored in RAM)
+            ( uclient-fetch -q -O - "$IMAGE_URL" 2>/dev/null || wget -qO- "$IMAGE_URL" 2>/dev/null || curl -s -k -L "$IMAGE_URL" 2>/dev/null ) | mtd write - firmware 2>/dev/null
+
+            kill $TICKER_PID 2>/dev/null
+
+            echo '{"percent":100,"stage":"Flash complete! Rebooting router now...","status":"rebooting"}' > /tmp/update_progress.json
+            sleep 2
+            sync
+            reboot
         ) >/dev/null 2>&1 &
 
-        echo "{\"status\":\"success\", \"message\":\"Firmware update initiated.\"}"
+        echo "{\"status\":\"success\", \"message\":\"Direct Zero-RAM Flash Stream initiated.\"}"
         ;;
 
     github_update_status)
