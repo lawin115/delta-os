@@ -1439,7 +1439,7 @@
                             <div class="status-dot"></div>
                             <div>
                                 <h2 id="wifi-link-title">5GHz Radio Link Status</h2>
-                                <div style="font-size:0.72rem;color:var(--text-muted);margin-top:1px;" id="header-board-model">RouterBOARD SXT 5nD r2 (Atheros AR9344)</div>
+                                <div style="font-size:0.72rem;color:var(--text-muted);margin-top:1px;" id="header-board-model">MikroTik RouterBOARD</div>
                             </div>
                         </div>
                         <span id="wifi-link-badge" class="badge badge-warning">STANDBY</span>
@@ -1660,7 +1660,7 @@
                             <div class="progress-bar-container">
                                 <div id="stat-cpu-bar" class="progress-bar-fill" style="width: 5%;"></div>
                             </div>
-                            <div class="stat-desc" id="stat-board-model">RouterBOARD SXT 5nD r2</div>
+                            <div class="stat-desc" id="stat-board-model">MikroTik RouterBOARD</div>
                         </div>
                     </div>
 
@@ -2323,7 +2323,7 @@
                         </div>
                         <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
                             <div style="background:rgba(255,255,255,0.08);padding:6px 12px;border-radius:8px;font-size:0.75rem;border:1px solid rgba(255,255,255,0.1);">
-                                <span style="color:#94A3B8;">Target Hardware:</span> <strong style="color:#38BDF8;">Mikrotik SXT 5nD r2</strong>
+                                <span style="color:#94A3B8;">Target Hardware:</span> <strong style="color:#38BDF8;" id="flash-hw-model">MikroTik RouterBOARD</strong>
                             </div>
                             <button type="button" onclick="downloadBackupConfig()" class="btn" style="background:#10B981;color:#FFFFFF;font-weight:700;padding:8px 16px;border-radius:10px;box-shadow:0 4px 12px rgba(16,185,129,0.3);">
                                 <svg viewBox="0 0 24 24" style="width:15px;height:15px;fill:currentColor;">
@@ -3182,9 +3182,13 @@
                     document.getElementById('stat-uptime').innerText = data.uptime;
                     if (data.model) {
                         const bm = document.getElementById('stat-board-model');
-                        if (bm) bm.innerText = 'RouterBOARD SXT 5nD r2';
+                        if (bm) bm.innerText = data.model;
                         const hm = document.getElementById('header-board-model');
-                        if (hm) hm.innerText = 'RouterBOARD SXT 5nD r2 (Atheros AR9344)';
+                        if (hm) hm.innerText = `${data.model} (${data.cpu_model || 'Atheros AR9344'})`;
+                        const um = document.getElementById('update-hw-model');
+                        if (um) um.innerText = data.model;
+                        const fm = document.getElementById('flash-hw-model');
+                        if (fm) fm.innerText = data.model;
                     }
                     document.getElementById('stat-wan-ip').innerText = data.wan_ip;
 
@@ -4658,7 +4662,7 @@
                 </div>
                 <div style="display:flex;justify-content:space-between;align-items:center;font-size:0.8rem;">
                     <span style="color:#64748B;font-weight:600;">Target Hardware:</span>
-                    <span id="update-hw-model" style="font-weight:700;color:#0F172A;">Delta SXT 5nD r2</span>
+                    <span id="update-hw-model" style="font-weight:700;color:#0F172A;">MikroTik RouterBOARD</span>
                 </div>
             </div>
 

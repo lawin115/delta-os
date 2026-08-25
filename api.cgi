@@ -408,10 +408,16 @@ EOF
         MINS=$(((UPTIME_SEC % 3600) / 60))
         UPTIME_STR="${DAYS}d ${HOURS}h ${MINS}m"
 
-        MODEL="RouterBOARD SXT 5nD r2"
-        ARCH="mips"
-        KERNEL="6.6"
-        HOSTNAME="Delta"
+        MODEL=$(cat /tmp/sysinfo/model 2>/dev/null || cat /proc/device-tree/model 2>/dev/null || grep -m1 'machine' /proc/cpuinfo 2>/dev/null | cut -d: -f2 | sed 's/^[ \t]*//')
+        [ -z "$MODEL" ] && MODEL="MikroTik RouterBOARD"
+        MODEL=$(echo "$MODEL" | tr -d '\0\r\n')
+
+        CPU_NAME=$(grep -m1 'system type' /proc/cpuinfo 2>/dev/null | cut -d: -f2 | sed 's/^[ \t]*//' | tr -d '\r\n')
+        [ -z "$CPU_NAME" ] && CPU_NAME="Atheros AR9344"
+
+        ARCH=$(uname -m 2>/dev/null || echo "mips")
+        KERNEL=$(uname -r 2>/dev/null || echo "6.6")
+        HOSTNAME=$(cat /proc/sys/kernel/hostname 2>/dev/null || uci -q get system.@system[0].hostname || echo "Delta")
 
         WAN_IP=$(ubus call network.interface.wan status 2>/dev/null | grep -A2 '"ipv4-address"' | grep '"address"' | cut -d'"' -f4)
         [ -z "$WAN_IP" ] && WAN_IP=$(ip -4 addr show "$WIFI_IFACE" 2>/dev/null | grep -o 'inet [0-9.]*' | cut -d' ' -f2)
