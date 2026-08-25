@@ -829,6 +829,138 @@ EOF
         echo "{\"status\":\"success\", \"message\":\"Connecting to $SSID...\"}"
         ;;
 
+    get_wireless_adv)
+        ADV_ENABLED=$(uci -q get wireless.radio0.adv_enabled || echo "1")
+        DISTANCE=$(uci -q get wireless.radio0.distance || echo "3000")
+        HTMODE=$(uci -q get wireless.radio0.htmode || echo "HT40")
+        TXPOWER=$(uci -q get wireless.radio0.txpower || echo "27")
+        BURSTING=$(uci -q get wireless.default_radio0.bursting || echo "1")
+        SHORT_GI=$(uci -q get wireless.radio0.short_gi_40 || echo "1")
+        NOSCAN=$(uci -q get wireless.radio0.noscan || echo "1")
+        ANI=$(uci -q get wireless.radio0.ani || echo "1")
+        PROFILE=$(uci -q get wireless.radio0.active_profile || echo "gaming")
+
+        cat <<EOF
+{
+    "status": "success",
+    "enabled": $([ "$ADV_ENABLED" = "1" ] && echo "true" || echo "false"),
+    "distance": $DISTANCE,
+    "htmode": "$HTMODE",
+    "txpower": $TXPOWER,
+    "bursting": $([ "$BURSTING" = "1" ] && echo "true" || echo "false"),
+    "short_gi": $([ "$SHORT_GI" = "1" ] && echo "true" || echo "false"),
+    "noscan": $([ "$NOSCAN" = "1" ] && echo "true" || echo "false"),
+    "ani": $([ "$ANI" = "1" ] && echo "true" || echo "false"),
+    "active_profile": "$PROFILE"
+}
+EOF
+        ;;
+
+    set_wireless_adv)
+        ADV_ENABLED=$(get_query_val "enabled")
+        DISTANCE=$(get_query_val "distance")
+        HTMODE=$(get_query_val "htmode")
+        TXPOWER=$(get_query_val "txpower")
+        BURSTING=$(get_query_val "bursting")
+        SHORT_GI=$(get_query_val "short_gi")
+        NOSCAN=$(get_query_val "noscan")
+        ANI=$(get_query_val "ani")
+        PROFILE=$(get_query_val "profile")
+
+        [ -z "$ADV_ENABLED" ] && ADV_ENABLED="1"
+        [ -z "$DISTANCE" ] && DISTANCE="3000"
+        [ -z "$HTMODE" ] && HTMODE="HT40"
+        [ -z "$TXPOWER" ] && TXPOWER="27"
+        [ -z "$BURSTING" ] && BURSTING="1"
+        [ -z "$SHORT_GI" ] && SHORT_GI="1"
+        [ -z "$NOSCAN" ] && NOSCAN="1"
+        [ -z "$ANI" ] && ANI="1"
+        [ -z "$PROFILE" ] && PROFILE="custom"
+
+        uci set wireless.radio0.adv_enabled="$ADV_ENABLED" 2>/dev/null
+        uci set wireless.radio0.distance="$DISTANCE" 2>/dev/null
+        uci set wireless.radio0.htmode="$HTMODE" 2>/dev/null
+        uci set wireless.radio0.txpower="$TXPOWER" 2>/dev/null
+        uci set wireless.radio0.short_gi_40="$SHORT_GI" 2>/dev/null
+        uci set wireless.radio0.short_gi_20="$SHORT_GI" 2>/dev/null
+        uci set wireless.radio0.noscan="$NOSCAN" 2>/dev/null
+        uci set wireless.radio0.ani="$ANI" 2>/dev/null
+        uci set wireless.radio0.active_profile="$PROFILE" 2>/dev/null
+
+        uci set wireless.default_radio0.bursting="$BURSTING" 2>/dev/null
+        uci set wireless.default_radio0.ff="$BURSTING" 2>/dev/null
+        uci commit wireless
+
+        # Live Hardware Rate & Distance Injection
+        iw phy phy0 set distance "$DISTANCE" 2>/dev/null
+        iw dev wlan0 set txpower fixed "${TXPOWER}00" 2>/dev/null
+        echo "$ANI" > /sys/kernel/debug/ath9k/phy0/ani 2>/dev/null
+
+        echo "{\"status\":\"success\", \"message\":\"Advanced Wireless Protocol settings applied!\"}"
+        ;;
+
+    apply_wireless_profile)
+        REQ_PROFILE=$(get_query_val "profile")
+        [ -z "$REQ_PROFILE" ] && REQ_PROFILE="gaming"
+
+        case "$REQ_PROFILE" in
+            gaming)
+                uci set wireless.radio0.htmode="HT20"
+                uci set wireless.radio0.distance="3000"
+                uci set wireless.radio0.txpower="25"
+                uci set wireless.radio0.short_gi_20="1"
+                uci set wireless.radio0.short_gi_40="1"
+                uci set wireless.radio0.noscan="0"
+                uci set wireless.radio0.ani="1"
+                uci set wireless.radio0.active_profile="gaming"
+                uci set wireless.default_radio0.bursting="1"
+                uci set wireless.default_radio0.ff="1"
+                iw phy phy0 set distance 3000 2>/dev/null
+                iw dev wlan0 set txpower fixed 2500 2>/dev/null
+                echo 1 > /sys/kernel/debug/ath9k/phy0/ani 2>/dev/null
+                MSG="Ultra-Low Latency & Gaming Profile (HT20 + ShortGI + Bursting) activated!"
+                ;;
+            max_speed)
+                uci set wireless.radio0.htmode="HT40"
+                uci set wireless.radio0.distance="1000"
+                uci set wireless.radio0.txpower="28"
+                uci set wireless.radio0.short_gi_20="1"
+                uci set wireless.radio0.short_gi_40="1"
+                uci set wireless.radio0.noscan="1"
+                uci set wireless.radio0.ani="1"
+                uci set wireless.radio0.active_profile="max_speed"
+                uci set wireless.default_radio0.bursting="1"
+                uci set wireless.default_radio0.ff="1"
+                iw phy phy0 set distance 1000 2>/dev/null
+                iw dev wlan0 set txpower fixed 2800 2>/dev/null
+                echo 1 > /sys/kernel/debug/ath9k/phy0/ani 2>/dev/null
+                MSG="Maximum Bandwidth Turbo Profile (40MHz + 300Mbps MIMO) activated!"
+                ;;
+            long_range)
+                uci set wireless.radio0.htmode="HT20"
+                uci set wireless.radio0.distance="15000"
+                uci set wireless.radio0.txpower="28"
+                uci set wireless.radio0.short_gi_20="0"
+                uci set wireless.radio0.short_gi_40="0"
+                uci set wireless.radio0.noscan="0"
+                uci set wireless.radio0.ani="1"
+                uci set wireless.radio0.active_profile="long_range"
+                uci set wireless.default_radio0.bursting="1"
+                uci set wireless.default_radio0.ff="1"
+                iw phy phy0 set distance 15000 2>/dev/null
+                iw dev wlan0 set txpower fixed 2800 2>/dev/null
+                echo 1 > /sys/kernel/debug/ath9k/phy0/ani 2>/dev/null
+                MSG="Anti-Interference & Long-Range Profile (15km ACK + Noise Immunity) activated!"
+                ;;
+            *)
+                MSG="Custom profile applied."
+                ;;
+        esac
+
+        uci commit wireless
+        echo "{\"status\":\"success\", \"profile\":\"$REQ_PROFILE\", \"message\":\"$MSG\"}"
+        ;;
+
     # IP ADDRESS LIST MANAGEMENT (/ip address)
     ip_list)
         echo "{\"status\":\"success\", \"ips\": ["
