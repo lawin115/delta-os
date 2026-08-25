@@ -504,11 +504,11 @@ EOF
             LINK_RAW=$(iw dev "$WIFI_IFACE" link 2>/dev/null)
             if echo "$LINK_RAW" | grep -qi "Connected to"; then
                 WIFI_CONNECTED=true
-                LINK_BSSID=$(echo "$LINK_RAW" | grep -i "Connected to" | awk '{print $3}' | tr -d '\n\r')
-                LINK_SSID=$(echo "$LINK_RAW" | grep -i "SSID:" | sed -e 's/^[ \t]*SSID: //' -e 's/^"//' -e 's/"$//' | tr -d '\n\r')
-                LINK_SIGNAL=$(echo "$LINK_RAW" | grep -i "signal:" | awk '{print $2}' | tr -d '\n\r')
-                LINK_FREQ=$(echo "$LINK_RAW" | grep -i "freq:" | awk '{print $2}' | tr -d '\n\r')
-                LINK_BITRATE=$(echo "$LINK_RAW" | grep -i "tx bitrate:" | sed 's/^[ \t]*tx bitrate: //' | tr -d '\n\r')
+                LINK_BSSID=$(echo "$LINK_RAW" | grep -i "Connected to" | awk '{print $3}' | tr -cd 'a-fA-F0-9:')
+                LINK_SSID=$(echo "$LINK_RAW" | grep -i "SSID:" | sed -e 's/^[ \t]*SSID:[ \t]*//' -e 's/^"//' -e 's/"$//' | tr -d '\n\r\t')
+                LINK_SIGNAL=$(echo "$LINK_RAW" | grep -i "signal:" | awk '{print $2}' | tr -cd -- '-0-9')
+                LINK_FREQ=$(echo "$LINK_RAW" | grep -i "freq:" | awk '{print $2}' | tr -cd '0-9')
+                LINK_BITRATE=$(echo "$LINK_RAW" | grep -i "tx bitrate:" | sed -e 's/.*tx bitrate:[ \t]*//' | tr '\t\r\n' ' ' | sed 's/^[ ]*//;s/[ ]*$//')
                 LINK_TX_RATE="$LINK_BITRATE"
             fi
 
@@ -518,8 +518,8 @@ EOF
                 STA_TX_PKTS=$(echo "$STA_RAW" | grep -i "tx packets:" | awk '{print $3}' | tr -cd '0-9')
                 STA_TX_RETRIES=$(echo "$STA_RAW" | grep -i "tx retries:" | awk '{print $3}' | tr -cd '0-9')
                 STA_TX_FAILED=$(echo "$STA_RAW" | grep -i "tx failed:" | awk '{print $3}' | tr -cd '0-9')
-                STA_RX_BITRATE=$(echo "$STA_RAW" | grep -i "rx bitrate:" | sed 's/^[ \t]*rx bitrate: //' | tr -d '\n\r')
-                STA_TX_BITRATE=$(echo "$STA_RAW" | grep -i "tx bitrate:" | sed 's/^[ \t]*tx bitrate: //' | tr -d '\n\r')
+                STA_RX_BITRATE=$(echo "$STA_RAW" | grep -i "rx bitrate:" | sed -e 's/.*rx bitrate:[ \t]*//' | tr '\t\r\n' ' ' | sed 's/^[ ]*//;s/[ ]*$//')
+                STA_TX_BITRATE=$(echo "$STA_RAW" | grep -i "tx bitrate:" | sed -e 's/.*tx bitrate:[ \t]*//' | tr '\t\r\n' ' ' | sed 's/^[ ]*//;s/[ ]*$//')
                 
                 [ -n "$STA_TX_BITRATE" ] && LINK_TX_RATE="$STA_TX_BITRATE"
                 [ -n "$STA_RX_BITRATE" ] && LINK_RX_RATE="$STA_RX_BITRATE"
@@ -677,13 +677,12 @@ EOF
         [ -z "$WDEV" ] && WDEV="wlan0"
         
         ip link set "$WDEV" up 2>/dev/null
-        # Try active scan first, if busy (connected), use scan dump
-        SCAN_RAW=$(iw dev "$WDEV" scan 2>/dev/null)
-        if [ -z "$SCAN_RAW" ] || echo "$SCAN_RAW" | grep -qi "failed\|busy\|error"; then
-            SCAN_RAW=$(iw dev "$WDEV" scan dump 2>&1)
-        fi
-        if [ -z "$SCAN_RAW" ] || echo "$SCAN_RAW" | grep -qi "failed\|busy\|error"; then
-            SCAN_RAW=$(iw dev "$WDEV" scan dump 2>&1)
+        # First check instant scan dump (cached BSS list, takes <10ms and avoids ping spikes)
+        SCAN_RAW=$(iw dev "$WDEV" scan dump 2>/dev/null)
+        if [ -z "$SCAN_RAW" ]; then
+            # If cache is empty, scan main channels fast
+            SCAN_RAW=$(iw dev "$WDEV" scan freq 5180 5200 5220 5240 5260 5280 5300 5320 5500 5505 5520 5540 5560 5580 5600 5620 5640 5660 5680 5700 5745 5765 5785 5805 5825 2>/dev/null)
+            [ -z "$SCAN_RAW" ] && SCAN_RAW=$(iw dev "$WDEV" scan dump 2>/dev/null)
         fi
 
         echo "$SCAN_RAW" | awk '
