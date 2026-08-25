@@ -4261,17 +4261,75 @@
         }
 
         async function executeGitHubUpdate() {
-            if (confirm('Flash and install latest Delta OS Pro firmware from GitHub? Router will reboot upon completion.')) {
-                const box = document.getElementById('update-status-box');
-                box.style.background = '#FEF3C7';
-                box.style.borderColor = '#FCD34D';
-                box.style.color = '#92400E';
-                box.innerHTML = '⌛ Downloading firmware from GitHub & flashing image... Router will reboot in 45 seconds!';
+            if (!confirm('Flash and install latest Delta OS Pro firmware from GitHub? Router will reboot upon completion.')) return;
 
+            const box = document.getElementById('update-status-box');
+            const wrap = document.getElementById('update-progress-wrap');
+            const bar = document.getElementById('update-progress-bar');
+            const num = document.getElementById('update-progress-num');
+            const stage = document.getElementById('update-progress-stage');
+            const desc = document.getElementById('update-progress-desc');
+            const btnDo = document.getElementById('btn-do-update');
+            const btnCheck = document.getElementById('btn-check-update');
+
+            if (box) box.style.display = 'none';
+            if (wrap) wrap.style.display = 'block';
+            if (btnDo) btnDo.style.display = 'none';
+            if (btnCheck) btnCheck.disabled = true;
+
+            try {
+                await fetch(`${API_URL}?action=github_do_update&token=${authToken}`);
+            } catch (e) { }
+
+            let curPercent = 15;
+            bar.style.width = '15%';
+            num.innerText = '15%';
+            stage.innerText = 'Connecting to GitHub server...';
+
+            const poller = setInterval(async () => {
                 try {
-                    await fetch(`${API_URL}?action=github_do_update&token=${authToken}`);
-                } catch (e) { }
-            }
+                    const res = await fetch(`${API_URL}?action=github_update_status&token=${authToken}`);
+                    const data = await res.json();
+                    if (data && data.percent !== undefined) {
+                        curPercent = Math.max(curPercent, data.percent);
+                        bar.style.width = curPercent + '%';
+                        num.innerText = curPercent + '%';
+                        if (data.stage) stage.innerText = data.stage;
+
+                        if (curPercent >= 100 || data.status === 'rebooting') {
+                            clearInterval(poller);
+                            stage.innerText = '🔄 Router is Rebooting...';
+                            desc.innerHTML = '<b style="color:#059669;">Flash complete! Reconnecting in <span id="reboot-countdown">30</span>s...</b>';
+
+                            let cd = 30;
+                            const cdTimer = setInterval(() => {
+                                cd--;
+                                const cdEl = document.getElementById('reboot-countdown');
+                                if (cdEl) cdEl.innerText = cd;
+                                if (cd <= 0) {
+                                    clearInterval(cdTimer);
+                                    window.location.reload();
+                                }
+                            }, 1000);
+                        } else if (data.status === 'error') {
+                            clearInterval(poller);
+                            stage.innerText = '❌ Update Error';
+                            stage.style.color = '#DC2626';
+                            desc.innerText = data.stage || 'An error occurred during update.';
+                            if (btnCheck) btnCheck.disabled = false;
+                        }
+                    }
+                } catch (e) {
+                    if (curPercent >= 75) {
+                        curPercent = 100;
+                        bar.style.width = '100%';
+                        num.innerText = '100%';
+                        stage.innerText = '🔄 Flash Complete! Router Rebooting...';
+                        clearInterval(poller);
+                        setTimeout(() => window.location.reload(), 25000);
+                    }
+                }
+            }, 800);
         }
 
         function openBackupFlashModal() {
@@ -4606,6 +4664,20 @@
 
             <div id="update-status-box" style="display:none;background:#EFF6FF;border:1px solid #93C5FD;color:#1E40AF;padding:12px;border-radius:8px;font-size:0.8rem;margin-bottom:16px;">
                 Checking cloud server for firmware releases...
+            </div>
+
+            <!-- DYNAMIC PROGRESS BAR -->
+            <div id="update-progress-wrap" style="display:none;background:#F8FAFC;border:1px solid #E2E8F0;border-radius:10px;padding:14px;margin-bottom:16px;">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;font-size:0.82rem;font-weight:700;">
+                    <span id="update-progress-stage" style="color:#0284C7;">⏳ Connecting to GitHub...</span>
+                    <span id="update-progress-num" style="color:#0F172A;font-family:monospace;font-size:0.9rem;">0%</span>
+                </div>
+                <div style="width:100%;height:16px;background:#E2E8F0;border-radius:20px;overflow:hidden;box-shadow:inset 0 1px 3px rgba(0,0,0,0.1);position:relative;">
+                    <div id="update-progress-bar" style="width:0%;height:100%;background:linear-gradient(90deg, #0284C7, #10B981);border-radius:20px;transition:width 0.5s ease-out;box-shadow:0 0 12px rgba(16,185,129,0.6);"></div>
+                </div>
+                <div id="update-progress-desc" style="margin-top:8px;font-size:0.75rem;color:#64748B;text-align:center;">
+                    Please keep the power on. Flashing takes ~30 seconds.
+                </div>
             </div>
 
             <div style="display:flex;gap:10px;justify-content:flex-end;">

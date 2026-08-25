@@ -1413,13 +1413,38 @@ EOF
         IMAGE_URL=$(get_query_val "url")
         [ -z "$IMAGE_URL" ] && IMAGE_URL="https://raw.githubusercontent.com/lawin115/delta-os/main/sysupgrade.bin"
 
-        echo "{\"status\":\"success\", \"message\":\"Downloading firmware update from GitHub... Router will flash and reboot!\"}"
+        # Initialize progress state
+        echo '{"percent":10,"stage":"Connecting to GitHub...","status":"downloading"}' > /tmp/update_progress.json
+
+        # Launch async flashing task
         (
-            uclient-fetch -q -O /tmp/sysupgrade.bin "$IMAGE_URL" || wget -qO /tmp/sysupgrade.bin "$IMAGE_URL" || curl -s -k -L -o /tmp/sysupgrade.bin "$IMAGE_URL"
+            echo '{"percent":25,"stage":"Downloading firmware image (6.7 MB)...","status":"downloading"}' > /tmp/update_progress.json
+            rm -f /tmp/sysupgrade.bin
+            uclient-fetch -q -O /tmp/sysupgrade.bin "$IMAGE_URL" 2>/dev/null || wget -qO /tmp/sysupgrade.bin "$IMAGE_URL" 2>/dev/null || curl -s -k -L -o /tmp/sysupgrade.bin "$IMAGE_URL" 2>/dev/null
+
             if [ -f "/tmp/sysupgrade.bin" ] && [ $(stat -c%s /tmp/sysupgrade.bin 2>/dev/null || echo 0) -gt 1000000 ]; then
-                mtd write /tmp/sysupgrade.bin firmware && reboot
+                echo '{"percent":60,"stage":"Firmware downloaded! Verifying image integrity...","status":"flashing"}' > /tmp/update_progress.json
+                sleep 1
+                echo '{"percent":80,"stage":"Writing new firmware to SPI Flash...","status":"flashing"}' > /tmp/update_progress.json
+                mtd write /tmp/sysupgrade.bin firmware 2>/dev/null
+                echo '{"percent":100,"stage":"Flash complete! Rebooting router now...","status":"rebooting"}' > /tmp/update_progress.json
+                sleep 2
+                sync
+                reboot
+            else
+                echo '{"percent":0,"stage":"Download failed. Check internet connection.","status":"error"}' > /tmp/update_progress.json
             fi
         ) >/dev/null 2>&1 &
+
+        echo "{\"status\":\"success\", \"message\":\"Firmware update initiated.\"}"
+        ;;
+
+    github_update_status)
+        if [ -f "/tmp/update_progress.json" ]; then
+            cat /tmp/update_progress.json
+        else
+            echo '{"percent":0,"stage":"Idle","status":"idle"}'
+        fi
         ;;
 
     backup_export)
