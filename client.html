@@ -1,0 +1,1378 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="theme-color" content="#0B0F19">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Delta 5G - Client Live Portal</title>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg: #0B0F19;
+            --bg-card: rgba(18, 24, 38, 0.85);
+            --border: rgba(255, 255, 255, 0.08);
+            --border-glow: rgba(56, 189, 248, 0.25);
+            --primary: #38BDF8;
+            --primary-glow: rgba(56, 189, 248, 0.35);
+            --accent: #818CF8;
+            --success: #10B981;
+            --warning: #F59E0B;
+            --danger: #EF4444;
+            --text-main: #F8FAFC;
+            --text-muted: #94A3B8;
+            --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            background-color: var(--bg);
+            background-image: 
+                radial-gradient(circle at 15% 15%, rgba(56, 189, 248, 0.07) 0%, transparent 40%),
+                radial-gradient(circle at 85% 85%, rgba(129, 140, 248, 0.07) 0%, transparent 40%);
+            color: var(--text-main);
+            min-height: 100vh;
+            min-height: 100dvh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 14px 12px 36px;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* HEADER */
+        .client-header {
+            width: 100%;
+            max-width: 640px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 16px;
+            background: var(--bg-card);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            margin-bottom: 12px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
+        }
+
+        .header-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .brand-icon {
+            width: 34px;
+            height: 34px;
+            border-radius: 9px;
+            background: linear-gradient(135deg, #0284C7, #2563EB);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(2, 132, 199, 0.4);
+            flex-shrink: 0;
+        }
+
+        .brand-icon svg {
+            width: 18px;
+            height: 18px;
+            fill: #FFFFFF;
+        }
+
+        .brand-text h1 {
+            font-size: 0.95rem;
+            font-weight: 800;
+            color: #FFFFFF;
+            letter-spacing: -0.3px;
+            line-height: 1.1;
+        }
+
+        .brand-text span {
+            font-size: 0.64rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .header-status {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .status-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 5px 10px;
+            background: rgba(16, 185, 129, 0.12);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 20px;
+            font-size: 0.68rem;
+            font-weight: 800;
+            color: #34D399;
+            letter-spacing: 0.4px;
+        }
+
+        .pulse-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #10B981;
+            box-shadow: 0 0 8px #10B981;
+            animation: pulseGlow 1.8s infinite ease-in-out;
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% { transform: scale(0.9); opacity: 0.7; }
+            50% { transform: scale(1.2); opacity: 1; }
+        }
+
+        /* MAIN CONTAINER */
+        .client-container {
+            width: 100%;
+            max-width: 640px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        /* GLASS CARD */
+        .glass-card {
+            background: var(--bg-card);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 16px 16px;
+            box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35);
+            position: relative;
+            overflow: hidden;
+            transition: border-color 0.25s ease;
+        }
+
+        .glass-card:hover {
+            border-color: var(--border-glow);
+        }
+
+        .card-title-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .card-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.86rem;
+            font-weight: 800;
+            color: #FFFFFF;
+            letter-spacing: -0.2px;
+        }
+
+        .card-title svg {
+            width: 16px;
+            height: 16px;
+            fill: var(--primary);
+            flex-shrink: 0;
+        }
+
+        /* 1. SIGNAL HERO GAUGE */
+        .signal-hero {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 4px 0;
+        }
+
+        .signal-gauge-wrapper {
+            position: relative;
+            width: 150px;
+            height: 84px;
+            margin: 0 auto 8px;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+        }
+
+        .gauge-svg {
+            width: 150px;
+            height: 84px;
+        }
+
+        .gauge-bg {
+            fill: none;
+            stroke: rgba(255, 255, 255, 0.08);
+            stroke-width: 9;
+            stroke-linecap: round;
+        }
+
+        .gauge-meter {
+            fill: none;
+            stroke: url(#gaugeGradient);
+            stroke-width: 9;
+            stroke-linecap: round;
+            stroke-dasharray: 236;
+            stroke-dashoffset: 80;
+            transition: stroke-dashoffset 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .gauge-center-val {
+            position: absolute;
+            bottom: 2px;
+            text-align: center;
+        }
+
+        .gauge-dbm {
+            font-size: 1.45rem;
+            font-weight: 800;
+            font-family: var(--font-mono);
+            color: #FFFFFF;
+            line-height: 1;
+            letter-spacing: -0.5px;
+        }
+
+        .gauge-unit {
+            font-size: 0.62rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            margin-top: 2px;
+        }
+
+        .signal-details {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1px;
+        }
+
+        .signal-pct-val {
+            font-size: 0.98rem;
+            font-weight: 800;
+            color: #FFFFFF;
+            font-family: var(--font-mono);
+        }
+
+        .signal-pct-lbl {
+            font-size: 0.66rem;
+            font-weight: 600;
+            color: var(--text-muted);
+        }
+
+        .link-quality-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 3px 8px;
+            background: rgba(56, 189, 248, 0.12);
+            border: 1px solid rgba(56, 189, 248, 0.25);
+            border-radius: 10px;
+            font-size: 0.68rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        /* 4 STAT BOXES (COMPACT & CLEAN) */
+        .signal-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            width: 100%;
+            margin-top: 12px;
+            padding-top: 10px;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .signal-stat-box {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 10px;
+            padding: 8px 6px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 2px;
+            overflow: hidden;
+        }
+
+        .stat-lbl {
+            font-size: 0.58rem;
+            font-weight: 800;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            line-height: 1.1;
+        }
+
+        .stat-val {
+            font-size: 0.74rem;
+            font-weight: 800;
+            color: #FFFFFF;
+            font-family: var(--font-mono);
+            word-break: break-word;
+            line-height: 1.2;
+            max-width: 100%;
+        }
+
+        .stat-sub {
+            font-size: 0.62rem;
+            color: var(--primary);
+            font-family: var(--font-mono);
+            opacity: 0.85;
+            line-height: 1.1;
+            word-break: break-all;
+        }
+
+        /* 2. REAL-TIME SPEED GRID (SIDE BY SIDE ON ALL SCREENS) */
+        .speed-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .speed-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 12px;
+            padding: 12px 10px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .speed-card.rx {
+            border-left: 3px solid #38BDF8;
+        }
+
+        .speed-card.tx {
+            border-left: 3px solid #34D399;
+        }
+
+        .speed-head {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.65rem;
+            font-weight: 800;
+            color: #FFFFFF;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+        }
+
+        .speed-icon {
+            width: 22px;
+            height: 22px;
+            border-radius: 6px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .speed-card.rx .speed-icon {
+            background: rgba(56, 189, 248, 0.15);
+            color: #38BDF8;
+        }
+
+        .speed-card.tx .speed-icon {
+            background: rgba(52, 211, 153, 0.15);
+            color: #34D399;
+        }
+
+        .speed-icon svg {
+            width: 12px !important;
+            height: 12px !important;
+            max-width: 12px;
+            max-height: 12px;
+            fill: currentColor;
+        }
+
+        .speed-num {
+            font-size: 1.18rem;
+            font-weight: 800;
+            font-family: var(--font-mono);
+            color: #FFFFFF;
+            letter-spacing: -0.4px;
+            line-height: 1.1;
+            margin-bottom: 2px;
+        }
+
+        .speed-foot {
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            font-family: var(--font-mono);
+        }
+
+        /* LIVE THROUGHPUT BAR GRAPH */
+        .graph-box {
+            display: flex;
+            align-items: flex-end;
+            height: 44px;
+            padding: 6px 4px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            margin-top: 4px;
+        }
+
+        .graph-bars {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            width: 100%;
+            height: 100%;
+            gap: 3px;
+        }
+
+        .graph-bar-col {
+            flex: 1;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            gap: 2px;
+            height: 100%;
+        }
+
+        .graph-pill {
+            width: 100%;
+            max-width: 6px;
+            border-radius: 2px 2px 0 0;
+            min-height: 3px;
+            transition: height 0.35s ease;
+        }
+
+        .graph-pill.rx { background: linear-gradient(180deg, #38BDF8, #0284C7); }
+        .graph-pill.tx { background: linear-gradient(180deg, #34D399, #059669); }
+
+        /* 3. ETHERNET LAN ROW */
+        .lan-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 12px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 12px;
+        }
+
+        .lan-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .lan-rate-badge {
+            padding: 6px 10px;
+            border-radius: 8px;
+            font-size: 0.82rem;
+            font-weight: 800;
+            font-family: var(--font-mono);
+            background: rgba(16, 185, 129, 0.15);
+            border: 1px solid rgba(16, 185, 129, 0.35);
+            color: #34D399;
+            white-space: nowrap;
+        }
+
+        .lan-duplex-pill {
+            font-size: 0.6rem;
+            font-weight: 800;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            background: rgba(255, 255, 255, 0.06);
+            padding: 3px 6px;
+            border-radius: 5px;
+        }
+
+        /* 4. FOOTER CONTROLS */
+        .footer-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 6px 2px;
+            font-size: 0.7rem;
+            color: var(--text-muted);
+        }
+
+        .btn-refresh {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #FFFFFF;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 0.72rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            transition: all 0.2s ease;
+        }
+
+        .btn-refresh:hover {
+            background: rgba(255, 255, 255, 0.12);
+            border-color: var(--primary);
+        }
+
+        /* 5. SPEED TEST COMPONENT */
+        .st-card {
+            background: linear-gradient(145deg, rgba(18, 24, 38, 0.95), rgba(15, 23, 42, 0.98));
+            border: 1px solid rgba(56, 189, 248, 0.25);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.45);
+        }
+
+        .st-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at 50% 30%, rgba(56, 189, 248, 0.12) 0%, transparent 60%);
+            pointer-events: none;
+        }
+
+        .st-gauge-wrap {
+            position: relative;
+            width: 200px;
+            height: 110px;
+            margin: 6px auto 10px;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+        }
+
+        .st-gauge-svg {
+            width: 200px;
+            height: 110px;
+        }
+
+        .st-gauge-bg {
+            fill: none;
+            stroke: rgba(255, 255, 255, 0.08);
+            stroke-width: 10;
+            stroke-linecap: round;
+        }
+
+        .st-gauge-meter {
+            fill: none;
+            stroke: url(#stGradient);
+            stroke-width: 10;
+            stroke-linecap: round;
+            stroke-dasharray: 267;
+            stroke-dashoffset: 267;
+            transition: stroke-dashoffset 0.22s cubic-bezier(0.1, 0.9, 0.2, 1);
+            filter: drop-shadow(0 0 8px rgba(56, 189, 248, 0.7));
+        }
+
+        .st-center-display {
+            position: absolute;
+            bottom: 4px;
+            text-align: center;
+        }
+
+        .st-speed-val {
+            font-size: 2.15rem;
+            font-weight: 800;
+            font-family: var(--font-mono);
+            color: #FFFFFF;
+            line-height: 1;
+            letter-spacing: -1px;
+            text-shadow: 0 0 18px rgba(56, 189, 248, 0.6);
+        }
+
+        .st-speed-unit {
+            font-size: 0.68rem;
+            font-weight: 800;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 3px;
+        }
+
+        .st-status-msg {
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: #94A3B8;
+            text-align: center;
+            margin-bottom: 12px;
+            min-height: 20px;
+        }
+
+        .st-metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            width: 100%;
+            margin-bottom: 14px;
+        }
+
+        .st-metric-box {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 10px;
+            padding: 8px 4px;
+            text-align: center;
+            transition: all 0.25s ease;
+        }
+
+        .st-metric-box.active {
+            border-color: #38BDF8;
+            background: rgba(56, 189, 248, 0.12);
+            box-shadow: 0 0 14px rgba(56, 189, 248, 0.3);
+            transform: scale(1.02);
+        }
+
+        .st-metric-label {
+            font-size: 0.58rem;
+            font-weight: 800;
+            color: #64748B;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 2px;
+        }
+
+        .st-metric-val {
+            font-size: 0.88rem;
+            font-weight: 800;
+            font-family: var(--font-mono);
+            color: #FFFFFF;
+        }
+
+        .btn-speedtest {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #0284C7, #2563EB);
+            border: none;
+            border-radius: 12px;
+            color: #FFFFFF;
+            font-family: var(--font-sans);
+            font-size: 0.88rem;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            box-shadow: 0 4px 18px rgba(2, 132, 199, 0.4);
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .btn-speedtest:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 24px rgba(2, 132, 199, 0.6);
+            background: linear-gradient(135deg, #0369A1, #1D4ED8);
+        }
+
+        .btn-speedtest:active {
+            transform: scale(0.98);
+        }
+
+        .btn-speedtest:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-speedtest svg {
+            width: 16px;
+            height: 16px;
+            fill: currentColor;
+        }
+
+        /* MOBILE OPTIMIZATIONS */
+        @media (max-width: 520px) {
+            body {
+                padding: 10px 8px 30px;
+            }
+            .client-header {
+                padding: 10px 12px;
+                margin-bottom: 10px;
+                border-radius: 12px;
+            }
+            .glass-card {
+                padding: 12px 10px;
+                border-radius: 14px;
+            }
+            .signal-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 6px;
+                margin-top: 10px;
+                padding-top: 8px;
+            }
+            .signal-stat-box {
+                padding: 6px 4px;
+                border-radius: 8px;
+            }
+            .stat-lbl {
+                font-size: 0.54rem;
+            }
+            .stat-val {
+                font-size: 0.68rem;
+            }
+            .stat-sub {
+                font-size: 0.56rem;
+            }
+            .speed-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 6px;
+                margin-bottom: 8px;
+            }
+            .speed-card {
+                padding: 8px 6px;
+                border-radius: 10px;
+            }
+            .speed-head {
+                font-size: 0.58rem;
+                gap: 4px;
+                margin-bottom: 4px;
+            }
+            .speed-icon {
+                width: 18px;
+                height: 18px;
+                border-radius: 5px;
+            }
+            .speed-icon svg {
+                width: 10px !important;
+                height: 10px !important;
+            }
+            .speed-num {
+                font-size: 0.98rem;
+            }
+            .speed-foot {
+                font-size: 0.58rem;
+            }
+            .lan-row {
+                padding: 8px 10px;
+            }
+            .lan-text h3 {
+                font-size: 0.8rem !important;
+            }
+            .lan-text p {
+                font-size: 0.64rem !important;
+            }
+            .lan-rate-badge {
+                padding: 4px 8px;
+                font-size: 0.72rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- CLIENT HEADER BAR -->
+    <header class="client-header">
+        <div class="header-brand">
+            <div class="brand-icon">
+                <svg viewBox="0 0 24 24"><path d="M12 4C7.31 4 3.07 5.9 0 8.98L12 21 24 8.98C20.93 5.9 16.69 4 12 4zm0 3.8c3.6 0 6.88 1.45 9.27 3.81L12 18.87 2.73 11.61C5.12 9.25 8.4 7.8 12 7.8z"/></svg>
+            </div>
+            <div class="brand-text">
+                <h1>Delta 5G Client</h1>
+                <span>Live Signal & Speed Portal</span>
+            </div>
+        </div>
+        <div class="header-status">
+            <div class="status-pill" id="client-conn-pill">
+                <span class="pulse-dot" id="client-pulse-dot"></span>
+                <span id="client-conn-text">CONNECTED</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN DASHBOARD -->
+    <main class="client-container" id="client-main-container">
+
+        <!-- LOCKED NOTICE CARD (Shown only if administrator locks portal) -->
+        <div id="client-locked-card" style="display:none;width:100%;text-align:center;padding:30px 16px;" class="glass-card">
+            <div style="font-size:2.5rem;margin-bottom:10px;">🔒</div>
+            <h2 style="color:#FFFFFF;font-size:1.15rem;margin-bottom:6px;">Portal Currently Locked</h2>
+            <p style="color:var(--text-muted);font-size:0.8rem;max-width:360px;margin:0 auto 16px;">Subscriber speed & signal live monitoring has been restricted by network administrator.</p>
+            <div style="display:inline-block;padding:5px 12px;background:rgba(239,68,68,0.15);border:1px solid rgba(239,68,68,0.3);border-radius:20px;color:#EF4444;font-size:0.72rem;font-weight:700;">Status: LOCKED</div>
+        </div>
+
+        <!-- ACTIVE PORTAL CONTENT -->
+        <div id="client-active-content" style="display:flex;flex-direction:column;gap:12px;">
+
+        <!-- CARD 1: 5GHZ WIRELESS SIGNAL & LINK GAUGE -->
+        <section class="glass-card">
+            <div class="card-title-row">
+                <div class="card-title">
+                    <svg viewBox="0 0 24 24"><path d="M12 4C7.31 4 3.07 5.9 0 8.98L12 21 24 8.98C20.93 5.9 16.69 4 12 4zm0 3.8c3.6 0 6.88 1.45 9.27 3.81L12 18.87 2.73 11.61C5.12 9.25 8.4 7.8 12 7.8z"/></svg>
+                    <span>5GHz Wireless Signal Transceiver</span>
+                </div>
+                <div class="link-quality-badge" id="client-quality-badge">Excellent Link</div>
+            </div>
+
+            <div class="signal-hero">
+                <div class="signal-gauge-wrapper">
+                    <svg class="gauge-svg" viewBox="0 0 170 95">
+                        <defs>
+                            <linearGradient id="gaugeGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                <stop offset="0%" stop-color="#EF4444" />
+                                <stop offset="45%" stop-color="#F59E0B" />
+                                <stop offset="80%" stop-color="#10B981" />
+                                <stop offset="100%" stop-color="#38BDF8" />
+                            </linearGradient>
+                        </defs>
+                        <path class="gauge-bg" d="M 15 85 A 70 70 0 0 1 155 85" />
+                        <path class="gauge-meter" id="gauge-meter-path" d="M 15 85 A 70 70 0 0 1 155 85" />
+                    </svg>
+                    <div class="gauge-center-val">
+                        <div class="gauge-dbm" id="client-signal-dbm">-55</div>
+                        <div class="gauge-unit">Signal Level (dBm)</div>
+                    </div>
+                </div>
+
+                <div class="signal-details">
+                    <div class="signal-pct-val" id="client-pct-val">88%</div>
+                    <div class="signal-pct-lbl">Transceiver Link Quality</div>
+                </div>
+            </div>
+
+            <div class="signal-grid">
+                <div class="signal-stat-box">
+                    <div class="stat-lbl">Connected SSID</div>
+                    <div class="stat-val" id="client-ssid-name">Delta-5G</div>
+                    <div class="stat-sub" id="client-bssid-mac">--:--:--:--:--:--</div>
+                </div>
+                <div class="signal-stat-box">
+                    <div class="stat-lbl">Frequency / Channel</div>
+                    <div class="stat-val" id="client-freq-val">5800 MHz</div>
+                    <div class="stat-sub">5GHz High Band</div>
+                </div>
+                <div class="signal-stat-box">
+                    <div class="stat-lbl">Physical Data Rate</div>
+                    <div class="stat-val" id="client-rate-val">300.0 Mbps</div>
+                    <div class="stat-sub" id="client-rate-sub">MCS15 40MHz</div>
+                </div>
+                <div class="signal-stat-box">
+                    <div class="stat-lbl">Noise / CCQ Quality</div>
+                    <div class="stat-val" id="client-ccq-val" style="color:#10B981;">98%</div>
+                    <div class="stat-sub" id="client-noise-val">-95 dBm</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CARD 2: REAL-TIME TRAFFIC & SPEEDOMETER -->
+        <section class="glass-card">
+            <div class="card-title-row">
+                <div class="card-title">
+                    <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 14h-2v-2h2v2zm0-4h-2V7h2v5z"/></svg>
+                    <span>Subscriber Real-Time Traffic</span>
+                </div>
+            </div>
+
+            <div class="speed-grid">
+                <div class="speed-card rx">
+                    <div class="speed-head">
+                        <span class="speed-icon">
+                            <svg viewBox="0 0 24 24"><path d="M20 12l-1.41-1.41L13 16.17V4h-2v12.17l-5.58-5.59L4 12l8 8 8-8z"/></svg>
+                        </span>
+                        <span>Download Speed</span>
+                    </div>
+                    <div class="speed-num" id="client-rx-speed">0.00 KB/s</div>
+                    <div class="speed-foot" id="client-rx-total">Total: 0 B</div>
+                </div>
+
+                <div class="speed-card tx">
+                    <div class="speed-head">
+                        <span class="speed-icon">
+                            <svg viewBox="0 0 24 24"><path d="M4 12l1.41 1.41L11 7.83V20h2V7.83l5.58 5.59L20 12l-8-8-8 8z"/></svg>
+                        </span>
+                        <span>Upload Speed</span>
+                    </div>
+                    <div class="speed-num" id="client-tx-speed">0.00 KB/s</div>
+                    <div class="speed-foot" id="client-tx-total">Total: 0 B</div>
+                </div>
+            </div>
+
+            <!-- LIVE ACTIVITY BAR GRAPH -->
+            <div class="graph-box">
+                <div class="graph-bars" id="client-graph-bars">
+                    <div class="graph-bar-col"><div class="graph-pill rx" style="height:10%;"></div><div class="graph-pill tx" style="height:10%;"></div></div>
+                    <div class="graph-bar-col"><div class="graph-pill rx" style="height:25%;"></div><div class="graph-pill tx" style="height:15%;"></div></div>
+                    <div class="graph-bar-col"><div class="graph-pill rx" style="height:40%;"></div><div class="graph-pill tx" style="height:20%;"></div></div>
+                    <div class="graph-bar-col"><div class="graph-pill rx" style="height:60%;"></div><div class="graph-pill tx" style="height:35%;"></div></div>
+                    <div class="graph-bar-col"><div class="graph-pill rx" style="height:30%;"></div><div class="graph-pill tx" style="height:15%;"></div></div>
+                    <div class="graph-bar-col"><div class="graph-pill rx" style="height:70%;"></div><div class="graph-pill tx" style="height:45%;"></div></div>
+                    <div class="graph-bar-col"><div class="graph-pill rx" style="height:85%;"></div><div class="graph-pill tx" style="height:55%;"></div></div>
+                    <div class="graph-bar-col"><div class="graph-pill rx" style="height:45%;"></div><div class="graph-pill tx" style="height:30%;"></div></div>
+                    <div class="graph-bar-col"><div class="graph-pill rx" style="height:30%;"></div><div class="graph-pill tx" style="height:20%;"></div></div>
+                    <div class="graph-bar-col"><div class="graph-pill rx" style="height:50%;"></div><div class="graph-pill tx" style="height:25%;"></div></div>
+                    <div class="graph-bar-col"><div class="graph-pill rx" style="height:65%;"></div><div class="graph-pill tx" style="height:40%;"></div></div>
+                    <div class="graph-bar-col"><div class="graph-pill rx" style="height:40%;"></div><div class="graph-pill tx" style="height:25%;"></div></div>
+                </div>
+            </div>
+        <!-- CARD 2.5: LIVE SPEED TEST COMPONENT -->
+        <section class="glass-card st-card">
+            <div class="card-title-row">
+                <div class="card-title">
+                    <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14.5v-9l6 4.5-6 4.5z"/></svg>
+                    <span>Delta 5G Speed Test</span>
+                </div>
+                <div class="link-quality-badge" id="st-badge-status" style="background:rgba(56,189,248,0.12);color:#38BDF8;border-color:rgba(56,189,248,0.3);">
+                    Ready to Test
+                </div>
+            </div>
+
+            <!-- SPEEDOMETER GAUGE -->
+            <div class="st-gauge-wrap">
+                <svg class="st-gauge-svg" viewBox="0 0 190 105">
+                    <defs>
+                        <linearGradient id="stGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" stop-color="#38BDF8" />
+                            <stop offset="50%" stop-color="#10B981" />
+                            <stop offset="100%" stop-color="#F59E0B" />
+                        </linearGradient>
+                    </defs>
+                    <path class="st-gauge-bg" d="M 15 95 A 75 75 0 0 1 175 95" />
+                    <path class="st-gauge-meter" id="st-gauge-path" d="M 15 95 A 75 75 0 0 1 175 95" />
+                </svg>
+                <div class="st-center-display">
+                    <div class="st-speed-val" id="st-live-speed">0.0</div>
+                    <div class="st-speed-unit" id="st-live-unit">Mbps</div>
+                </div>
+            </div>
+
+            <div class="st-status-msg" id="st-status-text">Click below to test your real-time 5GHz wireless link speed</div>
+
+            <!-- METRIC STATS (PING, JITTER, DOWNLOAD, UPLOAD) -->
+            <div class="st-metrics-grid">
+                <div class="st-metric-box" id="st-box-ping">
+                    <div class="st-metric-label">Ping</div>
+                    <div class="st-metric-val" id="st-val-ping" style="color:#38BDF8;">-- ms</div>
+                </div>
+                <div class="st-metric-box" id="st-box-jitter">
+                    <div class="st-metric-label">Jitter</div>
+                    <div class="st-metric-val" id="st-val-jitter" style="color:#818CF8;">-- ms</div>
+                </div>
+                <div class="st-metric-box" id="st-box-down">
+                    <div class="st-metric-label">Download</div>
+                    <div class="st-metric-val" id="st-val-down" style="color:#34D399;">-- Mbps</div>
+                </div>
+                <div class="st-metric-box" id="st-box-up">
+                    <div class="st-metric-label">Upload</div>
+                    <div class="st-metric-val" id="st-val-up" style="color:#F59E0B;">-- Mbps</div>
+                </div>
+            </div>
+
+            <!-- ACTION BUTTON -->
+            <button class="btn-speedtest" id="btn-start-speedtest" onclick="startSpeedTest()">
+                <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14.5v-9l6 4.5-6 4.5z"/></svg>
+                <span>START SPEED TEST</span>
+            </button>
+        </section>
+
+        <!-- CARD 3: ETHERNET LAN CABLE NEGOTIATION -->
+        <section class="glass-card">
+            <div class="card-title-row">
+                <div class="card-title">
+                    <svg viewBox="0 0 24 24"><path d="M4 6h16v12H4z M2 4v16h20V4H2z M8 10h8v4H8z"/></svg>
+                    <span>Ethernet LAN Link Speed</span>
+                </div>
+                <span class="lan-duplex-pill" id="client-lan-duplex">FULL DUPLEX</span>
+            </div>
+
+            <div class="lan-row">
+                <div class="lan-info">
+                    <div class="lan-rate-badge" id="client-lan-rate">100 Mbps</div>
+                    <div class="lan-text">
+                        <h3 style="font-size:0.86rem;font-weight:700;color:#FFFFFF;margin-bottom:2px;">Local LAN Interface (eth0)</h3>
+                        <p id="client-lan-desc" style="font-size:0.7rem;color:var(--text-muted);">Port Speed: 100 Mbps (Full Duplex) | Link Active</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FOOTER INFO & REFRESH -->
+        <div class="footer-row">
+            <div>Device Uptime: <span id="client-uptime-val" style="font-weight:700;color:#FFFFFF;">--</span></div>
+            <button class="btn-refresh" onclick="fetchClientData()">
+                <svg viewBox="0 0 24 24"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+                Refresh
+            </button>
+        </div>
+
+        <!-- BRANDING FOOTER LINK -->
+        <div style="text-align:center;padding:10px 0 4px;margin-top:2px;">
+            <a href="http://deltaz.it.com" target="_blank" rel="noopener noreferrer" style="color:var(--primary);text-decoration:none;font-size:0.74rem;font-weight:800;letter-spacing:0.5px;display:inline-flex;align-items:center;gap:6px;padding:5px 14px;background:rgba(56,189,248,0.08);border:1px solid rgba(56,189,248,0.2);border-radius:20px;transition:all 0.2s ease;">
+                <span>by delta</span>
+                <svg style="width:11px;height:11px;fill:currentColor;" viewBox="0 0 24 24"><path d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/></svg>
+            </a>
+        </div>
+        </div> <!-- End of client-active-content -->
+
+    </main>
+
+    <script>
+        const API_URL = '/cgi-bin/api.cgi';
+        let prevClientMetrics = {
+            rx: 0,
+            tx: 0,
+            timestamp: 0
+        };
+
+        function formatBytes(bytes) {
+            if (!bytes || bytes === 0) return '0 B';
+            const k = 1024;
+            const sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+
+        function formatSpeed(bytesPerSec) {
+            if (!bytesPerSec || bytesPerSec === 0) return '0.00 KB/s';
+            const bits = bytesPerSec * 8;
+            if (bits >= 1000000) {
+                return (bits / 1000000).toFixed(2) + ' Mbps';
+            }
+            return (bytesPerSec / 1024).toFixed(2) + ' KB/s';
+        }
+
+        async function fetchClientData() {
+            if (document.hidden) return;
+            try {
+                const res = await fetch(`${API_URL}?action=client_status`);
+                const data = await res.json();
+
+                if (data.locked === true) {
+                    const actContent = document.getElementById('client-active-content');
+                    const lockCard = document.getElementById('client-locked-card');
+                    if (actContent) actContent.style.display = 'none';
+                    if (lockCard) lockCard.style.display = 'block';
+                    return;
+                } else {
+                    const actContent = document.getElementById('client-active-content');
+                    const lockCard = document.getElementById('client-locked-card');
+                    if (actContent) actContent.style.display = 'flex';
+                    if (lockCard) lockCard.style.display = 'none';
+                }
+
+                if (data.status !== 'success') return;
+
+                // 1. SIGNAL & QUALITY GAUGE
+                const isConnected = data.wifi_connected === true;
+                const sigStr = data.link_signal || '-65';
+                const sigNum = parseInt(sigStr) || -65;
+                
+                document.getElementById('client-signal-dbm').innerText = isConnected ? `${sigNum}` : '--';
+                document.getElementById('client-ssid-name').innerText = isConnected ? (data.link_ssid || data.wifi_ssid || 'Delta-5G') : 'No Link';
+                document.getElementById('client-bssid-mac').innerText = isConnected && data.link_bssid ? data.link_bssid : '--:--:--:--:--:--';
+                document.getElementById('client-freq-val').innerText = isConnected && data.link_freq ? `${data.link_freq} MHz` : '5GHz';
+                
+                if (isConnected && data.link_bitrate) {
+                    document.getElementById('client-rate-val').innerText = data.link_bitrate;
+                    document.getElementById('client-rate-sub').innerText = 'Physical Link';
+                } else {
+                    document.getElementById('client-rate-val').innerText = 'Standby';
+                    document.getElementById('client-rate-sub').innerText = 'No Data';
+                }
+                
+                document.getElementById('client-noise-val').innerText = isConnected ? (data.link_noise || '-95 dBm') : '--';
+                document.getElementById('client-ccq-val').innerText = isConnected ? (data.link_ccq || '98%') : '--';
+
+                // Quality percentage calculation (-100 dBm = 0%, -50 dBm = 100%)
+                let qualityPct = Math.min(Math.max((sigNum + 100) * 2, 0), 100);
+                if (!isConnected) qualityPct = 0;
+                document.getElementById('client-pct-val').innerText = `${qualityPct}%`;
+
+                // SVG Gauge animation: total circumference arc ~220
+                const gaugeMeter = document.getElementById('gauge-meter-path');
+                if (gaugeMeter) {
+                    const offset = 220 - (220 * (qualityPct / 100));
+                    gaugeMeter.style.strokeDashoffset = offset;
+                }
+
+                // Quality Badge
+                const badge = document.getElementById('client-quality-badge');
+                if (badge) {
+                    if (isConnected) {
+                        if (sigNum >= -62) {
+                            badge.innerText = 'Excellent Link';
+                            badge.style.color = '#38BDF8';
+                            badge.style.borderColor = 'rgba(56, 189, 248, 0.4)';
+                        } else if (sigNum >= -72) {
+                            badge.innerText = 'Good Signal';
+                            badge.style.color = '#10B981';
+                            badge.style.borderColor = 'rgba(16, 185, 129, 0.4)';
+                        } else if (sigNum >= -82) {
+                            badge.innerText = 'Fair Signal';
+                            badge.style.color = '#F59E0B';
+                            badge.style.borderColor = 'rgba(245, 158, 11, 0.4)';
+                        } else {
+                            badge.innerText = 'Weak Signal';
+                            badge.style.color = '#EF4444';
+                            badge.style.borderColor = 'rgba(239, 68, 68, 0.4)';
+                        }
+                    } else {
+                        badge.innerText = 'Searching Link';
+                        badge.style.color = '#F59E0B';
+                    }
+                }
+
+                // 2. LIVE SPEED & REAL-TIME GRAPH
+                const now = Date.now();
+                const curRx = parseInt(data.wifi_rx_bytes) || 0;
+                const curTx = parseInt(data.wifi_tx_bytes) || 0;
+
+                if (prevClientMetrics.timestamp > 0) {
+                    const dt = (now - prevClientMetrics.timestamp) / 1000;
+                    if (dt > 0) {
+                        const rxSpeed = Math.max((curRx - prevClientMetrics.rx) / dt, 0);
+                        const txSpeed = Math.max((curTx - prevClientMetrics.tx) / dt, 0);
+
+                        document.getElementById('client-rx-speed').innerText = formatSpeed(rxSpeed);
+                        document.getElementById('client-tx-speed').innerText = formatSpeed(txSpeed);
+                        document.getElementById('client-rx-total').innerText = `Total: ${formatBytes(curRx)}`;
+                        document.getElementById('client-tx-total').innerText = `Total: ${formatBytes(curTx)}`;
+
+                        // Update live graph bars
+                        const chart = document.getElementById('client-graph-bars');
+                        if (chart) {
+                            const rxH = Math.min(Math.max((rxSpeed / 500000) * 100, 8), 100);
+                            const txH = Math.min(Math.max((txSpeed / 250000) * 100, 6), 100);
+                            const cols = chart.getElementsByClassName('graph-bar-col');
+                            if (cols.length > 0) {
+                                cols[0].remove();
+                                const newCol = document.createElement('div');
+                                newCol.className = 'graph-bar-col';
+                                newCol.innerHTML = `<div class="graph-pill rx" style="height:${rxH}%;"></div><div class="graph-pill tx" style="height:${txH}%;"></div>`;
+                                chart.appendChild(newCol);
+                            }
+                        }
+                    }
+                }
+
+                prevClientMetrics = {
+                    rx: curRx,
+                    tx: curTx,
+                    timestamp: now
+                };
+
+                // 3. ETHERNET LAN CABLE RATE (10 / 100 / 1000 Mbps)
+                const isEthUp = data.eth_carrier === 1 || data.eth_operstate === 'up';
+                const lanRateElem = document.getElementById('client-lan-rate');
+                const lanDescElem = document.getElementById('client-lan-desc');
+                const lanDuplexElem = document.getElementById('client-lan-duplex');
+
+                if (isEthUp) {
+                    let speedNum = parseInt(data.eth_speed) || 100;
+                    let speedText = '100 Mbps';
+                    if (speedNum >= 1000) speedText = '1 Gbps';
+                    else if (speedNum === 10) speedText = '10 Mbps';
+                    else speedText = '100 Mbps';
+
+                    const duplexText = (data.eth_duplex || 'FULL').toUpperCase();
+                    if (lanRateElem) {
+                        lanRateElem.innerText = speedText;
+                        lanRateElem.style.background = 'rgba(16, 185, 129, 0.15)';
+                        lanRateElem.style.borderColor = 'rgba(16, 185, 129, 0.35)';
+                        lanRateElem.style.color = '#34D399';
+                    }
+                    if (lanDescElem) lanDescElem.innerText = `Port Speed: ${speedText} (${duplexText} Duplex) | Link Active`;
+                    if (lanDuplexElem) lanDuplexElem.innerText = `${duplexText} DUPLEX`;
+                } else {
+                    if (lanRateElem) {
+                        lanRateElem.innerText = 'NO CABLE';
+                        lanRateElem.style.background = 'rgba(239, 68, 68, 0.15)';
+                        lanRateElem.style.borderColor = 'rgba(239, 68, 68, 0.35)';
+                        lanRateElem.style.color = '#EF4444';
+                    }
+                    if (lanDescElem) lanDescElem.innerText = 'Ethernet Cable Disconnected';
+                    if (lanDuplexElem) lanDuplexElem.innerText = 'LINK DOWN';
+                }
+
+                // 4. DEVICE UPTIME
+                const uptimeEl = document.getElementById('client-uptime-val');
+                if (uptimeEl) uptimeEl.innerText = data.uptime || '--';
+            } catch (e) {
+                console.error("Live client metrics fetch error:", e);
+            }
+        // 5. LIVE SPEED TEST ENGINE
+        let isSpeedTesting = false;
+
+        function updateSpeedGauge(mbps, maxMbps = 100) {
+            const gaugePath = document.getElementById('st-gauge-path');
+            const speedVal = document.getElementById('st-live-speed');
+            if (speedVal) speedVal.innerText = mbps.toFixed(1);
+            if (gaugePath) {
+                const pct = Math.min(Math.max(mbps / maxMbps, 0), 1);
+                // arc circumference ~ 250
+                const offset = 250 - (250 * pct);
+                gaugePath.style.strokeDashoffset = offset;
+            }
+        }
+
+        async function startSpeedTest() {
+            if (isSpeedTesting) return;
+            isSpeedTesting = true;
+
+            const btn = document.getElementById('btn-start-speedtest');
+            const statusText = document.getElementById('st-status-text');
+            const badge = document.getElementById('st-badge-status');
+            const boxPing = document.getElementById('st-box-ping');
+            const boxJitter = document.getElementById('st-box-jitter');
+            const boxDown = document.getElementById('st-box-down');
+            const boxUp = document.getElementById('st-box-up');
+
+            const valPing = document.getElementById('st-val-ping');
+            const valJitter = document.getElementById('st-val-jitter');
+            const valDown = document.getElementById('st-val-down');
+            const valUp = document.getElementById('st-val-up');
+
+            btn.disabled = true;
+            btn.innerHTML = `<span class="pulse-dot" style="background:#FFFFFF;box-shadow:0 0 8px #FFFFFF;"></span> <span>TESTING IN PROGRESS...</span>`;
+            badge.innerText = 'TESTING';
+            badge.style.color = '#F59E0B';
+            badge.style.borderColor = 'rgba(245, 158, 11, 0.4)';
+
+            valPing.innerText = '-- ms';
+            valJitter.innerText = '-- ms';
+            valDown.innerText = '-- Mbps';
+            valUp.innerText = '-- Mbps';
+            document.querySelectorAll('.st-metric-box').forEach(b => b.classList.remove('active'));
+
+            try {
+                // PHASE 1: PING & JITTER TEST (5 rounds)
+                boxPing.classList.add('active');
+                boxJitter.classList.add('active');
+                statusText.innerText = '📡 Measuring network latency & jitter...';
+
+                let pings = [];
+                for (let i = 0; i < 5; i++) {
+                    const t0 = performance.now();
+                    await fetch(`${API_URL}?action=speedtest_ping&t=${Date.now()}`);
+                    const t1 = performance.now();
+                    pings.push(t1 - t0);
+                    await new Promise(r => setTimeout(r, 50));
+                }
+
+                const avgPing = Math.round(pings.reduce((a, b) => a + b, 0) / pings.length);
+                let jitter = 0;
+                for (let i = 1; i < pings.length; i++) {
+                    jitter += Math.abs(pings[i] - pings[i - 1]);
+                }
+                jitter = Math.round(jitter / (pings.length - 1));
+
+                valPing.innerText = `${avgPing} ms`;
+                valJitter.innerText = `${jitter} ms`;
+                boxPing.classList.remove('active');
+                boxJitter.classList.remove('active');
+
+                // PHASE 2: DOWNLOAD THROUGHPUT TEST (6 MB Stream)
+                boxDown.classList.add('active');
+                statusText.innerText = '⬇️ Testing Download Throughput...';
+
+                let dlLoaded = 0;
+                const dlStart = performance.now();
+                const dlChunks = 2;
+                let finalDlMbps = 0;
+
+                for (let c = 0; c < dlChunks; c++) {
+                    const chunkSize = 3145728; // 3MB chunk
+                    const res = await fetch(`${API_URL}?action=speedtest_payload&size=${chunkSize}&t=${Date.now()}`);
+                    const reader = res.body.getReader();
+
+                    while (true) {
+                        const { done, value } = await reader.read();
+                        if (done) break;
+                        dlLoaded += value.length;
+                        const elapsedSec = (performance.now() - dlStart) / 1000;
+                        if (elapsedSec > 0) {
+                            const curMbps = (dlLoaded * 8) / (elapsedSec * 1000000);
+                            finalDlMbps = curMbps;
+                            updateSpeedGauge(curMbps, 100);
+                            valDown.innerText = `${curMbps.toFixed(1)} Mbps`;
+                        }
+                    }
+                }
+
+                valDown.innerText = `${finalDlMbps.toFixed(1)} Mbps`;
+                boxDown.classList.remove('active');
+                await new Promise(r => setTimeout(r, 300));
+
+                // PHASE 3: UPLOAD THROUGHPUT TEST (4 MB Stream)
+                boxUp.classList.add('active');
+                statusText.innerText = '⬆️ Testing Upload Throughput...';
+                updateSpeedGauge(0, 100);
+
+                const upPayload = new Uint8Array(2097152); // 2MB upload payload
+                const upStart = performance.now();
+                let upLoaded = 0;
+                let finalUpMbps = 0;
+
+                for (let u = 0; u < 2; u++) {
+                    await fetch(`${API_URL}?action=speedtest_upload&t=${Date.now()}`, {
+                        method: 'POST',
+                        body: upPayload
+                    });
+                    upLoaded += upPayload.length;
+                    const elapsedSec = (performance.now() - upStart) / 1000;
+                    if (elapsedSec > 0) {
+                        const curMbps = (upLoaded * 8) / (elapsedSec * 1000000);
+                        finalUpMbps = curMbps;
+                        updateSpeedGauge(curMbps, 100);
+                        valUp.innerText = `${curMbps.toFixed(1)} Mbps`;
+                    }
+                }
+
+                valUp.innerText = `${finalUpMbps.toFixed(1)} Mbps`;
+                boxUp.classList.remove('active');
+
+                // FINISHED
+                statusText.innerHTML = `<span style="color:#10B981;font-weight:800;">✨ Speed test completed successfully!</span>`;
+                badge.innerText = 'TEST COMPLETED';
+                badge.style.color = '#10B981';
+                badge.style.borderColor = 'rgba(16, 185, 129, 0.4)';
+                updateSpeedGauge(finalDlMbps, 100);
+
+            } catch (e) {
+                console.error("Speed test error:", e);
+                statusText.innerHTML = `<span style="color:#EF4444;">⚠️ Speed test interrupted. Check connection.</span>`;
+                badge.innerText = 'ERROR';
+                badge.style.color = '#EF4444';
+            } finally {
+                isSpeedTesting = false;
+                btn.disabled = false;
+                btn.innerHTML = `<svg viewBox="0 0 24 24"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg> <span>TEST AGAIN</span>`;
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            fetchClientData();
+            setInterval(fetchClientData, 2000);
+        });
+    </script>
+</body>
+
+</html>
