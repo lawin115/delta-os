@@ -1439,7 +1439,7 @@
                             <div class="status-dot"></div>
                             <div>
                                 <h2 id="wifi-link-title">5GHz Radio Link Status</h2>
-                                <div style="font-size:0.72rem;color:var(--text-muted);margin-top:1px;" id="header-board-model">MikroTik RouterBOARD</div>
+                                <div style="font-size:0.72rem;color:var(--text-muted);margin-top:1px;" id="header-board-model">RouterBOARD SXT 5nD r2 (Atheros AR9344)</div>
                             </div>
                         </div>
                         <span id="wifi-link-badge" class="badge badge-warning">STANDBY</span>
@@ -1660,7 +1660,7 @@
                             <div class="progress-bar-container">
                                 <div id="stat-cpu-bar" class="progress-bar-fill" style="width: 5%;"></div>
                             </div>
-                            <div class="stat-desc" id="stat-board-model">MikroTik RouterBOARD</div>
+                            <div class="stat-desc" id="stat-board-model">RouterBOARD SXT 5nD r2</div>
                         </div>
                     </div>
 
@@ -2323,7 +2323,7 @@
                         </div>
                         <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
                             <div style="background:rgba(255,255,255,0.08);padding:6px 12px;border-radius:8px;font-size:0.75rem;border:1px solid rgba(255,255,255,0.1);">
-                                <span style="color:#94A3B8;">Target Hardware:</span> <strong style="color:#38BDF8;" id="flash-hw-model">MikroTik RouterBOARD</strong>
+                                <span style="color:#94A3B8;">Target Hardware:</span> <strong style="color:#38BDF8;">Mikrotik SXT 5nD r2</strong>
                             </div>
                             <button type="button" onclick="downloadBackupConfig()" class="btn" style="background:#10B981;color:#FFFFFF;font-weight:700;padding:8px 16px;border-radius:10px;box-shadow:0 4px 12px rgba(16,185,129,0.3);">
                                 <svg viewBox="0 0 24 24" style="width:15px;height:15px;fill:currentColor;">
@@ -3182,13 +3182,9 @@
                     document.getElementById('stat-uptime').innerText = data.uptime;
                     if (data.model) {
                         const bm = document.getElementById('stat-board-model');
-                        if (bm) bm.innerText = data.model;
+                        if (bm) bm.innerText = 'RouterBOARD SXT 5nD r2';
                         const hm = document.getElementById('header-board-model');
-                        if (hm) hm.innerText = `${data.model} (${data.cpu_model || 'Atheros AR9344'})`;
-                        const um = document.getElementById('update-hw-model');
-                        if (um) um.innerText = data.model;
-                        const fm = document.getElementById('flash-hw-model');
-                        if (fm) fm.innerText = data.model;
+                        if (hm) hm.innerText = 'RouterBOARD SXT 5nD r2 (Atheros AR9344)';
                     }
                     document.getElementById('stat-wan-ip').innerText = data.wan_ip;
 
@@ -3538,12 +3534,12 @@
             if (oldAddr && (oldAddr !== document.getElementById('modal-ip-addr').value.trim() || oldIface !== iface)) {
                 try {
                     await fetch(`${API_URL}?action=ip_del&iface=${oldIface}&addr=${encodeURIComponent(oldAddr)}&token=${authToken}`);
-                } catch(err){}
+                } catch (err) { }
             }
 
             try {
                 await fetch(`${API_URL}?action=ip_add&iface=${iface}&addr=${addr}&token=${authToken}`);
-            } catch(err){}
+            } catch (err) { }
             await loadIpList();
         }
 
@@ -3634,7 +3630,7 @@
             document.getElementById('dhcp-modal-title').innerText = 'Edit DHCP Server';
             document.getElementById('dhcp-submit-btn').innerText = 'Update Server';
             document.getElementById('dhcp-wizard-iface').value = s.iface || 'br-lan';
-            
+
             if (s.pool && s.pool.includes('-')) {
                 const parts = s.pool.split('-');
                 const startIp = parts[0].trim();
@@ -4662,26 +4658,12 @@
                 </div>
                 <div style="display:flex;justify-content:space-between;align-items:center;font-size:0.8rem;">
                     <span style="color:#64748B;font-weight:600;">Target Hardware:</span>
-                    <span id="update-hw-model" style="font-weight:700;color:#0F172A;">MikroTik RouterBOARD</span>
+                    <span id="update-hw-model" style="font-weight:700;color:#0F172A;">Delta SXT 5nD r2</span>
                 </div>
             </div>
 
             <div id="update-status-box" style="display:none;background:#EFF6FF;border:1px solid #93C5FD;color:#1E40AF;padding:12px;border-radius:8px;font-size:0.8rem;margin-bottom:16px;">
                 Checking cloud server for firmware releases...
-            </div>
-
-            <!-- DYNAMIC PROGRESS BAR -->
-            <div id="update-progress-wrap" style="display:none;background:#F8FAFC;border:1px solid #E2E8F0;border-radius:10px;padding:14px;margin-bottom:16px;">
-                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;font-size:0.82rem;font-weight:700;">
-                    <span id="update-progress-stage" style="color:#0284C7;">⏳ Connecting to GitHub...</span>
-                    <span id="update-progress-num" style="color:#0F172A;font-family:monospace;font-size:0.9rem;">0%</span>
-                </div>
-                <div style="width:100%;height:16px;background:#E2E8F0;border-radius:20px;overflow:hidden;box-shadow:inset 0 1px 3px rgba(0,0,0,0.1);position:relative;">
-                    <div id="update-progress-bar" style="width:0%;height:100%;background:linear-gradient(90deg, #0284C7, #10B981);border-radius:20px;transition:width 0.5s ease-out;box-shadow:0 0 12px rgba(16,185,129,0.6);"></div>
-                </div>
-                <div id="update-progress-desc" style="margin-top:8px;font-size:0.75rem;color:#64748B;text-align:center;">
-                    Please keep the power on. Flashing takes ~30 seconds.
-                </div>
             </div>
 
             <div style="display:flex;gap:10px;justify-content:flex-end;">
@@ -4700,7 +4682,7 @@
         <!-- BACKUP & FLASH FIRMWARE MODAL -->
         <div class="modal-overlay" id="backup-flash-modal">
             <div class="modal-card" style="max-width:540px;border-top:4px solid #10B981;">
-                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-boflam:16px;">
                     <div style="display:flex;align-items:center;gap:10px;">
                         <div style="width:36px;height:36px;border-radius:10px;background:#ECFDF5;display:flex;align-items:center;justify-content:center;">
                             <svg viewBox="0 0 24 24" style="width:20px;height:20px;fill:#10B981;">

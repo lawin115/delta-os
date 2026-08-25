@@ -1,0 +1,32 @@
+#!/bin/sh /etc/rc.common
+START=12
+
+boot() {
+    # Find data partition in /proc/mtd
+    MTD_DEV=$(grep -E '"data"|"rootfs_data"' /proc/mtd | head -n1 | cut -d: -f1)
+    if [ -n "$MTD_DEV" ]; then
+        BLK="/dev/mtdblock${MTD_DEV#mtd}"
+        if [ -e "$BLK" ]; then
+            mkdir -p /overlay
+            # Try mounting as JFFS2
+            if ! grep -q ' /overlay ' /proc/mounts; then
+                mount -t jffs2 "$BLK" /overlay 2>/dev/null || {
+                    # If blank or unformatted, format with JFFS2 and mount
+                    mtd erase "$MTD_DEV" 2>/dev/null
+                    mount -t jffs2 "$BLK" /overlay 2>/dev/null
+                }
+            fi
+
+            # Check if /overlay is mounted via /proc/mounts
+            if grep -q ' /overlay ' /proc/mounts; then
+                mkdir -p /overlay/config /overlay/etc
+                # Initialize default configs on first boot
+                if [ ! -f /overlay/config/network ]; then
+                    cp -a /etc/config/* /overlay/config/ 2>/dev/null
+                fi
+                # Bind-mount so /etc/config writes directly to flash
+                mount --bind /overlay/config /etc/config 2>/dev/null
+            fi
+        fi
+    fi
+}

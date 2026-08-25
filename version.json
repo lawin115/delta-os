@@ -4,5 +4,5 @@
     "update_available": true,
     "release_date": "2026-08-25",
     "firmware_url": "https://raw.githubusercontent.com/lawin115/delta-os/main/sysupgrade.bin",
-    "changelog": "Delta OS Pro v2.6: Cyberpunk 5G Speed Test in Client Portal, Dynamic Real Hardware Model Detection, Zero-RAM Direct Cloud Flash, WinBox MNDP Discovery, iperf3, and Persistent JFFS2."
+    "changelog": "Delta OS Pro v2.6: Zero-RAM Direct Cloud Streaming Flash, WinBox MNDP Discovery, iperf3 Bandwidth Test, Persistent JFFS2 Partition, and Ultra-Fast Boot."
 }

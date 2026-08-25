@@ -42,7 +42,7 @@
         body {
             font-family: var(--font-sans);
             background-color: var(--bg);
-            background-image: 
+            background-image:
                 radial-gradient(circle at 15% 15%, rgba(56, 189, 248, 0.07) 0%, transparent 40%),
                 radial-gradient(circle at 85% 85%, rgba(129, 140, 248, 0.07) 0%, transparent 40%);
             color: var(--text-main);
@@ -143,8 +143,17 @@
         }
 
         @keyframes pulseGlow {
-            0%, 100% { transform: scale(0.9); opacity: 0.7; }
-            50% { transform: scale(1.2); opacity: 1; }
+
+            0%,
+            100% {
+                transform: scale(0.9);
+                opacity: 0.7;
+            }
+
+            50% {
+                transform: scale(1.2);
+                opacity: 1;
+            }
         }
 
         /* MAIN CONTAINER */
@@ -467,8 +476,13 @@
             transition: height 0.35s ease;
         }
 
-        .graph-pill.rx { background: linear-gradient(180deg, #38BDF8, #0284C7); }
-        .graph-pill.tx { background: linear-gradient(180deg, #34D399, #059669); }
+        .graph-pill.rx {
+            background: linear-gradient(180deg, #38BDF8, #0284C7);
+        }
+
+        .graph-pill.tx {
+            background: linear-gradient(180deg, #34D399, #059669);
+        }
 
         /* 3. ETHERNET LAN ROW */
         .lan-row {
@@ -714,72 +728,90 @@
             body {
                 padding: 10px 8px 30px;
             }
+
             .client-header {
                 padding: 10px 12px;
                 margin-bottom: 10px;
                 border-radius: 12px;
             }
+
             .glass-card {
                 padding: 12px 10px;
                 border-radius: 14px;
             }
+
             .signal-grid {
                 grid-template-columns: repeat(2, 1fr);
                 gap: 6px;
                 margin-top: 10px;
                 padding-top: 8px;
             }
+
             .signal-stat-box {
                 padding: 6px 4px;
                 border-radius: 8px;
             }
+
             .stat-lbl {
                 font-size: 0.54rem;
             }
+
             .stat-val {
                 font-size: 0.68rem;
             }
+
             .stat-sub {
                 font-size: 0.56rem;
             }
+
             .speed-grid {
                 grid-template-columns: 1fr 1fr;
                 gap: 6px;
                 margin-bottom: 8px;
             }
+
             .speed-card {
                 padding: 8px 6px;
                 border-radius: 10px;
             }
+
             .speed-head {
                 font-size: 0.58rem;
                 gap: 4px;
                 margin-bottom: 4px;
             }
+
             .speed-icon {
                 width: 18px;
                 height: 18px;
                 border-radius: 5px;
             }
+
             .speed-icon svg {
                 width: 10px !important;
                 height: 10px !important;
             }
+
             .speed-num {
                 font-size: 0.98rem;
             }
+
             .speed-foot {
                 font-size: 0.58rem;
             }
+
             .lan-row {
                 padding: 8px 10px;
             }
+
             .lan-text h3 {
                 font-size: 0.8rem !important;
             }
+
             .lan-text p {
                 font-size: 0.64rem !important;
             }
+
             .lan-rate-badge {
                 padding: 4px 8px;
                 font-size: 0.72rem;
@@ -794,7 +826,9 @@
     <header class="client-header">
         <div class="header-brand">
             <div class="brand-icon">
-                <svg viewBox="0 0 24 24"><path d="M12 4C7.31 4 3.07 5.9 0 8.98L12 21 24 8.98C20.93 5.9 16.69 4 12 4zm0 3.8c3.6 0 6.88 1.45 9.27 3.81L12 18.87 2.73 11.61C5.12 9.25 8.4 7.8 12 7.8z"/></svg>
+                <svg viewBox="0 0 24 24">
+                    <path d="M12 4C7.31 4 3.07 5.9 0 8.98L12 21 24 8.98C20.93 5.9 16.69 4 12 4zm0 3.8c3.6 0 6.88 1.45 9.27 3.81L12 18.87 2.73 11.61C5.12 9.25 8.4 7.8 12 7.8z" />
+                </svg>
             </div>
             <div class="brand-text">
                 <h1>Delta 5G Client</h1>
@@ -823,221 +857,275 @@
         <!-- ACTIVE PORTAL CONTENT -->
         <div id="client-active-content" style="display:flex;flex-direction:column;gap:12px;">
 
-        <!-- CARD 1: 5GHZ WIRELESS SIGNAL & LINK GAUGE -->
-        <section class="glass-card">
-            <div class="card-title-row">
-                <div class="card-title">
-                    <svg viewBox="0 0 24 24"><path d="M12 4C7.31 4 3.07 5.9 0 8.98L12 21 24 8.98C20.93 5.9 16.69 4 12 4zm0 3.8c3.6 0 6.88 1.45 9.27 3.81L12 18.87 2.73 11.61C5.12 9.25 8.4 7.8 12 7.8z"/></svg>
-                    <span>5GHz Wireless Signal Transceiver</span>
+            <!-- CARD 1: 5GHZ WIRELESS SIGNAL & LINK GAUGE -->
+            <section class="glass-card">
+                <div class="card-title-row">
+                    <div class="card-title">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M12 4C7.31 4 3.07 5.9 0 8.98L12 21 24 8.98C20.93 5.9 16.69 4 12 4zm0 3.8c3.6 0 6.88 1.45 9.27 3.81L12 18.87 2.73 11.61C5.12 9.25 8.4 7.8 12 7.8z" />
+                        </svg>
+                        <span>5GHz Wireless Signal Transceiver</span>
+                    </div>
+                    <div class="link-quality-badge" id="client-quality-badge">Excellent Link</div>
                 </div>
-                <div class="link-quality-badge" id="client-quality-badge">Excellent Link</div>
-            </div>
 
-            <div class="signal-hero">
-                <div class="signal-gauge-wrapper">
-                    <svg class="gauge-svg" viewBox="0 0 170 95">
+                <div class="signal-hero">
+                    <div class="signal-gauge-wrapper">
+                        <svg class="gauge-svg" viewBox="0 0 170 95">
+                            <defs>
+                                <linearGradient id="gaugeGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                    <stop offset="0%" stop-color="#EF4444" />
+                                    <stop offset="45%" stop-color="#F59E0B" />
+                                    <stop offset="80%" stop-color="#10B981" />
+                                    <stop offset="100%" stop-color="#38BDF8" />
+                                </linearGradient>
+                            </defs>
+                            <path class="gauge-bg" d="M 15 85 A 70 70 0 0 1 155 85" />
+                            <path class="gauge-meter" id="gauge-meter-path" d="M 15 85 A 70 70 0 0 1 155 85" />
+                        </svg>
+                        <div class="gauge-center-val">
+                            <div class="gauge-dbm" id="client-signal-dbm">-55</div>
+                            <div class="gauge-unit">Signal Level (dBm)</div>
+                        </div>
+                    </div>
+
+                    <div class="signal-details">
+                        <div class="signal-pct-val" id="client-pct-val">88%</div>
+                        <div class="signal-pct-lbl">Transceiver Link Quality</div>
+                    </div>
+                </div>
+
+                <div class="signal-grid">
+                    <div class="signal-stat-box">
+                        <div class="stat-lbl">Connected SSID</div>
+                        <div class="stat-val" id="client-ssid-name">Delta-5G</div>
+                        <div class="stat-sub" id="client-bssid-mac">--:--:--:--:--:--</div>
+                    </div>
+                    <div class="signal-stat-box">
+                        <div class="stat-lbl">Frequency / Channel</div>
+                        <div class="stat-val" id="client-freq-val">5800 MHz</div>
+                        <div class="stat-sub">5GHz High Band</div>
+                    </div>
+                    <div class="signal-stat-box">
+                        <div class="stat-lbl">Physical Data Rate</div>
+                        <div class="stat-val" id="client-rate-val">300.0 Mbps</div>
+                        <div class="stat-sub" id="client-rate-sub">MCS15 40MHz</div>
+                    </div>
+                    <div class="signal-stat-box">
+                        <div class="stat-lbl">Noise / CCQ Quality</div>
+                        <div class="stat-val" id="client-ccq-val" style="color:#10B981;">98%</div>
+                        <div class="stat-sub" id="client-noise-val">-95 dBm</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- CARD 2: REAL-TIME TRAFFIC & SPEEDOMETER -->
+            <section class="glass-card">
+                <div class="card-title-row">
+                    <div class="card-title">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 14h-2v-2h2v2zm0-4h-2V7h2v5z" />
+                        </svg>
+                        <span>Subscriber Real-Time Traffic</span>
+                    </div>
+                </div>
+
+                <div class="speed-grid">
+                    <div class="speed-card rx">
+                        <div class="speed-head">
+                            <span class="speed-icon">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M20 12l-1.41-1.41L13 16.17V4h-2v12.17l-5.58-5.59L4 12l8 8 8-8z" />
+                                </svg>
+                            </span>
+                            <span>Download Speed</span>
+                        </div>
+                        <div class="speed-num" id="client-rx-speed">0.00 KB/s</div>
+                        <div class="speed-foot" id="client-rx-total">Total: 0 B</div>
+                    </div>
+
+                    <div class="speed-card tx">
+                        <div class="speed-head">
+                            <span class="speed-icon">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M4 12l1.41 1.41L11 7.83V20h2V7.83l5.58 5.59L20 12l-8-8-8 8z" />
+                                </svg>
+                            </span>
+                            <span>Upload Speed</span>
+                        </div>
+                        <div class="speed-num" id="client-tx-speed">0.00 KB/s</div>
+                        <div class="speed-foot" id="client-tx-total">Total: 0 B</div>
+                    </div>
+                </div>
+
+                <!-- LIVE ACTIVITY BAR GRAPH -->
+                <div class="graph-box">
+                    <div class="graph-bars" id="client-graph-bars">
+                        <div class="graph-bar-col">
+                            <div class="graph-pill rx" style="height:10%;"></div>
+                            <div class="graph-pill tx" style="height:10%;"></div>
+                        </div>
+                        <div class="graph-bar-col">
+                            <div class="graph-pill rx" style="height:25%;"></div>
+                            <div class="graph-pill tx" style="height:15%;"></div>
+                        </div>
+                        <div class="graph-bar-col">
+                            <div class="graph-pill rx" style="height:40%;"></div>
+                            <div class="graph-pill tx" style="height:20%;"></div>
+                        </div>
+                        <div class="graph-bar-col">
+                            <div class="graph-pill rx" style="height:60%;"></div>
+                            <div class="graph-pill tx" style="height:35%;"></div>
+                        </div>
+                        <div class="graph-bar-col">
+                            <div class="graph-pill rx" style="height:30%;"></div>
+                            <div class="graph-pill tx" style="height:15%;"></div>
+                        </div>
+                        <div class="graph-bar-col">
+                            <div class="graph-pill rx" style="height:70%;"></div>
+                            <div class="graph-pill tx" style="height:45%;"></div>
+                        </div>
+                        <div class="graph-bar-col">
+                            <div class="graph-pill rx" style="height:85%;"></div>
+                            <div class="graph-pill tx" style="height:55%;"></div>
+                        </div>
+                        <div class="graph-bar-col">
+                            <div class="graph-pill rx" style="height:45%;"></div>
+                            <div class="graph-pill tx" style="height:30%;"></div>
+                        </div>
+                        <div class="graph-bar-col">
+                            <div class="graph-pill rx" style="height:30%;"></div>
+                            <div class="graph-pill tx" style="height:20%;"></div>
+                        </div>
+                        <div class="graph-bar-col">
+                            <div class="graph-pill rx" style="height:50%;"></div>
+                            <div class="graph-pill tx" style="height:25%;"></div>
+                        </div>
+                        <div class="graph-bar-col">
+                            <div class="graph-pill rx" style="height:65%;"></div>
+                            <div class="graph-pill tx" style="height:40%;"></div>
+                        </div>
+                        <div class="graph-bar-col">
+                            <div class="graph-pill rx" style="height:40%;"></div>
+                            <div class="graph-pill tx" style="height:25%;"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- CARD 2.5: LIVE SPEED TEST COMPONENT -->
+            <section class="glass-card st-card">
+                <div class="card-title-row">
+                    <div class="card-title">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14.5v-9l6 4.5-6 4.5z" />
+                        </svg>
+                        <span>Delta 5G Speed Test</span>
+                    </div>
+                    <div class="link-quality-badge" id="st-badge-status" style="background:rgba(56,189,248,0.12);color:#38BDF8;border-color:rgba(56,189,248,0.3);">
+                        🌍 Global Internet CDN
+                    </div>
+                </div>
+
+                <!-- SERVER INFO BAR -->
+                <div style="display:flex;justify-content:space-between;align-items:center;padding:5px 10px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:8px;font-size:0.68rem;margin-bottom:8px;">
+                    <span style="color:#94A3B8;">Test Server:</span>
+                    <span id="st-server-info" style="font-weight:700;color:#38BDF8;">Cloudflare Global High-Speed CDN</span>
+                </div>
+
+                <!-- SPEEDOMETER GAUGE -->
+                <div class="st-gauge-wrap">
+                    <svg class="st-gauge-svg" viewBox="0 0 190 105">
                         <defs>
-                            <linearGradient id="gaugeGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                                <stop offset="0%" stop-color="#EF4444" />
-                                <stop offset="45%" stop-color="#F59E0B" />
-                                <stop offset="80%" stop-color="#10B981" />
-                                <stop offset="100%" stop-color="#38BDF8" />
+                            <linearGradient id="stGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                <stop offset="0%" stop-color="#38BDF8" />
+                                <stop offset="50%" stop-color="#10B981" />
+                                <stop offset="100%" stop-color="#F59E0B" />
                             </linearGradient>
                         </defs>
-                        <path class="gauge-bg" d="M 15 85 A 70 70 0 0 1 155 85" />
-                        <path class="gauge-meter" id="gauge-meter-path" d="M 15 85 A 70 70 0 0 1 155 85" />
+                        <path class="st-gauge-bg" d="M 15 95 A 75 75 0 0 1 175 95" />
+                        <path class="st-gauge-meter" id="st-gauge-path" d="M 15 95 A 75 75 0 0 1 175 95" />
                     </svg>
-                    <div class="gauge-center-val">
-                        <div class="gauge-dbm" id="client-signal-dbm">-55</div>
-                        <div class="gauge-unit">Signal Level (dBm)</div>
+                    <div class="st-center-display">
+                        <div class="st-speed-val" id="st-live-speed">0.0</div>
+                        <div class="st-speed-unit" id="st-live-unit">Mbps</div>
                     </div>
                 </div>
 
-                <div class="signal-details">
-                    <div class="signal-pct-val" id="client-pct-val">88%</div>
-                    <div class="signal-pct-lbl">Transceiver Link Quality</div>
-                </div>
-            </div>
+                <div class="st-status-msg" id="st-status-text">Click below to test your real-time 5GHz wireless link speed</div>
 
-            <div class="signal-grid">
-                <div class="signal-stat-box">
-                    <div class="stat-lbl">Connected SSID</div>
-                    <div class="stat-val" id="client-ssid-name">Delta-5G</div>
-                    <div class="stat-sub" id="client-bssid-mac">--:--:--:--:--:--</div>
-                </div>
-                <div class="signal-stat-box">
-                    <div class="stat-lbl">Frequency / Channel</div>
-                    <div class="stat-val" id="client-freq-val">5800 MHz</div>
-                    <div class="stat-sub">5GHz High Band</div>
-                </div>
-                <div class="signal-stat-box">
-                    <div class="stat-lbl">Physical Data Rate</div>
-                    <div class="stat-val" id="client-rate-val">300.0 Mbps</div>
-                    <div class="stat-sub" id="client-rate-sub">MCS15 40MHz</div>
-                </div>
-                <div class="signal-stat-box">
-                    <div class="stat-lbl">Noise / CCQ Quality</div>
-                    <div class="stat-val" id="client-ccq-val" style="color:#10B981;">98%</div>
-                    <div class="stat-sub" id="client-noise-val">-95 dBm</div>
-                </div>
-            </div>
-        </section>
-
-        <!-- CARD 2: REAL-TIME TRAFFIC & SPEEDOMETER -->
-        <section class="glass-card">
-            <div class="card-title-row">
-                <div class="card-title">
-                    <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 14h-2v-2h2v2zm0-4h-2V7h2v5z"/></svg>
-                    <span>Subscriber Real-Time Traffic</span>
-                </div>
-            </div>
-
-            <div class="speed-grid">
-                <div class="speed-card rx">
-                    <div class="speed-head">
-                        <span class="speed-icon">
-                            <svg viewBox="0 0 24 24"><path d="M20 12l-1.41-1.41L13 16.17V4h-2v12.17l-5.58-5.59L4 12l8 8 8-8z"/></svg>
-                        </span>
-                        <span>Download Speed</span>
+                <!-- METRIC STATS (PING, JITTER, DOWNLOAD, UPLOAD) -->
+                <div class="st-metrics-grid">
+                    <div class="st-metric-box" id="st-box-ping">
+                        <div class="st-metric-label">Ping</div>
+                        <div class="st-metric-val" id="st-val-ping" style="color:#38BDF8;">-- ms</div>
                     </div>
-                    <div class="speed-num" id="client-rx-speed">0.00 KB/s</div>
-                    <div class="speed-foot" id="client-rx-total">Total: 0 B</div>
-                </div>
-
-                <div class="speed-card tx">
-                    <div class="speed-head">
-                        <span class="speed-icon">
-                            <svg viewBox="0 0 24 24"><path d="M4 12l1.41 1.41L11 7.83V20h2V7.83l5.58 5.59L20 12l-8-8-8 8z"/></svg>
-                        </span>
-                        <span>Upload Speed</span>
+                    <div class="st-metric-box" id="st-box-jitter">
+                        <div class="st-metric-label">Jitter</div>
+                        <div class="st-metric-val" id="st-val-jitter" style="color:#818CF8;">-- ms</div>
                     </div>
-                    <div class="speed-num" id="client-tx-speed">0.00 KB/s</div>
-                    <div class="speed-foot" id="client-tx-total">Total: 0 B</div>
-                </div>
-            </div>
-
-            <!-- LIVE ACTIVITY BAR GRAPH -->
-            <div class="graph-box">
-                <div class="graph-bars" id="client-graph-bars">
-                    <div class="graph-bar-col"><div class="graph-pill rx" style="height:10%;"></div><div class="graph-pill tx" style="height:10%;"></div></div>
-                    <div class="graph-bar-col"><div class="graph-pill rx" style="height:25%;"></div><div class="graph-pill tx" style="height:15%;"></div></div>
-                    <div class="graph-bar-col"><div class="graph-pill rx" style="height:40%;"></div><div class="graph-pill tx" style="height:20%;"></div></div>
-                    <div class="graph-bar-col"><div class="graph-pill rx" style="height:60%;"></div><div class="graph-pill tx" style="height:35%;"></div></div>
-                    <div class="graph-bar-col"><div class="graph-pill rx" style="height:30%;"></div><div class="graph-pill tx" style="height:15%;"></div></div>
-                    <div class="graph-bar-col"><div class="graph-pill rx" style="height:70%;"></div><div class="graph-pill tx" style="height:45%;"></div></div>
-                    <div class="graph-bar-col"><div class="graph-pill rx" style="height:85%;"></div><div class="graph-pill tx" style="height:55%;"></div></div>
-                    <div class="graph-bar-col"><div class="graph-pill rx" style="height:45%;"></div><div class="graph-pill tx" style="height:30%;"></div></div>
-                    <div class="graph-bar-col"><div class="graph-pill rx" style="height:30%;"></div><div class="graph-pill tx" style="height:20%;"></div></div>
-                    <div class="graph-bar-col"><div class="graph-pill rx" style="height:50%;"></div><div class="graph-pill tx" style="height:25%;"></div></div>
-                    <div class="graph-bar-col"><div class="graph-pill rx" style="height:65%;"></div><div class="graph-pill tx" style="height:40%;"></div></div>
-                    <div class="graph-bar-col"><div class="graph-pill rx" style="height:40%;"></div><div class="graph-pill tx" style="height:25%;"></div></div>
-                </div>
-            </div>
-        </section>
-
-        <!-- CARD 2.5: LIVE SPEED TEST COMPONENT -->
-        <section class="glass-card st-card">
-            <div class="card-title-row">
-                <div class="card-title">
-                    <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14.5v-9l6 4.5-6 4.5z"/></svg>
-                    <span>Delta 5G Speed Test</span>
-                </div>
-                <div class="link-quality-badge" id="st-badge-status" style="background:rgba(56,189,248,0.12);color:#38BDF8;border-color:rgba(56,189,248,0.3);">
-                    🌍 Global Internet CDN
-                </div>
-            </div>
-
-            <!-- SERVER INFO BAR -->
-            <div style="display:flex;justify-content:space-between;align-items:center;padding:5px 10px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:8px;font-size:0.68rem;margin-bottom:8px;">
-                <span style="color:#94A3B8;">Test Server:</span>
-                <span id="st-server-info" style="font-weight:700;color:#38BDF8;">Cloudflare Global High-Speed CDN</span>
-            </div>
-
-            <!-- SPEEDOMETER GAUGE -->
-            <div class="st-gauge-wrap">
-                <svg class="st-gauge-svg" viewBox="0 0 190 105">
-                    <defs>
-                        <linearGradient id="stGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                            <stop offset="0%" stop-color="#38BDF8" />
-                            <stop offset="50%" stop-color="#10B981" />
-                            <stop offset="100%" stop-color="#F59E0B" />
-                        </linearGradient>
-                    </defs>
-                    <path class="st-gauge-bg" d="M 15 95 A 75 75 0 0 1 175 95" />
-                    <path class="st-gauge-meter" id="st-gauge-path" d="M 15 95 A 75 75 0 0 1 175 95" />
-                </svg>
-                <div class="st-center-display">
-                    <div class="st-speed-val" id="st-live-speed">0.0</div>
-                    <div class="st-speed-unit" id="st-live-unit">Mbps</div>
-                </div>
-            </div>
-
-            <div class="st-status-msg" id="st-status-text">Click below to test your real-time 5GHz wireless link speed</div>
-
-            <!-- METRIC STATS (PING, JITTER, DOWNLOAD, UPLOAD) -->
-            <div class="st-metrics-grid">
-                <div class="st-metric-box" id="st-box-ping">
-                    <div class="st-metric-label">Ping</div>
-                    <div class="st-metric-val" id="st-val-ping" style="color:#38BDF8;">-- ms</div>
-                </div>
-                <div class="st-metric-box" id="st-box-jitter">
-                    <div class="st-metric-label">Jitter</div>
-                    <div class="st-metric-val" id="st-val-jitter" style="color:#818CF8;">-- ms</div>
-                </div>
-                <div class="st-metric-box" id="st-box-down">
-                    <div class="st-metric-label">Download</div>
-                    <div class="st-metric-val" id="st-val-down" style="color:#34D399;">-- Mbps</div>
-                </div>
-                <div class="st-metric-box" id="st-box-up">
-                    <div class="st-metric-label">Upload</div>
-                    <div class="st-metric-val" id="st-val-up" style="color:#F59E0B;">-- Mbps</div>
-                </div>
-            </div>
-
-            <!-- ACTION BUTTON -->
-            <button class="btn-speedtest" id="btn-start-speedtest" onclick="startSpeedTest()">
-                <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14.5v-9l6 4.5-6 4.5z"/></svg>
-                <span>START SPEED TEST</span>
-            </button>
-        </section>
-
-        <!-- CARD 3: ETHERNET LAN CABLE NEGOTIATION -->
-        <section class="glass-card">
-            <div class="card-title-row">
-                <div class="card-title">
-                    <svg viewBox="0 0 24 24"><path d="M4 6h16v12H4z M2 4v16h20V4H2z M8 10h8v4H8z"/></svg>
-                    <span>Ethernet LAN Link Speed</span>
-                </div>
-                <span class="lan-duplex-pill" id="client-lan-duplex">FULL DUPLEX</span>
-            </div>
-
-            <div class="lan-row">
-                <div class="lan-info">
-                    <div class="lan-rate-badge" id="client-lan-rate">100 Mbps</div>
-                    <div class="lan-text">
-                        <h3 style="font-size:0.86rem;font-weight:700;color:#FFFFFF;margin-bottom:2px;">Local LAN Interface (eth0)</h3>
-                        <p id="client-lan-desc" style="font-size:0.7rem;color:var(--text-muted);">Port Speed: 100 Mbps (Full Duplex) | Link Active</p>
+                    <div class="st-metric-box" id="st-box-down">
+                        <div class="st-metric-label">Download</div>
+                        <div class="st-metric-val" id="st-val-down" style="color:#34D399;">-- Mbps</div>
+                    </div>
+                    <div class="st-metric-box" id="st-box-up">
+                        <div class="st-metric-label">Upload</div>
+                        <div class="st-metric-val" id="st-val-up" style="color:#F59E0B;">-- Mbps</div>
                     </div>
                 </div>
+
+                <!-- ACTION BUTTON -->
+                <button class="btn-speedtest" id="btn-start-speedtest" onclick="startSpeedTest()">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14.5v-9l6 4.5-6 4.5z" />
+                    </svg>
+                    <span>START SPEED TEST</span>
+                </button>
+            </section>
+
+            <!-- CARD 3: ETHERNET LAN CABLE NEGOTIATION -->
+            <section class="glass-card">
+                <div class="card-title-row">
+                    <div class="card-title">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M4 6h16v12H4z M2 4v16h20V4H2z M8 10h8v4H8z" />
+                        </svg>
+                        <span>Ethernet LAN Link Speed</span>
+                    </div>
+                    <span class="lan-duplex-pill" id="client-lan-duplex">FULL DUPLEX</span>
+                </div>
+
+                <div class="lan-row">
+                    <div class="lan-info">
+                        <div class="lan-rate-badge" id="client-lan-rate">100 Mbps</div>
+                        <div class="lan-text">
+                            <h3 style="font-size:0.86rem;font-weight:700;color:#FFFFFF;margin-bottom:2px;">Local LAN Interface (eth0)</h3>
+                            <p id="client-lan-desc" style="font-size:0.7rem;color:var(--text-muted);">Port Speed: 100 Mbps (Full Duplex) | Link Active</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- FOOTER INFO & REFRESH -->
+            <div class="footer-row">
+                <div>Device Uptime: <span id="client-uptime-val" style="font-weight:700;color:#FFFFFF;">--</span></div>
+                <button class="btn-refresh" onclick="fetchClientData()">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z" />
+                    </svg>
+                    Refresh
+                </button>
             </div>
-        </section>
 
-        <!-- FOOTER INFO & REFRESH -->
-        <div class="footer-row">
-            <div>Device Uptime: <span id="client-uptime-val" style="font-weight:700;color:#FFFFFF;">--</span></div>
-            <button class="btn-refresh" onclick="fetchClientData()">
-                <svg viewBox="0 0 24 24"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
-                Refresh
-            </button>
-        </div>
-
-        <!-- BRANDING FOOTER LINK -->
-        <div style="text-align:center;padding:10px 0 4px;margin-top:2px;">
-            <a href="http://deltaz.it.com" target="_blank" rel="noopener noreferrer" style="color:var(--primary);text-decoration:none;font-size:0.74rem;font-weight:800;letter-spacing:0.5px;display:inline-flex;align-items:center;gap:6px;padding:5px 14px;background:rgba(56,189,248,0.08);border:1px solid rgba(56,189,248,0.2);border-radius:20px;transition:all 0.2s ease;">
-                <span>by delta</span>
-                <svg style="width:11px;height:11px;fill:currentColor;" viewBox="0 0 24 24"><path d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/></svg>
-            </a>
-        </div>
+            <!-- BRANDING FOOTER LINK -->
+            <div style="text-align:center;padding:10px 0 4px;margin-top:2px;">
+                <a href="http://deltaz.it.com" target="_blank" rel="noopener noreferrer" style="color:var(--primary);text-decoration:none;font-size:0.74rem;font-weight:800;letter-spacing:0.5px;display:inline-flex;align-items:center;gap:6px;padding:5px 14px;background:rgba(56,189,248,0.08);border:1px solid rgba(56,189,248,0.2);border-radius:20px;transition:all 0.2s ease;">
+                    <span>by delta</span>
+                    <svg style="width:11px;height:11px;fill:currentColor;" viewBox="0 0 24 24">
+                        <path d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z" />
+                    </svg>
+                </a>
+            </div>
         </div> <!-- End of client-active-content -->
 
     </main>
@@ -1092,12 +1180,12 @@
                 const isConnected = data.wifi_connected === true;
                 const sigStr = data.link_signal || '-65';
                 const sigNum = parseInt(sigStr) || -65;
-                
+
                 document.getElementById('client-signal-dbm').innerText = isConnected ? `${sigNum}` : '--';
                 document.getElementById('client-ssid-name').innerText = isConnected ? (data.link_ssid || data.wifi_ssid || 'Delta-5G') : 'No Link';
                 document.getElementById('client-bssid-mac').innerText = isConnected && data.link_bssid ? data.link_bssid : '--:--:--:--:--:--';
                 document.getElementById('client-freq-val').innerText = isConnected && data.link_freq ? `${data.link_freq} MHz` : '5GHz';
-                
+
                 if (isConnected && data.link_bitrate) {
                     document.getElementById('client-rate-val').innerText = data.link_bitrate;
                     document.getElementById('client-rate-sub').innerText = 'Physical Link';
@@ -1105,7 +1193,7 @@
                     document.getElementById('client-rate-val').innerText = 'Standby';
                     document.getElementById('client-rate-sub').innerText = 'No Data';
                 }
-                
+
                 document.getElementById('client-noise-val').innerText = isConnected ? (data.link_noise || '-95 dBm') : '--';
                 document.getElementById('client-ccq-val').innerText = isConnected ? (data.link_ccq || '98%') : '--';
 
@@ -1228,7 +1316,7 @@
             }
         }
 
-        // 5. LIVE SPEED TEST ENGINE (REAL GLOBAL INTERNET & LOCAL FALLBACK)
+        // 5. LIVE SPEED TEST ENGINE
         let isSpeedTesting = false;
 
         function updateSpeedGauge(mbps, maxMbps = 100) {
@@ -1250,7 +1338,6 @@
             const btn = document.getElementById('btn-start-speedtest');
             const statusText = document.getElementById('st-status-text');
             const badge = document.getElementById('st-badge-status');
-            const serverInfo = document.getElementById('st-server-info');
             const boxPing = document.getElementById('st-box-ping');
             const boxJitter = document.getElementById('st-box-jitter');
             const boxDown = document.getElementById('st-box-down');
@@ -1262,7 +1349,7 @@
             const valUp = document.getElementById('st-val-up');
 
             btn.disabled = true;
-            btn.innerHTML = `<span class="pulse-dot" style="background:#FFFFFF;box-shadow:0 0 8px #FFFFFF;"></span> <span>TESTING INTERNET SPEED...</span>`;
+            btn.innerHTML = `<span class="pulse-dot" style="background:#FFFFFF;box-shadow:0 0 8px #FFFFFF;"></span> <span>TESTING IN PROGRESS...</span>`;
             badge.innerText = 'TESTING';
             badge.style.color = '#F59E0B';
             badge.style.borderColor = 'rgba(245, 158, 11, 0.4)';
@@ -1274,40 +1361,18 @@
             document.querySelectorAll('.st-metric-box').forEach(b => b.classList.remove('active'));
 
             try {
-                // DETECT SERVER: Check if external Cloudflare CDN is reachable
-                let useExternal = true;
-                let pingUrl = 'https://speed.cloudflare.com/__down?bytes=0';
-                let dlBaseUrl = 'https://speed.cloudflare.com/__down?bytes=';
-                let upUrl = 'https://speed.cloudflare.com/__up';
-
-                try {
-                    const testCtrl = new AbortController();
-                    const testTimeout = setTimeout(() => testCtrl.abort(), 2000);
-                    const testRes = await fetch(`${pingUrl}&t=${Date.now()}`, { signal: testCtrl.signal, mode: 'cors' });
-                    clearTimeout(testTimeout);
-                    if (!testRes.ok) throw new Error('Cloudflare unavailable');
-                    if (serverInfo) serverInfo.innerText = 'Cloudflare Global High-Speed Edge CDN (Real Internet)';
-                } catch (err) {
-                    console.log("External CDN unavailable, switching to local link test mode:", err);
-                    useExternal = false;
-                    pingUrl = `${API_URL}?action=speedtest_ping`;
-                    dlBaseUrl = `${API_URL}?action=speedtest_payload&size=`;
-                    upUrl = `${API_URL}?action=speedtest_upload`;
-                    if (serverInfo) serverInfo.innerText = 'Local 5GHz Transceiver Wireless Link';
-                }
-
-                // PHASE 1: REAL PING & JITTER TEST (5 rounds)
+                // PHASE 1: PING & JITTER TEST (5 rounds)
                 boxPing.classList.add('active');
                 boxJitter.classList.add('active');
-                statusText.innerText = useExternal ? '🌍 Connecting to nearest Global CDN Edge...' : '📡 Measuring local wireless link latency...';
+                statusText.innerText = '📡 Measuring network latency & jitter...';
 
                 let pings = [];
                 for (let i = 0; i < 5; i++) {
                     const t0 = performance.now();
-                    await fetch(`${pingUrl}&t=${Date.now()}`, { mode: 'cors' });
+                    await fetch(`${API_URL}?action=speedtest_ping&t=${Date.now()}`);
                     const t1 = performance.now();
                     pings.push(t1 - t0);
-                    await new Promise(r => setTimeout(r, 40));
+                    await new Promise(r => setTimeout(r, 50));
                 }
 
                 const avgPing = Math.round(pings.reduce((a, b) => a + b, 0) / pings.length);
@@ -1322,18 +1387,18 @@
                 boxPing.classList.remove('active');
                 boxJitter.classList.remove('active');
 
-                // PHASE 2: REAL DOWNLOAD SPEED TEST
+                // PHASE 2: DOWNLOAD THROUGHPUT TEST (6 MB Stream)
                 boxDown.classList.add('active');
-                statusText.innerText = useExternal ? '⬇️ Testing Real Internet Download Throughput...' : '⬇️ Testing Local 5G Download Throughput...';
+                statusText.innerText = '⬇️ Testing Download Throughput...';
 
                 let dlLoaded = 0;
                 const dlStart = performance.now();
-                const chunkSizes = useExternal ? [2000000, 5000000, 10000000] : [2097152, 4194304];
+                const dlChunks = 2;
                 let finalDlMbps = 0;
 
-                for (let c = 0; c < chunkSizes.length; c++) {
-                    const url = useExternal ? `${dlBaseUrl}${chunkSizes[c]}&t=${Date.now()}` : `${dlBaseUrl}${chunkSizes[c]}&t=${Date.now()}`;
-                    const res = await fetch(url, { mode: 'cors' });
+                for (let c = 0; c < dlChunks; c++) {
+                    const chunkSize = 3145728; // 3MB chunk
+                    const res = await fetch(`${API_URL}?action=speedtest_payload&size=${chunkSize}&t=${Date.now()}`);
                     const reader = res.body.getReader();
 
                     while (true) {
@@ -1354,22 +1419,20 @@
                 boxDown.classList.remove('active');
                 await new Promise(r => setTimeout(r, 300));
 
-                // PHASE 3: REAL UPLOAD SPEED TEST
+                // PHASE 3: UPLOAD THROUGHPUT TEST (4 MB Stream)
                 boxUp.classList.add('active');
-                statusText.innerText = useExternal ? '⬆️ Testing Real Internet Upload Throughput...' : '⬆️ Testing Local 5G Upload Throughput...';
+                statusText.innerText = '⬆️ Testing Upload Throughput...';
                 updateSpeedGauge(0, 100);
 
-                const upSize = useExternal ? 1500000 : 2097152;
-                const upPayload = new Uint8Array(upSize);
+                const upPayload = new Uint8Array(2097152); // 2MB upload payload
                 const upStart = performance.now();
                 let upLoaded = 0;
                 let finalUpMbps = 0;
 
                 for (let u = 0; u < 2; u++) {
-                    await fetch(`${upUrl}?t=${Date.now()}`, {
+                    await fetch(`${API_URL}?action=speedtest_upload&t=${Date.now()}`, {
                         method: 'POST',
-                        body: upPayload,
-                        mode: 'cors'
+                        body: upPayload
                     });
                     upLoaded += upPayload.length;
                     const elapsedSec = (performance.now() - upStart) / 1000;
@@ -1385,7 +1448,7 @@
                 boxUp.classList.remove('active');
 
                 // FINISHED
-                statusText.innerHTML = `<span style="color:#10B981;font-weight:800;">✨ Real Internet Speed Test Completed (${useExternal ? 'Cloudflare Global Edge' : 'Local 5G Wireless'})!</span>`;
+                statusText.innerHTML = `<span style="color:#10B981;font-weight:800;">✨ Speed test completed successfully!</span>`;
                 badge.innerText = 'TEST COMPLETED';
                 badge.style.color = '#10B981';
                 badge.style.borderColor = 'rgba(16, 185, 129, 0.4)';
@@ -1393,7 +1456,7 @@
 
             } catch (e) {
                 console.error("Speed test error:", e);
-                statusText.innerHTML = `<span style="color:#EF4444;">⚠️ Speed test interrupted. Check Internet connection.</span>`;
+                statusText.innerHTML = `<span style="color:#EF4444;">⚠️ Speed test interrupted. Check connection.</span>`;
                 badge.innerText = 'ERROR';
                 badge.style.color = '#EF4444';
             } finally {
