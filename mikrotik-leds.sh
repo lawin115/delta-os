@@ -67,6 +67,12 @@ DISCONN_TICKS=0
 while true; do
     user_led_off
 
+    # Ensure wlan0 interface is created and active on phy0
+    if ! iw dev 2>/dev/null | grep -q "Interface wlan0"; then
+        iw phy phy0 interface add wlan0 type managed >/dev/null 2>&1
+        ip link set wlan0 up >/dev/null 2>&1
+    fi
+
     # Find active wifi interface
     IFACE=$(iw dev 2>/dev/null | awk '$1 == "Interface" {print $2; exit}')
     [ -z "$IFACE" ] && IFACE="wlan0"
