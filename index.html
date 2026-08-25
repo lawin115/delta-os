@@ -944,6 +944,17 @@
             justify-content: center;
             overflow: hidden;
             box-shadow: 0 0 12px rgba(2, 132, 199, 0.3);
+            transition: all 0.4s ease;
+        }
+
+        .radar-box.locked {
+            background: radial-gradient(circle, #10B981 0%, #064E3B 70%) !important;
+            box-shadow: 0 0 16px rgba(16, 185, 129, 0.45) !important;
+        }
+
+        .radar-box.scanning {
+            background: radial-gradient(circle, #0284C7 0%, #0F172A 70%) !important;
+            box-shadow: 0 0 14px rgba(2, 132, 199, 0.4) !important;
         }
 
         .radar-sweep-arm {
@@ -953,8 +964,14 @@
             width: 100%;
             height: 100%;
             border-radius: 50%;
-            background: conic-gradient(from 0deg, rgba(56, 189, 248, 0.6) 0deg, rgba(2, 132, 199, 0.05) 50deg, transparent 60deg);
-            animation: radarSweep 1.6s infinite linear;
+            background: conic-gradient(from 0deg, rgba(56, 189, 248, 0.7) 0deg, rgba(2, 132, 199, 0.1) 50deg, transparent 60deg);
+            animation: radarSweep 1.4s infinite linear;
+            transition: opacity 0.3s ease;
+        }
+
+        .radar-sweep-arm.locked {
+            animation-play-state: paused !important;
+            opacity: 0 !important;
         }
 
         @keyframes radarSweep {
@@ -1447,13 +1464,13 @@
 
                     <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));gap:10px;margin-top:10px;">
                         <div style="background:linear-gradient(135deg, #F8FAFC, #EFF6FF);padding:12px;border-radius:10px;border:1px solid #E2E8F0;text-align:center;">
-                            <div class="radar-box">
-                                <div class="radar-sweep-arm"></div>
+                            <div class="radar-box scanning" id="radar-spectrum-box">
+                                <div class="radar-sweep-arm" id="radar-sweep-arm"></div>
                                 <svg style="width:22px;height:22px;fill:#FFFFFF;z-index:2;position:relative;" viewBox="0 0 24 24">
                                     <path d="M12 4C7.31 4 3.07 5.9 0 8.98L12 21 24 8.98C20.93 5.9 16.69 4 12 4z" />
                                 </svg>
                             </div>
-                            <div style="font-size:0.7rem;font-weight:700;color:#0284C7;margin-top:6px;">5GHz Spectrum Monitor</div>
+                            <div id="radar-spectrum-lbl" style="font-size:0.7rem;font-weight:700;color:#0284C7;margin-top:6px;">5GHz Spectrum: Scanning...</div>
                         </div>
 
                         <div style="background:#F8FAFC;padding:12px 14px;border-radius:10px;border:1px solid #E2E8F0;">
@@ -3258,7 +3275,22 @@
                     };
 
                     // Wireless Link Status
+                    const radarArm = document.getElementById('radar-sweep-arm');
+                    const radarBox = document.getElementById('radar-spectrum-box');
+                    const radarLbl = document.getElementById('radar-spectrum-lbl');
+
                     if (data.wifi_connected) {
+                        // Connection Locked! Stop radar sweep arm and show solid green locked state
+                        if (radarArm) radarArm.classList.add('locked');
+                        if (radarBox) {
+                            radarBox.classList.add('locked');
+                            radarBox.classList.remove('scanning');
+                        }
+                        if (radarLbl) {
+                            radarLbl.innerText = '5GHz Spectrum: Locked';
+                            radarLbl.style.color = '#059669';
+                        }
+
                         document.getElementById('wifi-link-badge').className = 'badge badge-success';
                         document.getElementById('wifi-link-badge').innerText = 'CONNECTED';
                         document.getElementById('wifi-link-ssid-val').innerText = data.link_ssid || data.wifi_ssid;
@@ -3273,13 +3305,26 @@
                         document.getElementById('dash-wifi-status-badge').innerText = 'CONNECTED';
                         document.getElementById('dash-wifi-ssid').innerText = `${data.link_ssid || data.wifi_ssid} (${data.link_signal || '-50'} dBm)`;
                     } else {
+                        // Disconnected / Searching: Keep radar spinning actively
+                        if (radarArm) radarArm.classList.remove('locked');
+                        if (radarBox) {
+                            radarBox.classList.remove('locked');
+                            radarBox.classList.add('scanning');
+                        }
+                        if (radarLbl) {
+                            radarLbl.innerText = '5GHz Spectrum: Scanning...';
+                            radarLbl.style.color = '#0284C7';
+                        }
+
                         document.getElementById('wifi-link-badge').className = 'badge badge-warning';
-                        document.getElementById('wifi-link-badge').innerText = 'STANDBY';
-                        document.getElementById('wifi-link-ssid-val').innerText = data.wifi_ssid || 'None';
+                        document.getElementById('wifi-link-badge').innerText = 'SEARCHING...';
+                        document.getElementById('wifi-link-ssid-val').innerText = data.wifi_ssid || 'Scanning 5GHz';
+                        document.getElementById('wifi-link-signal-val').innerText = '-- dBm';
+                        document.getElementById('wifi-link-signal-bar').style.width = '0%';
 
                         document.getElementById('dash-wifi-status-badge').className = 'badge badge-warning';
-                        document.getElementById('dash-wifi-status-badge').innerText = 'STANDBY';
-                        document.getElementById('dash-wifi-ssid').innerText = 'Not connected';
+                        document.getElementById('dash-wifi-status-badge').innerText = 'SEARCHING';
+                        document.getElementById('dash-wifi-ssid').innerText = 'Searching 5GHz frequencies...';
                     }
 
                     // Populate Radio Configuration Form inputs if user is not currently typing

@@ -100,22 +100,21 @@ while true; do
         set_leds 0 0 0 0 0
         DISCONN_TICKS=$((DISCONN_TICKS + 1))
 
-        # SMART AUTO-SCAN & RECONNECT ENGINE:
-        # Only kicks in when wifi signal is lost (e.g. AP frequency changed)
-        if [ "$DISCONN_TICKS" -eq 3 ] || [ $((DISCONN_TICKS % 6)) -eq 0 ]; then
-            # 1. Ask wpa_supplicant to scan all 5GHz channels immediately
-            wpa_cli -i "$IFACE" scan >/dev/null 2>&1 || \
-            wpa_cli -p "/var/run/wpa_supplicant-$IFACE" scan >/dev/null 2>&1 || \
-            iw dev "$IFACE" scan trigger >/dev/null 2>&1
-
-            # 2. Tell wpa_supplicant to immediately reassociate to the AP on the new channel
-            wpa_cli -i "$IFACE" reassociate >/dev/null 2>&1 || \
-            wpa_cli -p "/var/run/wpa_supplicant-$IFACE" reassociate >/dev/null 2>&1
+        # SMART AUTO-RECONNECT ENGINE:
+        # Triggered ONLY when wireless connection is lost (e.g. AP changed frequency/channel)
+        # 1. At 4 seconds of disconnection: trigger fast native OpenWrt wireless reload
+        if [ "$DISCONN_TICKS" -eq 4 ]; then
+            /sbin/wifi reload >/dev/null 2>&1 || ubus call network.wireless reload >/dev/null 2>&1
         fi
 
-        # If disconnected for over 24 seconds (driver stuck on dead channel), trigger a wifi reload
-        if [ "$DISCONN_TICKS" -ge 24 ] && [ $((DISCONN_TICKS % 24)) -eq 0 ]; then
-            ubus call network.wireless notify_atf >/dev/null 2>&1 || wifi up radio0 >/dev/null 2>&1
+        # 2. At 12 seconds: if still looking, do a full radio scan & restart
+        if [ "$DISCONN_TICKS" -eq 12 ]; then
+            /sbin/wifi >/dev/null 2>&1 || ubus call network.wireless up >/dev/null 2>&1
+        fi
+
+        # 3. Every 15 seconds thereafter until connected:
+        if [ "$DISCONN_TICKS" -gt 12 ] && [ $((DISCONN_TICKS % 15)) -eq 0 ]; then
+            /sbin/wifi reload >/dev/null 2>&1
         fi
         ;;
     esac
