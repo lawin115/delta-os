@@ -27,6 +27,13 @@ boot() {
                 # Bind-mount so /etc/config writes directly to flash
                 mount --bind /overlay/config /etc/config 2>/dev/null
             fi
+
+            # Auto-Channel Fix: Ensure station mode is never locked to a fixed frequency on reboot
+            MODE=$(uci -q get wireless.@wifi-iface[0].mode || echo "sta")
+            if [ "$MODE" = "sta" ]; then
+                uci set wireless.radio0.channel="auto" 2>/dev/null
+                uci commit wireless 2>/dev/null
+            fi
         fi
     fi
 }

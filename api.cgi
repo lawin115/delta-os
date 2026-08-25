@@ -720,6 +720,13 @@ EOF
         uci set wireless.radio0.htmode="$HTMODE" 2>/dev/null
         uci set wireless.radio0.wireless_protocol="$WIRELESS_PROTO" 2>/dev/null
         
+        # In Station Client mode, ALWAYS force channel='auto' so frequency is never locked
+        if [ "$MODE" = "sta" ] || [ -z "$MODE" ]; then
+            uci set wireless.radio0.channel="auto" 2>/dev/null
+        else
+            [ -n "$CHAN" ] && uci set wireless.radio0.channel="$CHAN" 2>/dev/null || uci set wireless.radio0.channel="auto" 2>/dev/null
+        fi
+
         [ -z "$MODE" ] && MODE="sta"
 
         IFACE_SECS=$(uci show wireless 2>/dev/null | grep "=wifi-iface" | cut -d'.' -f2 | cut -d'=' -f1)
