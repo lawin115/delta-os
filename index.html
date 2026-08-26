@@ -264,7 +264,8 @@
             width: 100vw;
             height: 100vh;
             background: rgba(15, 23, 42, 0.3);
-
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
             z-index: 999;
             opacity: 0;
             pointer-events: none;
@@ -3519,15 +3520,10 @@
             drawWave(throughputHistory.tx, '#10B981', txGrad);
         }
 
-        // REFRESH OVERVIEW METRICS & LIVE INTERFACE TRAFFIC (Ultra-low CPU overhead)
-        async function refreshData() {
-            if (document.hidden) return;
-            if (!authToken && document.getElementById('login-screen').style.display !== 'none') return;
-
+        // APPLY STATUS DATA TO DOM (Used by live refresh and 0ms instant cache)
+        function applyStatusData(data) {
+            if (!data) return;
             try {
-                const res = await fetch(`${API_URL}?action=status&token=${authToken}`);
-                const data = await res.json();
-                if (data.status === 'success') {
                     document.getElementById('stat-cpu-percent').innerText = `${data.cpu_load}%`;
                     document.getElementById('stat-cpu-bar').style.width = `${Math.min(parseFloat(data.cpu_load) * 20, 100)}%`;
                     document.getElementById('stat-mem').innerText = `${data.mem_used_mb} / ${data.mem_total_mb} MB`;
@@ -3837,6 +3833,22 @@
                         document.getElementById('dash-pppoe-status-badge').innerText = 'DISCONNECTED';
                         document.getElementById('dash-pppoe-user').innerText = 'Inactive';
                     }
+            } catch (err) {
+                console.error('applyStatusData error:', err);
+            }
+        }
+
+        // REFRESH OVERVIEW METRICS & LIVE INTERFACE TRAFFIC (Ultra-low CPU overhead)
+        async function refreshData() {
+            if (document.hidden) return;
+            if (!authToken && document.getElementById('login-screen').style.display !== 'none') return;
+
+            try {
+                const res = await fetch(`${API_URL}?action=status&token=${authToken}`);
+                const data = await res.json();
+                if (data.status === 'success') {
+                    try { localStorage.setItem('delta_cached_status', JSON.stringify(data)); } catch(e){}
+                    applyStatusData(data);
                 }
             } catch (e) {
                 console.error(e);
@@ -5316,21 +5328,37 @@
             return String(str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
         }
 
-        // INITIAL LOAD & AUTH VALIDATION
+        // INITIAL LOAD & AUTH VALIDATION (Parallel Async with Instant UI Cache)
         window.addEventListener('DOMContentLoaded', async () => {
             if (authToken) {
+                // 1. Instant Cache Render (0ms immediate display)
                 try {
-                    const res = await fetch(`${API_URL}?action=check_auth&token=${authToken}`);
-                    const data = await res.json();
-                    if (data.authenticated === true) {
-                        document.getElementById('login-screen').style.display = 'none';
-                        switchTab('wifi');
-                        refreshData();
-                        loadInterfaces();
-                        setInterval(refreshData, 2000);
+                    const cachedStr = localStorage.getItem('delta_cached_status');
+                    if (cachedStr) {
+                        const cachedData = JSON.parse(cachedStr);
+                        applyStatusData(cachedData);
+                    }
+                } catch (e) { }
+
+                // 2. Immediate Tab Switch & Parallel Auth + Live Fetch
+                document.getElementById('login-screen').style.display = 'none';
+                switchTab('wifi');
+
+                try {
+                    const [authData] = await Promise.all([
+                        fetch(`${API_URL}?action=check_auth&token=${authToken}`).then(r => r.json()).catch(() => null),
+                        refreshData(),
+                        loadInterfaces()
+                    ]);
+
+                    if (authData && authData.authenticated === false) {
+                        document.getElementById('login-screen').style.display = 'flex';
                         return;
                     }
                 } catch (e) { }
+
+                setInterval(refreshData, 2000);
+                return;
             }
             document.getElementById('login-screen').style.display = 'flex';
         });
