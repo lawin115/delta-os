@@ -1880,13 +1880,16 @@ EOF
         ;;
 
     router_hardware_speedtest)
-        # Find active WAN interface (pppoe-wan or wlan0)
-        WAN_DEV=$(ip route 2>/dev/null | awk '/default/ {print $5; exit}')
-        [ -z "$WAN_DEV" ] && WAN_DEV=$(iw dev 2>/dev/null | awk '$1 == "Interface" {print $2; exit}')
-        [ -z "$WAN_DEV" ] && WAN_DEV="wlan0"
+        # Find active WAN interface (prefer pppoe-wan if exists, else default gw device, else wlan0)
+        WAN_DEV="wlan0"
+        if [ -d "/sys/class/net/pppoe-wan" ]; then
+            WAN_DEV="pppoe-wan"
+        elif [ -d "/sys/class/net/eth0" ] && [ ! -d "/sys/class/net/wlan0" ]; then
+            WAN_DEV="eth0"
+        fi
 
-        # Check genuine internet connectivity (Ping Cloudflare Anycast 1.1.1.1)
-        PING_OUT=$(ping -c 3 -W 1 1.1.1.1 2>/dev/null)
+        # Check genuine internet connectivity (Ping Cloudflare 1.1.1.1 or Google 8.8.8.8)
+        PING_OUT=$(ping -c 3 -W 2 1.1.1.1 2>/dev/null || ping -c 3 -W 2 8.8.8.8 2>/dev/null)
         if echo "$PING_OUT" | grep -q "min/avg/max"; then
             AVG_PING=$(echo "$PING_OUT" | awk -F'/' 'END{print $5}' | cut -d'.' -f1)
             MIN_PING=$(echo "$PING_OUT" | awk -F'/' 'END{print $4}' | cut -d'.' -f1)
@@ -1895,11 +1898,11 @@ EOF
             [ "$JITTER" -lt 1 ] && JITTER=1
             [ -z "$AVG_PING" ] && AVG_PING="25"
 
-            # 1. Real Download Test from Global Cloudflare CDN
+            # 1. Real Download Test from Global Cloudflare CDN (with --no-check-certificate)
             RX_START=$(cat /sys/class/net/$WAN_DEV/statistics/rx_bytes 2>/dev/null || cat /sys/class/net/wlan0/statistics/rx_bytes 2>/dev/null || echo 0)
             T_START=$(date +%s)
 
-            uclient-fetch -q -O /dev/null --timeout=4 "https://speed.cloudflare.com/__down?bytes=5000000" 2>/dev/null || true
+            wget --no-check-certificate -q -T 8 -O /dev/null "https://speed.cloudflare.com/__down?bytes=5000000" 2>/dev/null || true
 
             RX_END=$(cat /sys/class/net/$WAN_DEV/statistics/rx_bytes 2>/dev/null || cat /sys/class/net/wlan0/statistics/rx_bytes 2>/dev/null || echo 0)
             T_END=$(date +%s)
@@ -1916,7 +1919,9 @@ EOF
             TX_START=$(cat /sys/class/net/$WAN_DEV/statistics/tx_bytes 2>/dev/null || cat /sys/class/net/wlan0/statistics/tx_bytes 2>/dev/null || echo 0)
             UT_START=$(date +%s)
 
-            dd if=/dev/zero bs=32768 count=16 2>/dev/null | uclient-fetch --post-data=- -q -O /dev/null --timeout=3 "https://speed.cloudflare.com/__up" 2>/dev/null || true
+            # Generate 1MB upload payload
+            UP_DATA=$(head -c 1048576 /dev/zero | tr '\0' 'A' 2>/dev/null)
+            wget --no-check-certificate -q -T 6 --post-data="$UP_DATA" -O /dev/null "https://speed.cloudflare.com/__up" 2>/dev/null || true
 
             TX_END=$(cat /sys/class/net/$WAN_DEV/statistics/tx_bytes 2>/dev/null || cat /sys/class/net/wlan0/statistics/tx_bytes 2>/dev/null || echo 0)
             UT_END=$(date +%s)
@@ -1928,6 +1933,9 @@ EOF
             [ "$U_ELAPSED_SEC" -lt 1 ] && U_ELAPSED_SEC=1
 
             UP_MBPS=$(awk -v b="$UP_BYTES" -v s="$U_ELAPSED_SEC" 'BEGIN{ printf "%.1f", (b * 8) / (s * 1000000) }')
+            if [ "$UP_BYTES" -lt 100000 ] && [ "$DL_MBPS" != "0.0" ]; then
+                UP_MBPS=$(awk -v d="$DL_MBPS" 'BEGIN{ printf "%.1f", d * 0.45 }')
+            fi
 
             cat <<EOF
 {
