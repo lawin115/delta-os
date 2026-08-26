@@ -1630,10 +1630,10 @@
                             </div>
                             <div class="form-group">
                                 <div style="display:flex;justify-content:space-between;align-items:center;">
-                                    <label style="margin:0;">Wi-Fi Password </label>
+                                    <label style="margin:0;">Wi-Fi Password (Primary)</label>
                                 </div>
                                 <div class="input-password-wrapper" style="position:relative;display:flex;align-items:center;">
-                                    <input type="password" class="form-control" id="radio-key" placeholder="Enter Wi-Fi Password (or leave empty for Open)" style="padding-right:38px;">
+                                    <input type="password" class="form-control" id="radio-key" placeholder="Enter Wi-Fi Password (or leave empty for Open)" autocomplete="new-password" style="padding-right:38px;">
                                     <button type="button" class="password-toggle-btn" onclick="toggleRadioPassVisibility()" title="Show/Hide" style="position:absolute;right:8px;background:none;border:none;cursor:pointer;color:#64748B;">
                                         <svg style="width:16px;height:16px;fill:currentColor;" viewBox="0 0 24 24">
                                             <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z" />
@@ -1675,11 +1675,20 @@
                             <div class="form-grid">
                                 <div class="form-group">
                                     <label>Backup Tower SSID</label>
-                                    <input type="text" class="form-control" id="radio-backup-ssid" placeholder="Enter secondary AP SSID">
+                                    <input type="text" class="form-control" id="radio-backup-ssid" placeholder="Enter secondary AP SSID" autocomplete="off">
                                 </div>
                                 <div class="form-group">
-                                    <label>Backup Tower Password</label>
-                                    <input type="password" class="form-control" id="radio-backup-key" placeholder="Enter backup AP password (if any)">
+                                    <div style="display:flex;justify-content:space-between;align-items:center;">
+                                        <label style="margin:0;">Backup Tower Password</label>
+                                    </div>
+                                    <div class="input-password-wrapper" style="position:relative;display:flex;align-items:center;">
+                                        <input type="password" class="form-control" id="radio-backup-key" placeholder="Enter backup AP password (if any)" autocomplete="new-password" style="padding-right:38px;">
+                                        <button type="button" class="password-toggle-btn" onclick="toggleBackupRadioPassVisibility()" title="Show/Hide" style="position:absolute;right:8px;background:none;border:none;cursor:pointer;color:#64748B;">
+                                            <svg style="width:16px;height:16px;fill:currentColor;" viewBox="0 0 24 24">
+                                                <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z" />
+                                            </svg>
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -2198,8 +2207,17 @@
                                 <input type="text" class="form-control" id="pppoe-user" placeholder="user@isp.com">
                             </div>
                             <div class="form-group">
-                                <label>PPPoE Password</label>
-                                <input type="password" class="form-control" id="pppoe-pass" placeholder="••••••••">
+                                <div style="display:flex;justify-content:space-between;align-items:center;">
+                                    <label style="margin:0;">PPPoE Password</label>
+                                </div>
+                                <div class="input-password-wrapper" style="position:relative;display:flex;align-items:center;">
+                                    <input type="password" class="form-control" id="pppoe-pass" placeholder="••••••••" autocomplete="new-password" style="padding-right:38px;">
+                                    <button type="button" class="password-toggle-btn" onclick="togglePPPoEPassVisibility()" title="Show/Hide" style="position:absolute;right:8px;background:none;border:none;cursor:pointer;color:#64748B;">
+                                        <svg style="width:16px;height:16px;fill:currentColor;" viewBox="0 0 24 24">
+                                            <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z" />
+                                        </svg>
+                                    </button>
+                                </div>
                             </div>
                             <div class="form-group">
                                 <label>Service Name</label>
@@ -2674,8 +2692,17 @@
                     <input type="text" class="form-control" id="modal-channel" readonly>
                 </div>
                 <div class="form-group">
-                    <label>Wi-Fi Password</label>
-                    <input type="password" class="form-control" id="modal-key" placeholder="Enter Wi-Fi Password">
+                    <div style="display:flex;justify-content:space-between;align-items:center;">
+                        <label style="margin:0;">Wi-Fi Password</label>
+                    </div>
+                    <div class="input-password-wrapper" style="position:relative;display:flex;align-items:center;">
+                        <input type="password" class="form-control" id="modal-key" placeholder="Enter Wi-Fi Password" autocomplete="new-password" style="padding-right:38px;">
+                        <button type="button" class="password-toggle-btn" onclick="toggleModalPassVisibility()" title="Show/Hide" style="position:absolute;right:8px;background:none;border:none;cursor:pointer;color:#64748B;">
+                            <svg style="width:16px;height:16px;fill:currentColor;" viewBox="0 0 24 24">
+                                <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z" />
+                            </svg>
+                        </button>
+                    </div>
                 </div>
                 <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:14px;">
                     <button type="button" class="btn btn-secondary" onclick="closeWifiConnectModal()">Cancel</button>
@@ -3815,6 +3842,24 @@
             } else {
                 input.type = 'password';
             }
+        }
+
+        function toggleBackupRadioPassVisibility() {
+            const input = document.getElementById('radio-backup-key');
+            if (!input) return;
+            input.type = input.type === 'password' ? 'text' : 'password';
+        }
+
+        function toggleModalPassVisibility() {
+            const input = document.getElementById('modal-key');
+            if (!input) return;
+            input.type = input.type === 'password' ? 'text' : 'password';
+        }
+
+        function togglePPPoEPassVisibility() {
+            const input = document.getElementById('pppoe-pass');
+            if (!input) return;
+            input.type = input.type === 'password' ? 'text' : 'password';
         }
 
         async function saveRadioSettings(e) {
