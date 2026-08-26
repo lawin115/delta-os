@@ -1657,28 +1657,6 @@ EOF
         fi
         ;;
 
-    speedtest_ping)
-        echo "{\"status\":\"success\",\"time\":$(date +%s%3N 2>/dev/null || date +%s000)}"
-        ;;
-
-    speedtest_payload)
-        SIZE=$(get_query_val "size")
-        [ -z "$SIZE" ] && SIZE=3145728 # 3 MB
-        [ "$SIZE" -gt 15728640 ] && SIZE=15728640 # Cap at 15MB
-        echo "Status: 200 OK"
-        echo "Content-Type: application/octet-stream"
-        echo "Content-Length: $SIZE"
-        echo "Cache-Control: no-cache, no-store, must-revalidate"
-        echo ""
-        head -c "$SIZE" /dev/zero 2>/dev/null
-        exit 0
-        ;;
-
-    speedtest_upload)
-        cat > /dev/null
-        echo "{\"status\":\"success\",\"received\":true}"
-        ;;
-
     backup_export)
         sysupgrade -b /tmp/backup.tar.gz >/dev/null 2>&1
         if [ -f "/tmp/backup.tar.gz" ]; then
