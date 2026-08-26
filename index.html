@@ -3699,6 +3699,10 @@
                     if (rHt && document.activeElement !== rHt && data.wifi_htmode) {
                         rHt.value = data.wifi_htmode;
                     }
+                    const advHtEl = document.getElementById('adv-htmode-select');
+                    if (advHtEl && document.activeElement !== advHtEl && data.wifi_htmode) {
+                        advHtEl.value = data.wifi_htmode;
+                    }
                     if (rCountry && document.activeElement !== rCountry && data.wifi_country) {
                         rCountry.value = data.wifi_country;
                     }
@@ -4713,7 +4717,12 @@
                         document.getElementById('adv-txpower-slider').value = data.txpower;
                         onTxPowerSliderChange(data.txpower);
                     }
-                    if (data.htmode) document.getElementById('adv-htmode-select').value = data.htmode;
+                    if (data.htmode) {
+                        const advH = document.getElementById('adv-htmode-select');
+                        const radH = document.getElementById('radio-htmode');
+                        if (advH) advH.value = data.htmode;
+                        if (radH) radH.value = data.htmode;
+                    }
                     if (data.bursting !== undefined) document.getElementById('adv-bursting-select').value = data.bursting ? '1' : '0';
                     if (data.ani !== undefined) document.getElementById('adv-ani-select').value = data.ani ? '1' : '0';
                     if (data.short_gi !== undefined) document.getElementById('adv-shortgi-select').value = data.short_gi ? '1' : '0';

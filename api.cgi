@@ -436,6 +436,7 @@ EOF
         WIFI_SSID=$(uci -q get wireless.$IFACE_SEC.ssid || echo "Delta-5G")
         WIFI_MODE=$(uci -q get wireless.$IFACE_SEC.mode || echo "sta")
         WIFI_BAND=$(uci -q get wireless.radio0.band || uci -q get wireless.radio0.hwmode || echo "11a")
+        WIFI_HTMODE=$(uci -q get wireless.radio0.htmode || echo "HT40")
         WIFI_CHAN=$(uci -q get wireless.radio0.channel || echo "auto")
         WIFI_COUNTRY=$(uci -q get wireless.radio0.country || echo "US")
         WIFI_PROTOCOL=$(uci -q get wireless.radio0.wireless_protocol || echo "any")
@@ -597,6 +598,7 @@ EOF
     "wifi_key": "$WIFI_KEY",
     "wifi_mode": "$WIFI_MODE",
     "wifi_band": "$WIFI_BAND",
+    "wifi_htmode": "$WIFI_HTMODE",
     "wifi_channel": "$WIFI_CHAN",
     "wifi_freq_str": "$WIFI_FREQ_STR",
     "wifi_country": "$WIFI_COUNTRY",
