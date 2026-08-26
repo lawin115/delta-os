@@ -1,5 +1,4 @@
 #!/bin/sh
-mount -o remount,size=52M /tmp >/dev/null 2>&1
 # Delta OS Pro Enterprise Backend API for OpenWrt (Full 2.4G/5G, IP/DHCP/PPP/Firewall/Auth Suite)
 
 # Parse Query String

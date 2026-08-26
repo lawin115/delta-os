@@ -143,9 +143,10 @@ while true; do
             fi
         fi
 
-        # 3. Every 16 seconds thereafter until connected:
-        if [ "$DISCONN_TICKS" -gt 12 ] && [ $((DISCONN_TICKS % 16)) -eq 0 ]; then
-            /sbin/wifi reload >/dev/null 2>&1
+        # 3. Disconnected state: do not spam wifi reload to prevent kernel crash
+        if [ "$DISCONN_TICKS" -eq 30 ]; then
+            # Soft trigger single rescan once after 30s
+            iw dev "$IFACE" scan >/dev/null 2>&1 &
         fi
         ;;
     esac
