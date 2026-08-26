@@ -682,13 +682,13 @@ EOF
         [ -z "$WDEV" ] && WDEV="wlan0"
         
         ip link set "$WDEV" up 2>/dev/null
-        # First check instant scan dump (cached BSS list, takes <10ms and avoids ping spikes)
+        
+        # Trigger fast active multi-channel survey scan across 5GHz band
+        iw dev "$WDEV" scan freq 5180 5200 5220 5240 5260 5280 5300 5320 5500 5505 5520 5540 5560 5575 5580 5600 5620 5640 5660 5680 5700 5720 5745 5765 5785 5805 5825 5845 5865 2>/dev/null || iw dev "$WDEV" scan 2>/dev/null || true
+        
+        # Read full live BSS table
         SCAN_RAW=$(iw dev "$WDEV" scan dump 2>/dev/null)
-        if [ -z "$SCAN_RAW" ]; then
-            # If cache is empty, scan main channels fast
-            SCAN_RAW=$(iw dev "$WDEV" scan freq 5180 5200 5220 5240 5260 5280 5300 5320 5500 5505 5520 5540 5560 5580 5600 5620 5640 5660 5680 5700 5745 5765 5785 5805 5825 2>/dev/null)
-            [ -z "$SCAN_RAW" ] && SCAN_RAW=$(iw dev "$WDEV" scan dump 2>/dev/null)
-        fi
+        [ -z "$SCAN_RAW" ] && SCAN_RAW=$(iw dev "$WDEV" scan 2>/dev/null)
 
         echo "$SCAN_RAW" | awk '
             BEGIN {
