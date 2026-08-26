@@ -80,6 +80,9 @@ CLIENT_PORTAL_STORE="$CONFIG_DIR/delta_client_portal.txt"
 # Initialize Auth if not present (Default: user=admin, pass=admin)
 if [ ! -f "$AUTH_STORE" ]; then
     echo "admin:admin" > "$AUTH_STORE" 2>/dev/null
+    grep -q "^admin:" /etc/passwd 2>/dev/null || echo "admin:x:0:0:admin:/root:/bin/ash" >> /etc/passwd
+    printf "%s\n%s\n" "admin" "admin" | passwd admin >/dev/null 2>&1
+    printf "%s\n%s\n" "admin" "admin" | passwd root >/dev/null 2>&1
 fi
 # Initialize Client Portal (Default: UNLOCKED / ACTIVE)
 if [ ! -f "$CLIENT_PORTAL_STORE" ]; then
@@ -212,8 +215,12 @@ EOF
             echo "{\"status\":\"error\", \"message\":\"New password must be at least 4 characters long!\"}"
         else
             echo "${NEW_USER}:${NEW_PASS}" > "$AUTH_STORE"
-            echo "root:${NEW_PASS}" | chpasswd 2>/dev/null || printf "%s\n%s\n" "$NEW_PASS" "$NEW_PASS" | passwd root >/dev/null 2>&1 &
-            echo "{\"status\":\"success\", \"message\":\"Admin and SSH root password changed and synchronized successfully!\"}"
+            if [ "$NEW_USER" != "root" ]; then
+                grep -q "^${NEW_USER}:" /etc/passwd 2>/dev/null || echo "${NEW_USER}:x:0:0:${NEW_USER}:/root:/bin/ash" >> /etc/passwd
+                printf "%s\n%s\n" "$NEW_PASS" "$NEW_PASS" | passwd "$NEW_USER" >/dev/null 2>&1
+            fi
+            printf "%s\n%s\n" "$NEW_PASS" "$NEW_PASS" | passwd root >/dev/null 2>&1
+            echo "{\"status\":\"success\", \"message\":\"Web username and password synchronized with SSH successfully!\"}"
         fi
         ;;
 
