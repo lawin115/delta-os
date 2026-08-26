@@ -683,12 +683,11 @@ EOF
         
         ip link set "$WDEV" up 2>/dev/null
         
-        # Trigger fast active multi-channel survey scan across 5GHz band
-        iw dev "$WDEV" scan freq 5180 5200 5220 5240 5260 5280 5300 5320 5500 5505 5520 5540 5560 5575 5580 5600 5620 5640 5660 5680 5700 5720 5745 5765 5785 5805 5825 5845 5865 2>/dev/null || iw dev "$WDEV" scan 2>/dev/null || true
-        
-        # Read full live BSS table
         SCAN_RAW=$(iw dev "$WDEV" scan dump 2>/dev/null)
-        [ -z "$SCAN_RAW" ] && SCAN_RAW=$(iw dev "$WDEV" scan 2>/dev/null)
+        if [ -z "$SCAN_RAW" ]; then
+            iw dev "$WDEV" scan freq 5180 5200 5220 5240 5260 5280 5300 5320 5500 5505 5520 5540 5560 5575 5580 5600 5620 5640 5660 5680 5700 5720 5745 5765 5785 5805 5825 5845 5865 >/dev/null 2>&1 || iw dev "$WDEV" scan >/dev/null 2>&1 || true
+            SCAN_RAW=$(iw dev "$WDEV" scan dump 2>/dev/null)
+        fi
 
         echo "$SCAN_RAW" | awk '
             BEGIN {
@@ -714,15 +713,21 @@ EOF
                     gsub(/^[ \t"]+|[ \t"]+$/, "", s_raw)
                     ssid = s_raw
                 }
-                if (ssid == "" || ssid == "unknown" || ssid == "\"\"") ssid = "[Hidden 5G Network]"
+                gsub(/"/, "", ssid)
+                if (ssid == "" || ssid == "unknown") ssid = "[Hidden 5G Network]"
                 
                 chan = "Auto"
-                if (match(block, /freq: [0-9]+/)) {
-                    chan = substr(block, RSTART + 6, RLENGTH - 6) " MHz"
-                } else if (match(block, /Channel: [0-9]+/)) {
-                    chan = substr(block, RSTART + 9, RLENGTH - 9)
-                } else if (match(block, /primary channel: [0-9]+/)) {
+                if (match(block, /primary channel: [0-9]+/)) {
                     chan = substr(block, RSTART + 17, RLENGTH - 17)
+                } else if (match(block, /freq: [0-9]+/)) {
+                    fval = int(substr(block, RSTART + 6, RLENGTH - 6))
+                    if (fval >= 5000) {
+                        chan = int((fval - 5000) / 5)
+                    } else if (fval >= 2407) {
+                        chan = int((fval - 2407) / 5)
+                    } else {
+                        chan = fval " MHz"
+                    }
                 }
                 
                 sig = "-75"

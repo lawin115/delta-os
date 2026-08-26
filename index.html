@@ -49,7 +49,7 @@
         body {
             font-family: var(--font-sans);
             background: linear-gradient(135deg, #F0F7FF 0%, #E0F2FE 40%, #F8FAFC 100%);
-            
+
             color: var(--text-main);
             display: flex;
             height: 100vh;
@@ -170,9 +170,21 @@
         }
 
         @keyframes alertShake {
-            0%, 100% { transform: translateX(0); }
-            20%, 60% { transform: translateX(-6px); }
-            40%, 80% { transform: translateX(6px); }
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            20%,
+            60% {
+                transform: translateX(-6px);
+            }
+
+            40%,
+            80% {
+                transform: translateX(6px);
+            }
         }
 
         .input-password-wrapper {
@@ -252,8 +264,7 @@
             width: 100vw;
             height: 100vh;
             background: rgba(15, 23, 42, 0.3);
-            
-            -webkit-
+
             z-index: 999;
             opacity: 0;
             pointer-events: none;
@@ -579,9 +590,20 @@
         }
 
         @keyframes livePulse {
-            0% { transform: scale(0.95); opacity: 0.8; }
-            50% { transform: scale(1.15); opacity: 1; }
-            100% { transform: scale(0.95); opacity: 0.8; }
+            0% {
+                transform: scale(0.95);
+                opacity: 0.8;
+            }
+
+            50% {
+                transform: scale(1.15);
+                opacity: 1;
+            }
+
+            100% {
+                transform: scale(0.95);
+                opacity: 0.8;
+            }
         }
 
         /* CONTENT AREA */
@@ -606,8 +628,15 @@
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(4px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(4px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         /* LIQUID CRYSTAL BUTTONS */
@@ -651,7 +680,7 @@
 
         .btn-secondary {
             background: rgba(255, 255, 255, 0.8);
-            
+
             color: #0284C7;
             border: 1px solid rgba(255, 255, 255, 0.9);
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
@@ -689,7 +718,7 @@
         /* FROSTED WATER GLASS CARDS & TABLES */
         .card {
             background: rgba(255, 255, 255, 0.72);
-            
+
             border: 1px solid rgba(255, 255, 255, 0.85);
             border-radius: 16px;
             padding: 18px;
@@ -726,7 +755,7 @@
             border-radius: 12px;
             border: 1px solid rgba(255, 255, 255, 0.8);
             background: rgba(255, 255, 255, 0.5);
-            
+
         }
 
         table {
@@ -826,7 +855,7 @@
             font-family: var(--font-sans);
             color: #0F172A;
             background: rgba(255, 255, 255, 0.85);
-            
+
             outline: none;
             transition: all 0.2s ease;
             box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.03);
@@ -848,7 +877,7 @@
 
         .stat-card {
             background: rgba(255, 255, 255, 0.75);
-            
+
             border: 1px solid rgba(255, 255, 255, 0.9);
             border-radius: 16px;
             padding: 16px 18px;
@@ -882,10 +911,21 @@
             fill: #FFFFFF;
         }
 
-        .stat-icon.blue { background: linear-gradient(135deg, #0284C7, #38BDF8); }
-        .stat-icon.green { background: linear-gradient(135deg, #059669, #34D399); }
-        .stat-icon.purple { background: linear-gradient(135deg, #7C3AED, #A78BFA); }
-        .stat-icon.orange { background: linear-gradient(135deg, #D97706, #FBBF24); }
+        .stat-icon.blue {
+            background: linear-gradient(135deg, #0284C7, #38BDF8);
+        }
+
+        .stat-icon.green {
+            background: linear-gradient(135deg, #059669, #34D399);
+        }
+
+        .stat-icon.purple {
+            background: linear-gradient(135deg, #7C3AED, #A78BFA);
+        }
+
+        .stat-icon.orange {
+            background: linear-gradient(135deg, #D97706, #FBBF24);
+        }
 
         .stat-info {
             min-width: 0;
@@ -979,8 +1019,13 @@
         }
 
         @keyframes radarSweep {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
         }
 
         /* FROSTED GLASS MODAL */
@@ -1020,8 +1065,15 @@
         }
 
         @keyframes modalPop {
-            from { opacity: 0; transform: scale(0.96) translateY(8px); }
-            to { opacity: 1; transform: scale(1) translateY(0); }
+            from {
+                opacity: 0;
+                transform: scale(0.96) translateY(8px);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
         }
 
         .modal-header {
@@ -1416,7 +1468,7 @@
             <!-- TAB: WIRELESS (DEFAULT START VIEW) -->
             <div id="wifi" class="tab-pane active">
 
-                                <!-- ANTENNA ALIGNMENT & AUDIO TONE BEEPER WIDGET -->
+                <!-- ANTENNA ALIGNMENT & AUDIO TONE BEEPER WIDGET -->
                 <div class="card" style="background: #FFFFFF; border: 1px solid #E2E8F0; color: #0F172A; margin-bottom: 14px;">
                     <div class="card-header" style="border-bottom: 1px solid #F1F5F9; padding-bottom: 10px;">
                         <div style="display:flex;align-items:center;gap:10px;">
@@ -1430,7 +1482,7 @@
                             <span>🔊</span> <span id="btn-audio-text">Audio Beeper: OFF</span>
                         </button>
                     </div>
-                    
+
                     <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));gap:12px;padding-top:10px;">
                         <!-- Big Dial -->
                         <div style="background:linear-gradient(135deg, #F8FAFC, #EFF6FF);border:1px solid #BFDBFE;border-radius:12px;padding:16px;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;">
@@ -3798,27 +3850,42 @@
 
             try {
                 const res = await fetch(`${API_URL}?action=wifi_scan&token=${authToken}`);
-                const data = await res.json();
-                if (data.status === 'success' && data.scan_results && data.scan_results.length > 0) {
-                    tbody.innerHTML = data.scan_results.map(r => `
-                        <tr>
-                            <td style="font-weight:700;color:#0F172A;">${escapeHtml(r.ssid)}</td>
-                            <td style="font-family:var(--font-mono);">${r.bssid}</td>
-                            <td><span class="badge badge-info">Ch ${r.channel}</span></td>
-                            <td style="font-weight:700;color:#059669;">${r.signal} dBm</td>
-                            <td><span class="badge badge-success">${r.security}</span></td>
-                            <td>
-                                <button class="btn btn-primary" style="min-height:28px;padding:3px 8px;font-size:0.75rem;" onclick="openWifiConnectModal('${escapeHtml(r.ssid)}', '${r.bssid}', '${r.channel}')">
-                                    Connect
-                                </button>
-                            </td>
-                        </tr>
-                    `).join('');
+                const text = await res.text();
+                let data = null;
+                try {
+                    data = JSON.parse(text);
+                } catch (pe) {
+                    const firstBrace = text.indexOf('{');
+                    const lastBrace = text.lastIndexOf('}');
+                    if (firstBrace !== -1 && lastBrace !== -1) {
+                        data = JSON.parse(text.substring(firstBrace, lastBrace + 1));
+                    }
+                }
+
+                if (data && data.status === 'success' && data.scan_results && data.scan_results.length > 0) {
+                    tbody.innerHTML = data.scan_results.map(r => {
+                        let chDisplay = r.channel;
+                        if (!isNaN(chDisplay)) chDisplay = 'Ch ' + chDisplay;
+                        return `
+                            <tr>
+                                <td style="font-weight:700;color:#0F172A;">${escapeHtml(r.ssid)}</td>
+                                <td style="font-family:var(--font-mono);">${r.bssid}</td>
+                                <td><span class="badge badge-info">${chDisplay}</span></td>
+                                <td style="font-weight:700;color:#059669;">${r.signal} dBm</td>
+                                <td><span class="badge badge-success">${r.security}</span></td>
+                                <td>
+                                    <button class="btn btn-primary" style="min-height:28px;padding:3px 8px;font-size:0.75rem;" onclick="openWifiConnectModal('${escapeHtml(r.ssid)}', '${r.bssid}', '${r.channel}')">
+                                        Connect
+                                    </button>
+                                </td>
+                            </tr>
+                        `;
+                    }).join('');
                 } else {
                     tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:20px;color:var(--text-muted);">No 5GHz networks detected. Try scanning again.</td></tr>`;
                 }
             } catch (e) {
-                tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:20px;color:red;">Error scanning wireless networks.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:20px;color:var(--text-muted);">No 5GHz networks detected. Try scanning again.</td></tr>`;
             }
         }
 
@@ -5339,59 +5406,59 @@
             </div>
         </div>
     </div>
-        <!-- BACKUP & FLASH FIRMWARE MODAL -->
-        <div class="modal-overlay" id="backup-flash-modal">
-            <div class="modal-card" style="max-width:540px;border-top:4px solid #10B981;">
-                <div style="display:flex;align-items:center;justify-content:space-between;margin-boflam:16px;">
-                    <div style="display:flex;align-items:center;gap:10px;">
-                        <div style="width:36px;height:36px;border-radius:10px;background:#ECFDF5;display:flex;align-items:center;justify-content:center;">
-                            <svg viewBox="0 0 24 24" style="width:20px;height:20px;fill:#10B981;">
-                                <path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM14 13v4h-4v-4H7l5-5 5 5h-3z" />
-                            </svg>
-                        </div>
-                        <div>
-                            <h3 style="font-size:1rem;font-weight:800;color:#0F172A;">Backup / Flash Firmware</h3>
-                            <span style="font-size:0.72rem;color:#64748B;">System Configuration Backup & Manual Firmware Update</span>
-                        </div>
-                    </div>
-                    <button onclick="closeBackupFlashModal()" style="background:none;border:none;font-size:1.4rem;color:#64748B;cursor:pointer;">&times;</button>
-                </div>
-
-                <!-- SECTION 1: DOWNLOAD CONFIGURATION BACKUP -->
-                <div style="background:#F8FAFC;border:1px solid #E2E8F0;border-radius:10px;padding:14px;margin-bottom:16px;">
-                    <h4 style="font-size:0.85rem;font-weight:700;color:#0F172A;margin-bottom:6px;">1. Download System Backup</h4>
-                    <p style="font-size:0.76rem;color:#64748B;margin-bottom:12px;">Export all NVRAM configurations, network settings, and Wi-Fi profiles into a compressed backup file.</p>
-                    <button onclick="downloadBackupConfig()" class="btn btn-secondary" style="background:#F8FAFC;border-color:#10B981;color:#059669;font-weight:700;">
-                        <svg viewBox="0 0 24 24" style="width:14px;height:14px;fill:currentColor;">
-                            <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z" />
+    <!-- BACKUP & FLASH FIRMWARE MODAL -->
+    <div class="modal-overlay" id="backup-flash-modal">
+        <div class="modal-card" style="max-width:540px;border-top:4px solid #10B981;">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-boflam:16px;">
+                <div style="display:flex;align-items:center;gap:10px;">
+                    <div style="width:36px;height:36px;border-radius:10px;background:#ECFDF5;display:flex;align-items:center;justify-content:center;">
+                        <svg viewBox="0 0 24 24" style="width:20px;height:20px;fill:#10B981;">
+                            <path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM14 13v4h-4v-4H7l5-5 5 5h-3z" />
                         </svg>
-                        Download Backup (.tar.gz)
-                    </button>
-                </div>
-
-                <!-- SECTION 2: MANUAL FLASH FIRMWARE (sysupgrade.bin) -->
-                <div style="background:#F8FAFC;border:1px solid #E2E8F0;border-radius:10px;padding:14px;margin-bottom:16px;">
-                    <h4 style="font-size:0.85rem;font-weight:700;color:#0F172A;margin-bottom:6px;">2. Flash Firmware Image (sysupgrade.bin)</h4>
-                    <p style="font-size:0.76rem;color:#64748B;margin-bottom:12px;">Select a new <code>sysupgrade.bin</code> file from your computer to flash permanently to device Flash memory.</p>
-
-                    <div class="form-group" style="margin-bottom:12px;">
-                        <input type="file" id="firmware-file-input" accept=".bin" class="form-control" style="font-size:0.78rem;">
                     </div>
-
-                    <div id="flash-status-box" style="display:none;background:#FEF3C7;border:1px solid #FCD34D;color:#92400E;padding:10px;border-radius:8px;font-size:0.78rem;margin-bottom:10px;">
-                        ⌛ Flashing image in progress... Please do not power off the router!
+                    <div>
+                        <h3 style="font-size:1rem;font-weight:800;color:#0F172A;">Backup / Flash Firmware</h3>
+                        <span style="font-size:0.72rem;color:#64748B;">System Configuration Backup & Manual Firmware Update</span>
                     </div>
+                </div>
+                <button onclick="closeBackupFlashModal()" style="background:none;border:none;font-size:1.4rem;color:#64748B;cursor:pointer;">&times;</button>
+            </div>
 
-                    <button onclick="uploadAndFlashFirmware()" class="btn btn-success" style="width:100%;font-weight:700;">
-                        🚀 Flash Selected Firmware
-                    </button>
+            <!-- SECTION 1: DOWNLOAD CONFIGURATION BACKUP -->
+            <div style="background:#F8FAFC;border:1px solid #E2E8F0;border-radius:10px;padding:14px;margin-bottom:16px;">
+                <h4 style="font-size:0.85rem;font-weight:700;color:#0F172A;margin-bottom:6px;">1. Download System Backup</h4>
+                <p style="font-size:0.76rem;color:#64748B;margin-bottom:12px;">Export all NVRAM configurations, network settings, and Wi-Fi profiles into a compressed backup file.</p>
+                <button onclick="downloadBackupConfig()" class="btn btn-secondary" style="background:#F8FAFC;border-color:#10B981;color:#059669;font-weight:700;">
+                    <svg viewBox="0 0 24 24" style="width:14px;height:14px;fill:currentColor;">
+                        <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z" />
+                    </svg>
+                    Download Backup (.tar.gz)
+                </button>
+            </div>
+
+            <!-- SECTION 2: MANUAL FLASH FIRMWARE (sysupgrade.bin) -->
+            <div style="background:#F8FAFC;border:1px solid #E2E8F0;border-radius:10px;padding:14px;margin-bottom:16px;">
+                <h4 style="font-size:0.85rem;font-weight:700;color:#0F172A;margin-bottom:6px;">2. Flash Firmware Image (sysupgrade.bin)</h4>
+                <p style="font-size:0.76rem;color:#64748B;margin-bottom:12px;">Select a new <code>sysupgrade.bin</code> file from your computer to flash permanently to device Flash memory.</p>
+
+                <div class="form-group" style="margin-bottom:12px;">
+                    <input type="file" id="firmware-file-input" accept=".bin" class="form-control" style="font-size:0.78rem;">
                 </div>
 
-                <div style="display:flex;justify-content:flex-end;">
-                    <button onclick="closeBackupFlashModal()" class="btn btn-secondary">Close</button>
+                <div id="flash-status-box" style="display:none;background:#FEF3C7;border:1px solid #FCD34D;color:#92400E;padding:10px;border-radius:8px;font-size:0.78rem;margin-bottom:10px;">
+                    ⌛ Flashing image in progress... Please do not power off the router!
                 </div>
+
+                <button onclick="uploadAndFlashFirmware()" class="btn btn-success" style="width:100%;font-weight:700;">
+                    🚀 Flash Selected Firmware
+                </button>
+            </div>
+
+            <div style="display:flex;justify-content:flex-end;">
+                <button onclick="closeBackupFlashModal()" class="btn btn-secondary">Close</button>
             </div>
         </div>
+    </div>
 </body>
 
 </html>
