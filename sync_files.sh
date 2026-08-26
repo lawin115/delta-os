@@ -61,6 +61,7 @@ cp -fv "$WIN_DIR/ar9344_mikrotik_routerboard-lhg-5nd.dts" "$OPENWRT_DIR/target/l
 # 5. Copy Banner & System rc.local
 cp -fv "$WIN_DIR/banner" "$OPENWRT_DIR/files/etc/banner"
 chmod +x "$OPENWRT_DIR/files/etc/banner"
+echo "v2.6" > "$OPENWRT_DIR/files/etc/delta_version"
 
 cat > "$OPENWRT_DIR/files/etc/rc.local" << 'EOF'
 # Turn off user LED immediately when boot completes (Solid -> OFF)

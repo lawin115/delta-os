@@ -2,7 +2,7 @@
     "status": "success",
     "latest_version": "v2.6",
     "update_available": true,
-    "release_date": "2026-08-25",
+    "release_date": "2026-08-26",
     "firmware_url": "https://raw.githubusercontent.com/lawin115/delta-os/main/sysupgrade.bin",
-    "changelog": "Delta OS Pro v2.6: Zero-RAM Direct Cloud Streaming Flash, WinBox MNDP Discovery, iperf3 Bandwidth Test, Persistent JFFS2 Partition, and Ultra-Fast Boot."
+    "changelog": "Delta OS Pro v2.6: Advanced Wireless RF Engine, Distance ACK Calibration, Frame Bursting, Hardware ANI, WinBox MNDP Discovery, and Zero-RAM Cloud Streaming Flash."
 }
