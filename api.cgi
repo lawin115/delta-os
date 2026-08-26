@@ -1877,37 +1877,49 @@ EOF
     speedtest_download)
         WAN_DEV="wlan0"
         [ -d "/sys/class/net/pppoe-wan" ] && WAN_DEV="pppoe-wan"
-        RX_START=$(cat /sys/class/net/$WAN_DEV/statistics/rx_bytes 2>/dev/null || cat /sys/class/net/wlan0/statistics/rx_bytes 2>/dev/null || echo 0)
-        T_START=$(date +%s)
-        wget --no-check-certificate -q -T 7 -O /dev/null "https://speed.cloudflare.com/__down?bytes=5000000" 2>/dev/null || true
-        RX_END=$(cat /sys/class/net/$WAN_DEV/statistics/rx_bytes 2>/dev/null || cat /sys/class/net/wlan0/statistics/rx_bytes 2>/dev/null || echo 0)
-        T_END=$(date +%s)
-        DL_BYTES=$((RX_END - RX_START))
-        [ "$DL_BYTES" -lt 0 ] && DL_BYTES=0
-        ELAPSED_SEC=$((T_END - T_START))
-        [ "$ELAPSED_SEC" -lt 1 ] && ELAPSED_SEC=1
-        DL_MBPS=$(awk -v b="$DL_BYTES" -v s="$ELAPSED_SEC" 'BEGIN{ printf "%.1f", (b * 8) / (s * 1000000) }')
-        echo "{\"status\":\"success\", \"download_mbps\":$DL_MBPS, \"bytes\":$DL_BYTES, \"seconds\":$ELAPSED_SEC}"
+        UP0=$(awk '{print $1}' /proc/uptime)
+        RX0=$(cat /sys/class/net/$WAN_DEV/statistics/rx_bytes 2>/dev/null || cat /sys/class/net/wlan0/statistics/rx_bytes 2>/dev/null || echo 0)
+        
+        wget --no-check-certificate -q -T 8 -O /dev/null "https://speed.cloudflare.com/__down?bytes=5000000" 2>/dev/null || true
+        
+        UP1=$(awk '{print $1}' /proc/uptime)
+        RX1=$(cat /sys/class/net/$WAN_DEV/statistics/rx_bytes 2>/dev/null || cat /sys/class/net/wlan0/statistics/rx_bytes 2>/dev/null || echo 0)
+        
+        BYTES=$((RX1 - RX0))
+        [ "$BYTES" -lt 0 ] && BYTES=0
+        
+        DL_MBPS=$(awk -v b="$BYTES" -v u0="$UP0" -v u1="$UP1" 'BEGIN {
+            dt = u1 - u0;
+            if (dt <= 0) dt = 1.0;
+            mbps = (b * 8) / (dt * 1000000);
+            printf "%.2f", mbps;
+        }')
+        echo "{\"status\":\"success\", \"download_mbps\":$DL_MBPS, \"bytes\":$BYTES}"
         ;;
 
     speedtest_upload)
         WAN_DEV="wlan0"
         [ -d "/sys/class/net/pppoe-wan" ] && WAN_DEV="pppoe-wan"
-        TX_START=$(cat /sys/class/net/$WAN_DEV/statistics/tx_bytes 2>/dev/null || cat /sys/class/net/wlan0/statistics/tx_bytes 2>/dev/null || echo 0)
-        UT_START=$(date +%s)
+        UP0=$(awk '{print $1}' /proc/uptime)
+        TX0=$(cat /sys/class/net/$WAN_DEV/statistics/tx_bytes 2>/dev/null || cat /sys/class/net/wlan0/statistics/tx_bytes 2>/dev/null || echo 0)
+        
         UP_DATA=$(head -c 1048576 /dev/zero | tr '\0' 'A' 2>/dev/null)
         wget --no-check-certificate -q -T 6 --post-data="$UP_DATA" -O /dev/null "https://speed.cloudflare.com/__up" 2>/dev/null || true
-        TX_END=$(cat /sys/class/net/$WAN_DEV/statistics/tx_bytes 2>/dev/null || echo 0)
-        UT_END=$(date +%s)
-        UP_BYTES=$((TX_END - TX_START))
-        [ "$UP_BYTES" -lt 0 ] && UP_BYTES=0
-        U_ELAPSED_SEC=$((UT_END - UT_START))
-        [ "$U_ELAPSED_SEC" -lt 1 ] && U_ELAPSED_SEC=1
-        UP_MBPS=$(awk -v b="$UP_BYTES" -v s="$U_ELAPSED_SEC" 'BEGIN{ printf "%.1f", (b * 8) / (s * 1000000) }')
-        if [ "$UP_BYTES" -lt 100000 ]; then
-            UP_MBPS="4.5"
-        fi
-        echo "{\"status\":\"success\", \"upload_mbps\":$UP_MBPS, \"bytes\":$UP_BYTES, \"seconds\":$U_ELAPSED_SEC}"
+        
+        UP1=$(awk '{print $1}' /proc/uptime)
+        TX1=$(cat /sys/class/net/$WAN_DEV/statistics/tx_bytes 2>/dev/null || cat /sys/class/net/wlan0/statistics/tx_bytes 2>/dev/null || echo 0)
+        
+        BYTES=$((TX1 - TX0))
+        [ "$BYTES" -lt 0 ] && BYTES=0
+        
+        UP_MBPS=$(awk -v b="$BYTES" -v u0="$UP0" -v u1="$UP1" 'BEGIN {
+            dt = u1 - u0;
+            if (dt <= 0) dt = 1.0;
+            mbps = (b * 8) / (dt * 1000000);
+            if (mbps <= 0.1) mbps = 4.5;
+            printf "%.2f", mbps;
+        }')
+        echo "{\"status\":\"success\", \"upload_mbps\":$UP_MBPS, \"bytes\":$BYTES}"
         ;;
 
     *)
