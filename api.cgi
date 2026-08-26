@@ -1880,6 +1880,32 @@ EOF
         fi
         ;;
 
+    speedtest_ping)
+        echo "{\"status\":\"success\", \"pong\":1, \"time\":$(date +%s)}"
+        ;;
+
+    speedtest_payload)
+        SIZE=$(get_query_val "size")
+        [ -z "$SIZE" ] && SIZE=3145728
+        [ "$SIZE" -gt 15728640 ] && SIZE=15728640
+        echo "Status: 200 OK"
+        echo "Content-Type: application/octet-stream"
+        echo "Content-Length: $SIZE"
+        echo "Cache-Control: no-store, no-cache, must-revalidate"
+        echo ""
+        head -c "$SIZE" /dev/zero 2>/dev/null || dd if=/dev/zero bs=65536 count=$((SIZE / 65536)) 2>/dev/null
+        exit 0
+        ;;
+
+    speedtest_upload)
+        if [ "$REQUEST_METHOD" = "POST" ]; then
+            cat > /dev/null
+            echo "{\"status\":\"success\", \"message\":\"Upload received\"}"
+        else
+            echo "{\"status\":\"error\", \"message\":\"POST required\"}"
+        fi
+        ;;
+
     *)
         echo "{\"status\":\"error\", \"message\":\"Unknown action: $ACTION\"}"
         ;;

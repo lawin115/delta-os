@@ -1316,7 +1316,9 @@
             }
         }
 
-        // 5. LIVE SPEED TEST ENGINE
+        // ==========================================
+        // 5. GENUINE REAL-TIME HIGH PRECISION SPEED TEST ENGINE
+        // ==========================================
         let isSpeedTesting = false;
 
         function updateSpeedGauge(mbps, maxMbps = 100) {
@@ -1361,56 +1363,86 @@
             document.querySelectorAll('.st-metric-box').forEach(b => b.classList.remove('active'));
 
             try {
-                // PHASE 1: PING & JITTER TEST (5 rounds)
+                // Determine whether global Cloudflare CDN is reachable
+                let useCloudflare = true;
+                try {
+                    const testPing = await fetch('https://speed.cloudflare.com/__down?bytes=0', { method: 'GET', cache: 'no-store', mode: 'cors' });
+                    if (!testPing.ok) useCloudflare = false;
+                } catch (e) {
+                    useCloudflare = false;
+                }
+
+                // ==========================================
+                // PHASE 1: PING & JITTER TEST (6 fast rounds)
+                // ==========================================
                 boxPing.classList.add('active');
                 boxJitter.classList.add('active');
-                statusText.innerText = '📡 Measuring network latency & jitter...';
+                statusText.innerText = useCloudflare ? '📡 Testing Latency to Cloudflare Global CDN...' : '📡 Testing Latency to Local Gateway...';
 
                 let pings = [];
-                for (let i = 0; i < 5; i++) {
+                const pingUrl = useCloudflare ? 'https://speed.cloudflare.com/__down?bytes=0' : `${API_URL}?action=speedtest_ping`;
+
+                for (let i = 0; i < 6; i++) {
                     const t0 = performance.now();
-                    await fetch(`${API_URL}?action=speedtest_ping&t=${Date.now()}`);
+                    await fetch(`${pingUrl}&_t=${Date.now()}_${i}`, { cache: 'no-store', mode: useCloudflare ? 'cors' : 'same-origin' });
                     const t1 = performance.now();
-                    pings.push(t1 - t0);
-                    await new Promise(r => setTimeout(r, 50));
+                    const rtt = Math.max(t1 - t0, 1);
+                    pings.push(rtt);
+                    valPing.innerText = `${Math.round(rtt)} ms`;
+                    await new Promise(r => setTimeout(r, 40));
                 }
 
-                const avgPing = Math.round(pings.reduce((a, b) => a + b, 0) / pings.length);
+                // Discard highest spike for clean average
+                pings.sort((a, b) => a - b);
+                const usefulPings = pings.slice(0, 5);
+                const avgPing = Math.round(usefulPings.reduce((a, b) => a + b, 0) / usefulPings.length);
+                
                 let jitter = 0;
-                for (let i = 1; i < pings.length; i++) {
-                    jitter += Math.abs(pings[i] - pings[i - 1]);
+                for (let i = 1; i < usefulPings.length; i++) {
+                    jitter += Math.abs(usefulPings[i] - usefulPings[i - 1]);
                 }
-                jitter = Math.round(jitter / (pings.length - 1));
+                jitter = Math.round(jitter / (usefulPings.length - 1));
 
                 valPing.innerText = `${avgPing} ms`;
                 valJitter.innerText = `${jitter} ms`;
                 boxPing.classList.remove('active');
                 boxJitter.classList.remove('active');
+                await new Promise(r => setTimeout(r, 200));
 
-                // PHASE 2: DOWNLOAD THROUGHPUT TEST (6 MB Stream)
+                // ==========================================
+                // PHASE 2: DOWNLOAD THROUGHPUT TEST (Progressive Streaming)
+                // ==========================================
                 boxDown.classList.add('active');
                 statusText.innerText = '⬇️ Testing Download Throughput...';
 
-                let dlLoaded = 0;
-                const dlStart = performance.now();
-                const dlChunks = 2;
+                const dlChunkSizes = useCloudflare ? [1000000, 5000000, 10000000] : [1048576, 3145728, 5242880];
+                let dlTotalBytes = 0;
+                const dlStartTime = performance.now();
+                let lastGaugeUpdate = 0;
                 let finalDlMbps = 0;
 
-                for (let c = 0; c < dlChunks; c++) {
-                    const chunkSize = 3145728; // 3MB chunk
-                    const res = await fetch(`${API_URL}?action=speedtest_payload&size=${chunkSize}&t=${Date.now()}`);
+                for (let c = 0; c < dlChunkSizes.length; c++) {
+                    const cSize = dlChunkSizes[c];
+                    const dlUrl = useCloudflare ? `https://speed.cloudflare.com/__down?bytes=${cSize}` : `${API_URL}?action=speedtest_payload&size=${cSize}`;
+                    
+                    const res = await fetch(`${dlUrl}&_t=${Date.now()}_${c}`, { cache: 'no-store', mode: useCloudflare ? 'cors' : 'same-origin' });
                     const reader = res.body.getReader();
 
                     while (true) {
                         const { done, value } = await reader.read();
                         if (done) break;
-                        dlLoaded += value.length;
-                        const elapsedSec = (performance.now() - dlStart) / 1000;
-                        if (elapsedSec > 0) {
-                            const curMbps = (dlLoaded * 8) / (elapsedSec * 1000000);
-                            finalDlMbps = curMbps;
-                            updateSpeedGauge(curMbps, 100);
-                            valDown.innerText = `${curMbps.toFixed(1)} Mbps`;
+                        dlTotalBytes += value.length;
+
+                        const now = performance.now();
+                        if (now - lastGaugeUpdate > 80) {
+                            lastGaugeUpdate = now;
+                            const elapsedSec = (now - dlStartTime) / 1000;
+                            if (elapsedSec > 0) {
+                                const liveMbps = (dlTotalBytes * 8) / (elapsedSec * 1000000);
+                                finalDlMbps = liveMbps;
+                                updateSpeedGauge(liveMbps, Math.max(liveMbps * 1.3, 50));
+                                valDown.innerText = `${liveMbps.toFixed(1)} Mbps`;
+                            }
                         }
                     }
                 }
@@ -1419,27 +1451,35 @@
                 boxDown.classList.remove('active');
                 await new Promise(r => setTimeout(r, 300));
 
-                // PHASE 3: UPLOAD THROUGHPUT TEST (4 MB Stream)
+                // ==========================================
+                // PHASE 3: UPLOAD THROUGHPUT TEST (Binary POST Streaming)
+                // ==========================================
                 boxUp.classList.add('active');
                 statusText.innerText = '⬆️ Testing Upload Throughput...';
-                updateSpeedGauge(0, 100);
+                updateSpeedGauge(0, Math.max(finalDlMbps, 50));
 
-                const upPayload = new Uint8Array(2097152); // 2MB upload payload
-                const upStart = performance.now();
-                let upLoaded = 0;
+                const upChunkSizes = useCloudflare ? [500000, 1500000, 3000000] : [524288, 1048576, 2097152];
+                let upTotalBytes = 0;
+                const upStartTime = performance.now();
                 let finalUpMbps = 0;
 
-                for (let u = 0; u < 2; u++) {
-                    await fetch(`${API_URL}?action=speedtest_upload&t=${Date.now()}`, {
+                for (let u = 0; u < upChunkSizes.length; u++) {
+                    const uSize = upChunkSizes[u];
+                    const upPayload = new Uint8Array(uSize);
+                    const upUrl = useCloudflare ? 'https://speed.cloudflare.com/__up' : `${API_URL}?action=speedtest_upload`;
+
+                    await fetch(`${upUrl}?_t=${Date.now()}_${u}`, {
                         method: 'POST',
-                        body: upPayload
+                        body: upPayload,
+                        mode: useCloudflare ? 'cors' : 'same-origin'
                     });
-                    upLoaded += upPayload.length;
-                    const elapsedSec = (performance.now() - upStart) / 1000;
+
+                    upTotalBytes += uSize;
+                    const elapsedSec = (performance.now() - upStartTime) / 1000;
                     if (elapsedSec > 0) {
-                        const curMbps = (upLoaded * 8) / (elapsedSec * 1000000);
+                        const curMbps = (upTotalBytes * 8) / (elapsedSec * 1000000);
                         finalUpMbps = curMbps;
-                        updateSpeedGauge(curMbps, 100);
+                        updateSpeedGauge(curMbps, Math.max(finalDlMbps, 50));
                         valUp.innerText = `${curMbps.toFixed(1)} Mbps`;
                     }
                 }
@@ -1447,16 +1487,19 @@
                 valUp.innerText = `${finalUpMbps.toFixed(1)} Mbps`;
                 boxUp.classList.remove('active');
 
-                // FINISHED
-                statusText.innerHTML = `<span style="color:#10B981;font-weight:800;">✨ Speed test completed successfully!</span>`;
+                // ==========================================
+                // FINISHED: REAL SPEED DISPLAY
+                // ==========================================
+                const serverName = useCloudflare ? 'Cloudflare Anycast CDN' : 'Delta 5G Local Gateway';
+                statusText.innerHTML = `<span style="color:#10B981;font-weight:800;">✨ Real Speed Test Complete (${serverName})</span>`;
                 badge.innerText = 'TEST COMPLETED';
                 badge.style.color = '#10B981';
                 badge.style.borderColor = 'rgba(16, 185, 129, 0.4)';
-                updateSpeedGauge(finalDlMbps, 100);
+                updateSpeedGauge(finalDlMbps, Math.max(finalDlMbps * 1.2, 50));
 
             } catch (e) {
                 console.error("Speed test error:", e);
-                statusText.innerHTML = `<span style="color:#EF4444;">⚠️ Speed test interrupted. Check connection.</span>`;
+                statusText.innerHTML = `<span style="color:#EF4444;">⚠️ Speed test interrupted. Check WAN connection.</span>`;
                 badge.innerText = 'ERROR';
                 badge.style.color = '#EF4444';
             } finally {
