@@ -1880,18 +1880,14 @@ EOF
         ;;
 
     router_hardware_speedtest)
-        WDEV=$(iw dev 2>/dev/null | awk '$1 == "Interface" {print $2; exit}')
-        [ -z "$WDEV" ] && WDEV="wlan0"
+        # Find active WAN interface (pppoe-wan or wlan0)
+        WAN_DEV=$(ip route 2>/dev/null | awk '/default/ {print $5; exit}')
+        [ -z "$WAN_DEV" ] && WAN_DEV=$(iw dev 2>/dev/null | awk '$1 == "Interface" {print $2; exit}')
+        [ -z "$WAN_DEV" ] && WAN_DEV="wlan0"
 
-        # Check if internet / WAN is reachable (0.5s check)
-        HAS_INTERNET=0
-        if ping -c 1 -W 1 1.1.1.1 >/dev/null 2>&1; then
-            HAS_INTERNET=1
-        fi
-
-        if [ "$HAS_INTERNET" = "1" ]; then
-            # Online WAN Test
-            PING_OUT=$(ping -c 3 -W 1 1.1.1.1 2>/dev/null)
+        # Check genuine internet connectivity (Ping Cloudflare Anycast 1.1.1.1)
+        PING_OUT=$(ping -c 3 -W 1 1.1.1.1 2>/dev/null)
+        if echo "$PING_OUT" | grep -q "min/avg/max"; then
             AVG_PING=$(echo "$PING_OUT" | awk -F'/' 'END{print $5}' | cut -d'.' -f1)
             MIN_PING=$(echo "$PING_OUT" | awk -F'/' 'END{print $4}' | cut -d'.' -f1)
             MAX_PING=$(echo "$PING_OUT" | awk -F'/' 'END{print $6}' | cut -d'.' -f1)
@@ -1899,58 +1895,68 @@ EOF
             [ "$JITTER" -lt 1 ] && JITTER=1
             [ -z "$AVG_PING" ] && AVG_PING="25"
 
-            # Download test
-            RX_START=$(cat /sys/class/net/$WDEV/statistics/rx_bytes 2>/dev/null || echo 0)
+            # 1. Real Download Test from Global Cloudflare CDN
+            RX_START=$(cat /sys/class/net/$WAN_DEV/statistics/rx_bytes 2>/dev/null || cat /sys/class/net/wlan0/statistics/rx_bytes 2>/dev/null || echo 0)
             T_START=$(date +%s)
-            uclient-fetch -q -O /dev/null --timeout=3 "https://speed.cloudflare.com/__down?bytes=3000000" 2>/dev/null || true
-            RX_END=$(cat /sys/class/net/$WDEV/statistics/rx_bytes 2>/dev/null || echo 0)
+
+            uclient-fetch -q -O /dev/null --timeout=4 "https://speed.cloudflare.com/__down?bytes=5000000" 2>/dev/null || true
+
+            RX_END=$(cat /sys/class/net/$WAN_DEV/statistics/rx_bytes 2>/dev/null || cat /sys/class/net/wlan0/statistics/rx_bytes 2>/dev/null || echo 0)
             T_END=$(date +%s)
+
             DL_BYTES=$((RX_END - RX_START))
             [ "$DL_BYTES" -lt 0 ] && DL_BYTES=0
+
             ELAPSED_SEC=$((T_END - T_START))
             [ "$ELAPSED_SEC" -lt 1 ] && ELAPSED_SEC=1
+
             DL_MBPS=$(awk -v b="$DL_BYTES" -v s="$ELAPSED_SEC" 'BEGIN{ printf "%.1f", (b * 8) / (s * 1000000) }')
 
-            # Upload test
-            TX_START=$(cat /sys/class/net/$WDEV/statistics/tx_bytes 2>/dev/null || echo 0)
+            # 2. Real Upload Test to Global Cloudflare CDN
+            TX_START=$(cat /sys/class/net/$WAN_DEV/statistics/tx_bytes 2>/dev/null || cat /sys/class/net/wlan0/statistics/tx_bytes 2>/dev/null || echo 0)
             UT_START=$(date +%s)
-            dd if=/dev/zero bs=32768 count=16 2>/dev/null | uclient-fetch --post-data=- -q -O /dev/null --timeout=2 "https://speed.cloudflare.com/__up" 2>/dev/null || true
-            TX_END=$(cat /sys/class/net/$WDEV/statistics/tx_bytes 2>/dev/null || echo 0)
+
+            dd if=/dev/zero bs=32768 count=16 2>/dev/null | uclient-fetch --post-data=- -q -O /dev/null --timeout=3 "https://speed.cloudflare.com/__up" 2>/dev/null || true
+
+            TX_END=$(cat /sys/class/net/$WAN_DEV/statistics/tx_bytes 2>/dev/null || cat /sys/class/net/wlan0/statistics/tx_bytes 2>/dev/null || echo 0)
             UT_END=$(date +%s)
+
             UP_BYTES=$((TX_END - TX_START))
             [ "$UP_BYTES" -lt 0 ] && UP_BYTES=0
+
             U_ELAPSED_SEC=$((UT_END - UT_START))
             [ "$U_ELAPSED_SEC" -lt 1 ] && U_ELAPSED_SEC=1
+
             UP_MBPS=$(awk -v b="$UP_BYTES" -v s="$U_ELAPSED_SEC" 'BEGIN{ printf "%.1f", (b * 8) / (s * 1000000) }')
 
-            SERVER_NAME="Cloudflare Global Anycast Edge (wlan0 Direct)"
-        else
-            # Offline / Dish-to-Tower Hardware Link Benchmark
-            AVG_PING="3"
-            JITTER="1"
-            
-            # Read real negotiated hardware link bitrate from Atheros ath9k driver
-            RAW_BITRATE=$(iw dev "$WDEV" link 2>/dev/null | awk '/tx bitrate:/ {print $3; exit}')
-            [ -z "$RAW_BITRATE" ] && RAW_BITRATE="150.0"
-            
-            # Real-world TCP throughput is ~65-70% of physical PHY layer rate
-            DL_MBPS=$(awk -v r="$RAW_BITRATE" 'BEGIN{ printf "%.1f", r * 0.68 }')
-            UP_MBPS=$(awk -v r="$RAW_BITRATE" 'BEGIN{ printf "%.1f", r * 0.52 }')
-            SERVER_NAME="MikroTik 5GHz Radio Physical Link ($WDEV PHY: ${RAW_BITRATE}M)"
-        fi
-
-        cat <<EOF
+            cat <<EOF
 {
     "status": "success",
-    "mode": "router_hardware",
-    "interface": "$WDEV",
+    "online": true,
+    "interface": "$WAN_DEV",
     "ping": $AVG_PING,
     "jitter": $JITTER,
     "download_mbps": $DL_MBPS,
     "upload_mbps": $UP_MBPS,
-    "server": "$SERVER_NAME"
+    "server": "Cloudflare Global CDN (Real WAN Stream)"
 }
 EOF
+        else
+            # No Internet / Offline
+            cat <<EOF
+{
+    "status": "success",
+    "online": false,
+    "interface": "$WAN_DEV",
+    "ping": 0,
+    "jitter": 0,
+    "download_mbps": 0.0,
+    "upload_mbps": 0.0,
+    "server": "No Internet Route (Check PPPoE / WAN)",
+    "message": "Router has no active Internet route. Connect PPPoE or WAN to measure live ISP speed."
+}
+EOF
+        fi
         ;;
 
     speedtest_ping)
