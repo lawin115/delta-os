@@ -444,7 +444,7 @@ EOF
         WIFI_BAND=$(uci -q get wireless.radio0.band || uci -q get wireless.radio0.hwmode || echo "11a")
         WIFI_HTMODE=$(uci -q get wireless.radio0.htmode || echo "HT40")
         WIFI_CHAN=$(uci -q get wireless.radio0.channel || echo "auto")
-        WIFI_COUNTRY=$(uci -q get wireless.radio0.country || echo "US")
+        WIFI_COUNTRY=$(uci -q get wireless.radio0.country || echo "00")
         WIFI_PROTOCOL=$(uci -q get wireless.radio0.wireless_protocol || echo "any")
         WIFI_SCANLIST=$(uci -q get wireless.radio0.scan_list 2>/dev/null | tr '\n' ',' | sed 's/,$//')
         [ -z "$WIFI_SCANLIST" ] && WIFI_SCANLIST="default"
@@ -689,16 +689,28 @@ EOF
         [ -z "$WDEV" ] && WDEV="wlan0"
         
         ip link set "$WDEV" up 2>/dev/null
+        iw reg set 00 2>/dev/null
         
+        # 1. Trigger comprehensive active scan across full spectrum
+        # Full scan sweeping all physical channels
+        iw dev "$WDEV" scan >/dev/null 2>&1
+        SCAN_ERR=$?
+        
+        # 2. If busy or restricted, trigger wpa_cli and active sweep across superchannel + standard frequencies
+        if [ $SCAN_ERR -ne 0 ]; then
+            wpa_cli -i "$WDEV" scan >/dev/null 2>&1 || true
+            iw dev "$WDEV" scan freq 4920 4940 4960 4980 5000 5020 5040 5060 5080 5100 5120 5140 5160 5180 5200 5220 5240 5260 5280 5300 5320 5500 5520 5540 5560 5580 5600 5620 5640 5660 5680 5700 5720 5745 5765 5785 5805 5825 5845 5865 5885 5900 5920 5940 5960 5980 6000 6020 6040 6060 6080 6100 >/dev/null 2>&1 || true
+        fi
+
+        # 3. Retrieve raw kernel scan dump or fallback to iwinfo
         SCAN_RAW=$(iw dev "$WDEV" scan dump 2>/dev/null)
         if [ -z "$SCAN_RAW" ]; then
-            iw dev "$WDEV" scan freq 5180 5200 5220 5240 5260 5280 5300 5320 5500 5505 5520 5540 5560 5575 5580 5600 5620 5640 5660 5680 5700 5720 5745 5765 5785 5805 5825 5845 5865 >/dev/null 2>&1 || iw dev "$WDEV" scan >/dev/null 2>&1 || true
-            SCAN_RAW=$(iw dev "$WDEV" scan dump 2>/dev/null)
+            SCAN_RAW=$(iwinfo "$WDEV" scan 2>/dev/null)
         fi
 
         echo "$SCAN_RAW" | awk '
             BEGIN {
-                RS = "(BSS|Cell [0-9]+)"
+                RS = "(BSS |Cell [0-9]+)"
                 first = 1
                 printf "{\"status\":\"success\", \"scan_results\": ["
             }
@@ -711,50 +723,75 @@ EOF
                 }
                 
                 ssid = ""
-                if (match(block, /SSID: [^\n\r]+/)) {
-                    s_raw = substr(block, RSTART + 6, RLENGTH - 6)
-                    gsub(/^[ \t"]+|[ \t"]+$/, "", s_raw)
-                    ssid = s_raw
-                } else if (match(block, /ESSID: [^\n\r]+/)) {
-                    s_raw = substr(block, RSTART + 7, RLENGTH - 7)
-                    gsub(/^[ \t"]+|[ \t"]+$/, "", s_raw)
-                    ssid = s_raw
+                if (match(block, /(SSID|ESSID):[ \t]*[^\n\r]*/)) {
+                    raw_s = substr(block, RSTART, RLENGTH)
+                    sub(/^(SSID|ESSID):[ \t]*/, "", raw_s)
+                    gsub(/^[" \t]+|[" \t]+$/, "", raw_s)
+                    ssid = raw_s
                 }
-                gsub(/"/, "", ssid)
-                if (ssid == "" || ssid == "unknown") ssid = "[Hidden 5G Network]"
+                gsub(/\\/, "\\\\", ssid)
+                gsub(/"/, "\\\"", ssid)
+                gsub(/[\r\n\t]/, " ", ssid)
+                if (ssid == "" || ssid == "unknown") ssid = "[Hidden Network]"
                 
-                chan = "Auto"
-                if (match(block, /primary channel: [0-9]+/)) {
-                    chan = substr(block, RSTART + 17, RLENGTH - 17)
-                } else if (match(block, /freq: [0-9]+/)) {
-                    fval = int(substr(block, RSTART + 6, RLENGTH - 6))
-                    if (fval >= 5000) {
-                        chan = int((fval - 5000) / 5)
-                    } else if (fval >= 2407) {
-                        chan = int((fval - 2407) / 5)
-                    } else {
-                        chan = fval " MHz"
-                    }
+                freq = 0
+                if (match(block, /freq:[ \t]*[0-9]+/)) {
+                    f_str = substr(block, RSTART, RLENGTH)
+                    sub(/freq:[ \t]*/, "", f_str)
+                    freq = int(f_str)
+                } else if (match(block, /Frequency:[ \t]*[0-9.]+/)) {
+                    f_str = substr(block, RSTART, RLENGTH)
+                    sub(/Frequency:[ \t]*/, "", f_str)
+                    if (f_str ~ /\./) freq = int(f_str * 1000)
+                    else freq = int(f_str)
                 }
                 
-                sig = "-75"
-                if (match(block, /signal: -?[0-9]+(\.[0-9]+)? dBm/)) {
-                    s_val = substr(block, RSTART + 8, RLENGTH - 8)
-                    gsub(/ dBm/, "", s_val)
-                    sig = int(s_val)
-                } else if (match(block, /Signal: -?[0-9]+/)) {
-                    sig = substr(block, RSTART + 8, RLENGTH - 8)
+                ch_num = ""
+                if (match(block, /primary channel:[ \t]*[0-9]+/)) {
+                    c_str = substr(block, RSTART, RLENGTH)
+                    sub(/primary channel:[ \t]*/, "", c_str)
+                    ch_num = c_str
+                } else if (match(block, /Channel:[ \t]*[0-9]+/)) {
+                    c_str = substr(block, RSTART, RLENGTH)
+                    sub(/Channel:[ \t]*/, "", c_str)
+                    ch_num = c_str
                 }
+                
+                if (freq >= 4900 && freq <= 6100) {
+                    calc_c = int((freq - 5000) / 5)
+                    if (ch_num != "") chan = freq " MHz (Ch " ch_num ")"
+                    else if (calc_c > 0) chan = freq " MHz (Ch " calc_c ")"
+                    else chan = freq " MHz"
+                } else if (freq >= 2400 && freq <= 2500) {
+                    calc_c = int((freq - 2407) / 5)
+                    chan = freq " MHz (Ch " calc_c ")"
+                } else if (ch_num != "") {
+                    chan = "Ch " ch_num
+                } else {
+                    chan = "Auto"
+                }
+                
+                sig = -75
+                if (match(block, /[Ss]ignal:[ \t]*-?[0-9]+/)) {
+                    sig_s = substr(block, RSTART, RLENGTH)
+                    sub(/[Ss]ignal:[ \t]*/, "", sig_s)
+                    sig = int(sig_s)
+                }
+                
+                sig_pct = int((sig + 95) * 100 / 45)
+                if (sig_pct > 100) sig_pct = 100
+                if (sig_pct < 5) sig_pct = 5
                 
                 sec = "Open"
-                if (block ~ /RSN|WPA2|CCMP/) sec = "WPA2"
+                if (block ~ /WPA3|SAE/) sec = "WPA3"
+                else if (block ~ /RSN|WPA2|CCMP/) sec = "WPA2"
                 else if (block ~ /WPA/) sec = "WPA"
                 else if (block ~ /WEP/) sec = "WEP"
                 
                 if (bssid != "") {
                     if (!first) printf ", "
                     first = 0
-                    printf "{\"ssid\":\"%s\", \"bssid\":\"%s\", \"channel\":\"%s\", \"signal\":%s, \"security\":\"%s\"}", ssid, bssid, chan, sig, sec
+                    printf "{\"ssid\":\"%s\", \"bssid\":\"%s\", \"frequency\":%d, \"channel\":\"%s\", \"signal\":%d, \"signal_pct\":%d, \"security\":\"%s\"}", ssid, bssid, freq, chan, sig, sig_pct, sec
                 }
             }
             END {
@@ -766,6 +803,7 @@ EOF
     wifi_set)
         SSID=$(get_query_val "ssid")
         SSID=$(echo "$SSID" | sed -e 's/^ESSID:[[:space:]]*//i' -e 's/^SSID:[[:space:]]*//i' -e 's/^"//' -e 's/"$//' -e "s/^'//" -e "s/'$//" -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')
+        BSSID=$(get_query_val "bssid")
         KEY=$(get_query_val "key")
         MODE=$(get_query_val "mode")
         CHAN=$(get_query_val "chan")
@@ -778,14 +816,19 @@ EOF
         AUTO_FAILOVER=$(get_query_val "auto_failover")
         [ -z "$AUTO_FAILOVER" ] && AUTO_FAILOVER="0"
         
-        [ -z "$COUNTRY" ] && COUNTRY="US"
+        [ -z "$COUNTRY" ] && COUNTRY="00"
         [ -z "$HTMODE" ] && HTMODE="HT40"
         [ -z "$WIRELESS_PROTO" ] && WIRELESS_PROTO="any"
 
+        # Apply Universal Superchannel & Regulatory Domain
+        iw reg set "$COUNTRY" 2>/dev/null
         uci set wireless.radio0.disabled=0 2>/dev/null
         uci set wireless.radio0.country="$COUNTRY" 2>/dev/null
         uci set wireless.radio0.hwmode="11a" 2>/dev/null
         uci set wireless.radio0.htmode="$HTMODE" 2>/dev/null
+        uci set wireless.radio0.noscan="1" 2>/dev/null
+        uci set wireless.radio0.distance="10000" 2>/dev/null
+        uci set wireless.radio0.ani="1" 2>/dev/null
         uci set wireless.radio0.wireless_protocol="$WIRELESS_PROTO" 2>/dev/null
         
         # In Station Client mode, ALWAYS force channel='auto' so frequency is never locked
@@ -809,7 +852,16 @@ EOF
             uci set wireless.$sec.backup_ssid="$BACKUP_SSID" 2>/dev/null
             uci set wireless.$sec.backup_key="$BACKUP_KEY" 2>/dev/null
             uci set wireless.$sec.auto_failover="$AUTO_FAILOVER" 2>/dev/null
-            uci del wireless.$sec.bssid 2>/dev/null
+            
+            # If explicit BSSID was provided (lock to selected tower AP), set it; otherwise remove lock
+            if [ -n "$BSSID" ] && [ "$BSSID" != "undefined" ] && [ "$BSSID" != "null" ]; then
+                uci set wireless.$sec.bssid="$BSSID" 2>/dev/null
+            else
+                uci del wireless.$sec.bssid 2>/dev/null
+            fi
+            
+            # scan_ssid=1 enables connection to hidden and distant APs
+            uci set wireless.$sec.scan_ssid="1" 2>/dev/null
             rm -f /tmp/delta_failover_active 2>/dev/null
 
             if [ "$MODE" = "sta" ]; then

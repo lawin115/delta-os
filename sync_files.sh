@@ -1,6 +1,6 @@
 #!/bin/bash
 set -e
-WIN_DIR="/mnt/c/Users/Malta Computer/Desktop/mikrotik"
+WIN_DIR="/mnt/c/Users/delta/Desktop/mikrotik"
 OPENWRT_DIR="/home/ubuntu/openwrt"
 
 mkdir -p "$OPENWRT_DIR/files/etc/config"
@@ -71,6 +71,9 @@ done
 
 exit 0
 EOF
-chmod +x "$OPENWRT_DIR/files/etc/rc.local"
+# 6. Copy Superchannel ath9k patches
+mkdir -p "$OPENWRT_DIR/package/kernel/mac80211/patches/ath"
+cp -fv "$WIN_DIR/407-mikrotik-eeprom-accept-all.patch" "$OPENWRT_DIR/package/kernel/mac80211/patches/ath/"
+cp -fv "$WIN_DIR/408-ath9k-superchannel-5mhz-steps.patch" "$OPENWRT_DIR/package/kernel/mac80211/patches/ath/"
 
 echo "=== ALL CUSTOM FILES COPIED AND CONFIGURED SUCCESSFULLY ==="

@@ -1702,10 +1702,10 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label>Regulatory Country</label>
+                                <label>Regulatory Country / Spectrum</label>
                                 <select class="form-control" id="radio-country">
-                                    <option value="US" selected>United States (Channels 36-165)</option>
-                                    <option value="00">Worldwide (Universal 00)</option>
+                                    <option value="00" selected>Worldwide (Universal 00 / Superchannel 4.9G - 6.1G)</option>
+                                    <option value="US">United States (Standard 5GHz)</option>
                                 </select>
                             </div>
                         </div>
@@ -3858,7 +3858,7 @@
         // WIRELESS 5G SCANNER
         async function scanWifi() {
             const tbody = document.getElementById('scan-results-tbody');
-            tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:20px;color:#2563EB;">Scanning 5GHz spectrum...</td></tr>`;
+            tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:20px;color:#2563EB;">Scanning spectrum (4.9GHz - 6.1GHz Superchannel & 5GHz)...</td></tr>`;
 
             try {
                 const res = await fetch(`${API_URL}?action=wifi_scan&token=${authToken}`);
@@ -3875,18 +3875,27 @@
                 }
 
                 if (data && data.status === 'success' && data.scan_results && data.scan_results.length > 0) {
+                    // Sort descending by signal strength (best signal at the top)
+                    data.scan_results.sort((a, b) => (b.signal || -99) - (a.signal || -99));
+                    
                     tbody.innerHTML = data.scan_results.map(r => {
-                        let chDisplay = r.channel;
-                        if (!isNaN(chDisplay)) chDisplay = 'Ch ' + chDisplay;
+                        let chDisplay = r.channel || 'Auto';
+                        let sigPct = r.signal_pct || Math.min(100, Math.max(5, Math.round((r.signal + 95) * 100 / 45)));
+                        let sigColor = r.signal >= -65 ? '#059669' : (r.signal >= -75 ? '#0284C7' : '#D97706');
                         return `
                             <tr>
                                 <td style="font-weight:700;color:#0F172A;">${escapeHtml(r.ssid)}</td>
                                 <td style="font-family:var(--font-mono);">${r.bssid}</td>
-                                <td><span class="badge badge-info">${chDisplay}</span></td>
-                                <td style="font-weight:700;color:#059669;">${r.signal} dBm</td>
+                                <td><span class="badge badge-info" style="font-weight:600;">${chDisplay}</span></td>
+                                <td>
+                                    <div style="display:flex;align-items:center;gap:6px;">
+                                        <span style="font-weight:700;color:${sigColor};">${r.signal} dBm</span>
+                                        <span style="font-size:0.75rem;color:var(--text-muted);font-weight:600;">(${sigPct}%)</span>
+                                    </div>
+                                </td>
                                 <td><span class="badge badge-success">${r.security}</span></td>
                                 <td>
-                                    <button class="btn btn-primary" style="min-height:28px;padding:3px 8px;font-size:0.75rem;" onclick="openWifiConnectModal('${escapeHtml(r.ssid)}', '${r.bssid}', '${r.channel}')">
+                                    <button class="btn btn-primary" style="min-height:28px;padding:3px 10px;font-size:0.75rem;font-weight:700;" onclick="openWifiConnectModal('${escapeHtml(r.ssid)}', '${r.bssid}', '${chDisplay}')">
                                         Connect
                                     </button>
                                 </td>
@@ -3894,17 +3903,17 @@
                         `;
                     }).join('');
                 } else {
-                    tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:20px;color:var(--text-muted);">No 5GHz networks detected. Try scanning again.</td></tr>`;
+                    tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:20px;color:var(--text-muted);">No wireless networks detected. Check antenna alignment and try scanning again.</td></tr>`;
                 }
             } catch (e) {
-                tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:20px;color:var(--text-muted);">No 5GHz networks detected. Try scanning again.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:20px;color:var(--text-muted);">Scan complete. No networks found. Try scanning again.</td></tr>`;
             }
         }
 
         function openWifiConnectModal(ssid, bssid, channel) {
             document.getElementById('modal-ssid').value = ssid;
             document.getElementById('modal-bssid').value = bssid;
-            document.getElementById('modal-channel').value = `Channel ${channel} (5GHz)`;
+            document.getElementById('modal-channel').value = channel;
             document.getElementById('modal-key').value = '';
             document.getElementById('wifi-connect-modal').classList.add('active');
         }
@@ -3951,7 +3960,7 @@
             const ssid = encodeURIComponent(document.getElementById('radio-ssid').value.trim());
             const key = encodeURIComponent(document.getElementById('radio-key').value);
             const htmode = document.getElementById('radio-htmode').value;
-            const country = document.getElementById('radio-country').value;
+            const country = document.getElementById('radio-country').value || '00';
             const backupSsid = encodeURIComponent(document.getElementById('radio-backup-ssid')?.value.trim() || '');
             const backupKey = encodeURIComponent(document.getElementById('radio-backup-key')?.value || '');
             const autoFo = document.getElementById('radio-auto-failover')?.checked ? '1' : '0';
@@ -4002,11 +4011,12 @@
         async function executeWifiConnect(e) {
             e.preventDefault();
             const ssid = encodeURIComponent(document.getElementById('modal-ssid').value);
+            const bssid = encodeURIComponent(document.getElementById('modal-bssid').value);
             const key = encodeURIComponent(document.getElementById('modal-key').value);
             closeWifiConnectModal();
             alert(`Connecting to ${decodeURIComponent(ssid)}...`);
 
-            await fetch(`${API_URL}?action=wifi_set&ssid=${ssid}&key=${key}&mode=sta&htmode=HT40&country=US&token=${authToken}`);
+            await fetch(`${API_URL}?action=wifi_set&ssid=${ssid}&bssid=${bssid}&key=${key}&mode=sta&htmode=HT40&country=00&token=${authToken}`);
             setTimeout(() => { refreshData(); switchTab('wifi'); }, 3000);
         }
 
