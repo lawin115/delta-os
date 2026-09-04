@@ -40,8 +40,10 @@ cp -fv bin/targets/ath79/mikrotik/* "$MIKROTIK_WIN/" 2>/dev/null || true
 # Explicitly copy LHG 5nD / RouterBOARD images to openwrt.bin and sysupgrade.bin
 if [ -f "bin/targets/ath79/mikrotik/openwrt-ath79-mikrotik-mikrotik_routerboard-lhg-5nd-initramfs-kernel.bin" ]; then
     cp -fv "bin/targets/ath79/mikrotik/openwrt-ath79-mikrotik-mikrotik_routerboard-lhg-5nd-initramfs-kernel.bin" "$MIKROTIK_WIN/openwrt.bin"
-    echo "[*] Packaging flash-ready sysupgrade.bin from full initramfs kernel via kernel2minor..."
-    staging_dir/host/bin/kernel2minor -k "$MIKROTIK_WIN/openwrt.bin" -r "$MIKROTIK_WIN/sysupgrade.bin" -s 1024 -e
+fi
+
+if [ -f "bin/targets/ath79/mikrotik/openwrt-ath79-mikrotik-mikrotik_routerboard-lhg-5nd-squashfs-sysupgrade.bin" ]; then
+    cp -fv "bin/targets/ath79/mikrotik/openwrt-ath79-mikrotik-mikrotik_routerboard-lhg-5nd-squashfs-sysupgrade.bin" "$MIKROTIK_WIN/sysupgrade.bin"
 fi
 
 echo "=== FIRMWARE BUILD & DEPLOY COMPLETED SUCCESSFULLY ==="
