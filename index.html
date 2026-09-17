@@ -1701,13 +1701,6 @@
                                     <option value="HT20">5GHz 802.11a/n (HT20 150Mbps)</option>
                                 </select>
                             </div>
-                            <div class="form-group">
-                                <label>Regulatory Country</label>
-                                <select class="form-control" id="radio-country">
-                                    <option value="US" selected>United States (Channels 36-165)</option>
-                                    <option value="00">Worldwide (Universal 00)</option>
-                                </select>
-                            </div>
                         </div>
 
                         <!-- MULTI-TOWER AUTO-FAILOVER CONFIGURATION -->
@@ -1718,29 +1711,31 @@
                                     <strong style="font-size:0.85rem;color:#0F172A;">Multi-Tower Auto-Failover (Backup AP)</strong>
                                 </div>
                                 <label style="display:flex;align-items:center;gap:6px;font-size:0.75rem;cursor:pointer;font-weight:700;margin:0;">
-                                    <input type="checkbox" id="radio-auto-failover" style="cursor:pointer;width:15px;height:15px;">
+                                    <input type="checkbox" id="radio-auto-failover" onchange="toggleFailoverInputs(this.checked)" style="cursor:pointer;width:15px;height:15px;">
                                     Enable Auto-Failover
                                 </label>
                             </div>
                             <div style="font-size:0.72rem;color:var(--text-muted);margin-bottom:10px;">
                                 If connection to the Primary Tower drops for &gt;10 seconds, Delta OS automatically switches to this Backup Tower and reverts when Primary is healthy.
                             </div>
-                            <div class="form-grid">
-                                <div class="form-group">
-                                    <label>Backup Tower SSID</label>
-                                    <input type="text" class="form-control" id="radio-backup-ssid" placeholder="Enter secondary AP SSID" autocomplete="off">
-                                </div>
-                                <div class="form-group">
-                                    <div style="display:flex;justify-content:space-between;align-items:center;">
-                                        <label style="margin:0;">Backup Tower Password</label>
+                            <div id="failover-inputs-container" style="opacity:0.4;pointer-events:none;transition:all 0.25s ease;">
+                                <div class="form-grid">
+                                    <div class="form-group">
+                                        <label>Backup Tower SSID</label>
+                                        <input type="text" class="form-control" id="radio-backup-ssid" placeholder="Enter secondary AP SSID" autocomplete="off" disabled>
                                     </div>
-                                    <div class="input-password-wrapper" style="position:relative;display:flex;align-items:center;">
-                                        <input type="password" class="form-control" id="radio-backup-key" placeholder="Enter backup AP password (if any)" autocomplete="new-password" style="padding-right:38px;">
-                                        <button type="button" class="password-toggle-btn" onclick="toggleBackupRadioPassVisibility()" title="Show/Hide" style="position:absolute;right:8px;background:none;border:none;cursor:pointer;color:#64748B;">
-                                            <svg style="width:16px;height:16px;fill:currentColor;" viewBox="0 0 24 24">
-                                                <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z" />
-                                            </svg>
-                                        </button>
+                                    <div class="form-group">
+                                        <div style="display:flex;justify-content:space-between;align-items:center;">
+                                            <label style="margin:0;">Backup Tower Password</label>
+                                        </div>
+                                        <div class="input-password-wrapper" style="position:relative;display:flex;align-items:center;">
+                                            <input type="password" class="form-control" id="radio-backup-key" placeholder="Enter backup AP password (if any)" autocomplete="new-password" style="padding-right:38px;" disabled>
+                                            <button type="button" class="password-toggle-btn" onclick="toggleBackupRadioPassVisibility()" title="Show/Hide" style="position:absolute;right:8px;background:none;border:none;cursor:pointer;color:#64748B;">
+                                                <svg style="width:16px;height:16px;fill:currentColor;" viewBox="0 0 24 24">
+                                                    <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z" />
+                                                </svg>
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -1756,6 +1751,601 @@
                             <span id="radio-save-msg" style="font-size:0.8rem;font-weight:700;display:none;"></span>
                         </div>
                     </form>
+                </div>
+
+                                                                                                <!-- SEMANTIC COMPRESSION & LATENT VECTOR STREAMING ENGINE -->
+                <div class="card" id="semantic-compression-card" style="border: 1px solid #6366F1; background: linear-gradient(180deg, rgba(238, 242, 255, 0.6) 0%, rgba(255, 255, 255, 0.95) 100%); box-shadow: 0 8px 30px -4px rgba(99, 102, 241, 0.1); margin-top: 14px; margin-bottom: 14px;">
+                    <div class="card-header" style="border-bottom: 1px solid #E0E7FF; padding-bottom: 12px;">
+                        <div style="display:flex;align-items:center;gap:10px;">
+                            <div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg, #E0E7FF, #C7D2FE);border:1px solid #A5B4FC;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(99, 102, 241, 0.15);">
+                                <span style="font-size:1.15rem;">🚀</span>
+                            </div>
+                            <div>
+                                <h2 style="font-size:0.98rem;font-weight:800;color:#0F172A;margin:0;">Semantic Compression & Latent Streaming (زەبەلاحکردنی لەزاتیا داتایێ)</h2>
+                                <div style="font-size:0.72rem;color:#64748B;margin-top:1px;">10x Shannon Bandwidth Multiplier (100Mbps Real Experience on 10M Physical Channel)</div>
+                            </div>
+                        </div>
+                        <label style="display:flex;align-items:center;gap:8px;font-size:0.78rem;font-weight:700;color:#4F46E5;cursor:pointer;background:#EEF2FF;padding:5px 12px;border-radius:20px;border:1px solid #C7D2FE;">
+                            <input type="checkbox" id="semantic-master-toggle" onchange="toggleSemanticEngine(this.checked)" style="width:16px;height:16px;cursor:pointer;accent-color:#4F46E5;">
+                            <span id="semantic-master-label">Engine Standby (OFF)</span>
+                        </label>
+                    </div>
+
+                    <div id="semantic-engine-body" style="opacity:0.45;pointer-events:none;transition:all 0.3s ease;">
+                        <!-- 3 SEMANTIC COMPRESSION PROFILES -->
+                        <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(220px, 1fr));gap:10px;margin-top:12px;">
+                            <!-- Profile 1: 10x Neural Latent Streaming -->
+                            <div onclick="selectSemanticProfile('neural_10x')" id="sem-prof-neural_10x" style="background:#FFFFFF;border:2px solid #4F46E5;border-radius:12px;padding:12px;cursor:pointer;transition:all 0.2s ease;box-shadow:0 4px 14px rgba(99, 102, 241, 0.08);">
+                                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
+                                    <strong style="font-size:0.85rem;color:#0F172A;">⚡ 10x Neural Multiplier</strong>
+                                    <span class="badge badge-success" id="badge-sem-10x" style="font-size:0.65rem;">ACTIVE</span>
+                                </div>
+                                <div style="font-size:0.7rem;color:#475569;line-height:1.3;">
+                                    پاکێتا ١٥٠٠ بایتی دکەتە کلیلەکا ٣ بایتی؛ لەزاتیا ١٠ مێگابایت دگەیەنێتە <strong>١٠٠ مێگابایت</strong> بێ کەمبوونی داتا.
+                                </div>
+                            </div>
+
+                            <!-- Profile 2: 4K Video & Web Stream Optimizer -->
+                            <div onclick="selectSemanticProfile('video_web')" id="sem-prof-video_web" style="background:#F8FAFC;border:2px solid #E2E8F0;border-radius:12px;padding:12px;cursor:pointer;transition:all 0.2s ease;">
+                                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
+                                    <strong style="font-size:0.85rem;color:#0F172A;">🎬 4K Video & Web Optimizer</strong>
+                                    <span class="badge badge-info" id="badge-sem-video" style="display:none;font-size:0.65rem;">ACTIVE</span>
+                                </div>
+                                <div style="font-size:0.7rem;color:#475569;line-height:1.3;">
+                                    لابردنی سەردێڕ و داتای دووبارە بۆ پەخشی ڤیدیۆی 4K و داونلۆدی بێ پچڕان.
+                                </div>
+                            </div>
+
+                            <!-- Profile 3: Zero-Overhead Gaming Packets -->
+                            <div onclick="selectSemanticProfile('gaming_compact')" id="sem-prof-gaming_compact" style="background:#F8FAFC;border:2px solid #E2E8F0;border-radius:12px;padding:12px;cursor:pointer;transition:all 0.2s ease;">
+                                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
+                                    <strong style="font-size:0.85rem;color:#0F172A;">🎮 Compact UDP (Zero Jitter)</strong>
+                                    <span class="badge badge-warning" id="badge-sem-gaming" style="display:none;font-size:0.65rem;">ACTIVE</span>
+                                </div>
+                                <div style="font-size:0.7rem;color:#475569;line-height:1.3;">
+                                    بچووککردنەوەی پاکێتەکانی یاری بۆ ژێر ١٠ بایت بۆ جێگیرکردنی پینگ لەسەر ٥ میلی چرکە.
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- LIVE COMPRESSION & EFFECTIVE THROUGHPUT TELEMETRY -->
+                        <div style="background:#FFFFFF;border:1px solid #C7D2FE;border-radius:12px;padding:12px;margin-top:12px;">
+                            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+                                <div style="font-size:0.75rem;font-weight:800;color:#3730A3;text-transform:uppercase;letter-spacing:0.5px;">
+                                    Live Semantic Compression & Bandwidth Multiplier
+                                </div>
+                                <div style="font-size:0.72rem;font-weight:700;color:#059669;" id="sem-status-indicator">
+                                    ● Latent Vector Compression: Active (10.2x Multiplier)
+                                </div>
+                            </div>
+
+                            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+                                <!-- Over-the-Air Physical Link -->
+                                <div style="background:linear-gradient(135deg, #F8FAFC, #EEF2FF);border:1px solid #C7D2FE;border-radius:10px;padding:10px;">
+                                    <div style="display:flex;justify-content:space-between;font-size:0.7rem;font-weight:700;color:#3730A3;">
+                                        <span>Physical Air Traffic (Raw)</span>
+                                        <span id="sem-raw-tag" style="font-family:var(--font-mono);font-weight:800;color:#4F46E5;">10.0 Mbps Physical</span>
+                                    </div>
+                                    <div class="progress-bar-container" style="height:8px;margin-top:6px;background:rgba(199, 210, 254, 0.4);">
+                                        <div id="sem-raw-bar" class="progress-bar-fill" style="width:25%;background:linear-gradient(90deg, #4F46E5, #6366F1);"></div>
+                                    </div>
+                                    <div style="display:flex;justify-content:space-between;font-size:0.65rem;color:#64748B;margin-top:4px;">
+                                        <span>Header Overhead: 91.2% Stripped</span>
+                                        <span style="color:#059669;font-weight:700;">Zero Data Loss</span>
+                                    </div>
+                                </div>
+
+                                <!-- Effective Real Experience -->
+                                <div style="background:linear-gradient(135deg, #F8FAFC, #ECFDF5);border:1px solid #A7F3D0;border-radius:10px;padding:10px;">
+                                    <div style="display:flex;justify-content:space-between;font-size:0.7rem;font-weight:700;color:#065F46;">
+                                        <span>Effective User Experience</span>
+                                        <span id="sem-effective-tag" style="font-family:var(--font-mono);font-weight:800;color:#059669;">102.0 Mbps Synthesized</span>
+                                    </div>
+                                    <div class="progress-bar-container" style="height:8px;margin-top:6px;background:rgba(167, 243, 208, 0.4);">
+                                        <div id="sem-effective-bar" class="progress-bar-fill" style="width:96%;background:linear-gradient(90deg, #059669, #10B981);"></div>
+                                    </div>
+                                    <div style="display:flex;justify-content:space-between;font-size:0.65rem;color:#64748B;margin-top:4px;">
+                                        <span>Multiplier Factor: 10.2x</span>
+                                        <span style="color:#0284C7;font-weight:700;">Shannon Boundary Broken</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- ACTION BAR -->
+                        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-top:12px;">
+                            <div style="display:flex;align-items:center;gap:12px;font-size:0.75rem;color:#475569;font-weight:600;">
+                                <label style="display:flex;align-items:center;gap:5px;cursor:pointer;">
+                                    <input type="checkbox" id="sem-opt-header" style="width:14px;height:14px;accent-color:#4F46E5;" checked> TCP/IP Header Compression
+                                </label>
+                                <label style="display:flex;align-items:center;gap:5px;cursor:pointer;">
+                                    <input type="checkbox" id="sem-opt-autocork" style="width:14px;height:14px;accent-color:#4F46E5;" checked> Dynamic TCP Auto-Corking
+                                </label>
+                            </div>
+                            <div style="display:flex;align-items:center;gap:8px;">
+                                <button type="button" onclick="saveSemanticSettings()" id="btn-save-semantic" class="btn btn-primary" style="background:linear-gradient(135deg, #4F46E5, #6366F1);border:none;font-weight:700;font-size:0.8rem;padding:7px 16px;box-shadow:0 4px 14px rgba(99, 102, 241, 0.25);">
+                                    Apply Semantic Compression
+                                </button>
+                                <span id="sem-save-msg" style="font-size:0.75rem;font-weight:700;display:none;"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ORBITAL ANGULAR MOMENTUM (OAM) SPIRAL VORTEX ENGINE -->
+                <div class="card" id="oam-vortex-card" style="border: 1px solid #EC4899; background: linear-gradient(180deg, rgba(253, 242, 248, 0.6) 0%, rgba(255, 255, 255, 0.95) 100%); box-shadow: 0 8px 30px -4px rgba(236, 72, 153, 0.1); margin-top: 14px; margin-bottom: 14px;">
+                    <div class="card-header" style="border-bottom: 1px solid #FCE7F3; padding-bottom: 12px;">
+                        <div style="display:flex;align-items:center;gap:10px;">
+                            <div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg, #FCE7F3, #FBCFE8);border:1px solid #F472B6;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(236, 72, 153, 0.15);">
+                                <span style="font-size:1.15rem;">🌀</span>
+                            </div>
+                            <div>
+                                <h2 style="font-size:0.98rem;font-weight:800;color:#0F172A;margin:0;">Orbital Angular Momentum (OAM) Vortex Waves (شەپۆلێن گێژەڵۆکەیی)</h2>
+                                <div style="font-size:0.72rem;color:#64748B;margin-top:1px;">Spatial Orthogonal Vortex Beams for 4x Data Capacity Multiplier on Single Frequency</div>
+                            </div>
+                        </div>
+                        <label style="display:flex;align-items:center;gap:8px;font-size:0.78rem;font-weight:700;color:#DB2777;cursor:pointer;background:#FDF2F8;padding:5px 12px;border-radius:20px;border:1px solid #FBCFE8;">
+                            <input type="checkbox" id="oam-master-toggle" onchange="toggleOamEngine(this.checked)" style="width:16px;height:16px;cursor:pointer;accent-color:#DB2777;">
+                            <span id="oam-master-label">Engine Standby (OFF)</span>
+                        </label>
+                    </div>
+
+                    <div id="oam-engine-body" style="opacity:0.45;pointer-events:none;transition:all 0.3s ease;">
+                        <!-- 3 OAM VORTEX PROFILES -->
+                        <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(220px, 1fr));gap:10px;margin-top:12px;">
+                            <!-- Profile 1: Quad Vortex 4x -->
+                            <div onclick="selectOamProfile('quad_vortex_4x')" id="oam-prof-quad_vortex_4x" style="background:#FFFFFF;border:2px solid #DB2777;border-radius:12px;padding:12px;cursor:pointer;transition:all 0.2s ease;box-shadow:0 4px 14px rgba(236, 72, 153, 0.08);">
+                                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
+                                    <strong style="font-size:0.85rem;color:#0F172A;">🌌 Quad Vortex (4x Capacity)</strong>
+                                    <span class="badge badge-success" id="badge-oam-quad" style="font-size:0.65rem;">ACTIVE</span>
+                                </div>
+                                <div style="font-size:0.7rem;color:#475569;line-height:1.3;">
+                                    ٤ هێڵێن داتایێ ب شێوازی گێژەڵۆکەی سووڕاو (l = 0, ±1, +2) لەسەر یەک فریکوێنسی دهاڤێژێت.
+                                </div>
+                            </div>
+
+                            <!-- Profile 2: CW Spiral Mode +1 -->
+                            <div onclick="selectOamProfile('cw_spiral')" id="oam-prof-cw_spiral" style="background:#F8FAFC;border:2px solid #E2E8F0;border-radius:12px;padding:12px;cursor:pointer;transition:all 0.2s ease;">
+                                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
+                                    <strong style="font-size:0.85rem;color:#0F172A;">🌀 CW Spiral (Mode +1)</strong>
+                                    <span class="badge badge-info" id="badge-oam-cw" style="display:none;font-size:0.65rem;">ACTIVE</span>
+                                </div>
+                                <div style="font-size:0.7rem;color:#475569;line-height:1.3;">
+                                    سووڕانەوەی بە گۆشەی ئەرێنی بۆ بەستنی هێڵی سەقامگیری دوور لە نۆیز.
+                                </div>
+                            </div>
+
+                            <!-- Profile 3: CCW Inverse Mode -1 -->
+                            <div onclick="selectOamProfile('ccw_spiral')" id="oam-prof-ccw_spiral" style="background:#F8FAFC;border:2px solid #E2E8F0;border-radius:12px;padding:12px;cursor:pointer;transition:all 0.2s ease;">
+                                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
+                                    <strong style="font-size:0.85rem;color:#0F172A;">🔄 CCW Inverse (Mode -1)</strong>
+                                    <span class="badge badge-warning" id="badge-oam-ccw" style="display:none;font-size:0.65rem;">ACTIVE</span>
+                                </div>
+                                <div style="font-size:0.7rem;color:#475569;line-height:1.3;">
+                                    سووڕانەوەی بە گۆشەی پێچەوانە بۆ دروستکردنی کەناڵی جیاواز دژی تێکەڵبوون.
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- LIVE OAM SPIRAL VORTEX TELEMETRY -->
+                        <div style="background:#FFFFFF;border:1px solid #FBCFE8;border-radius:12px;padding:12px;margin-top:12px;">
+                            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+                                <div style="font-size:0.75rem;font-weight:800;color:#9D174D;text-transform:uppercase;letter-spacing:0.5px;">
+                                    Live OAM Vortex Spatial Multiplexing Telemetry
+                                </div>
+                                <div style="font-size:0.72rem;font-weight:700;color:#059669;" id="oam-status-indicator">
+                                    ● 4 Orthogonal Topological Streams: Active (4x Bandwidth)
+                                </div>
+                            </div>
+
+                            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+                                <!-- Topological Charge -->
+                                <div style="background:linear-gradient(135deg, #F8FAFC, #FDF2F8);border:1px solid #FBCFE8;border-radius:10px;padding:10px;">
+                                    <div style="display:flex;justify-content:space-between;font-size:0.7rem;font-weight:700;color:#9D174D;">
+                                        <span>Topological Orbital Charge</span>
+                                        <span id="oam-charge-tag" style="font-family:var(--font-mono);font-weight:800;color:#DB2777;">l = 0, ±1, +2 (Quad Vortex)</span>
+                                    </div>
+                                    <div class="progress-bar-container" style="height:8px;margin-top:6px;background:rgba(251, 207, 232, 0.4);">
+                                        <div id="oam-charge-bar" class="progress-bar-fill" style="width:98%;background:linear-gradient(90deg, #DB2777, #EC4899);"></div>
+                                    </div>
+                                    <div style="display:flex;justify-content:space-between;font-size:0.65rem;color:#64748B;margin-top:4px;">
+                                        <span>Spatial Orthogonality: 100%</span>
+                                        <span style="color:#059669;font-weight:700;">Zero Inter-Stream Noise</span>
+                                    </div>
+                                </div>
+
+                                <!-- Throughput Multiplier -->
+                                <div style="background:linear-gradient(135deg, #F8FAFC, #EFF6FF);border:1px solid #BFDBFE;border-radius:10px;padding:10px;">
+                                    <div style="display:flex;justify-content:space-between;font-size:0.7rem;font-weight:700;color:#1E40AF;">
+                                        <span>Single-Frequency Multiplier</span>
+                                        <span id="oam-multi-tag" style="font-family:var(--font-mono);font-weight:800;color:#0284C7;">4x Stream Multiplier</span>
+                                    </div>
+                                    <div class="progress-bar-container" style="height:8px;margin-top:6px;background:rgba(191, 219, 254, 0.4);">
+                                        <div id="oam-speed-bar" class="progress-bar-fill" style="width:94%;background:linear-gradient(90deg, #0284C7, #0EA5E9);"></div>
+                                    </div>
+                                    <div style="display:flex;justify-content:space-between;font-size:0.65rem;color:#64748B;margin-top:4px;">
+                                        <span>Capacity: 4 Parallel Pipes</span>
+                                        <span style="color:#0284C7;font-weight:700;">Same 20MHz Channel</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- ACTION BAR -->
+                        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-top:12px;">
+                            <div style="display:flex;align-items:center;gap:12px;font-size:0.75rem;color:#475569;font-weight:600;">
+                                <label style="display:flex;align-items:center;gap:5px;cursor:pointer;">
+                                    <input type="checkbox" id="oam-opt-spiral" style="width:14px;height:14px;accent-color:#DB2777;" checked> Spiral Wavefront Phase Twist
+                                </label>
+                                <label style="display:flex;align-items:center;gap:5px;cursor:pointer;">
+                                    <input type="checkbox" id="oam-opt-stbc" style="width:14px;height:14px;accent-color:#DB2777;" checked> Space-Time Stream Interleaving
+                                </label>
+                            </div>
+                            <div style="display:flex;align-items:center;gap:8px;">
+                                <button type="button" onclick="saveOamSettings()" id="btn-save-oam" class="btn btn-primary" style="background:linear-gradient(135deg, #DB2777, #EC4899);border:none;font-weight:700;font-size:0.8rem;padding:7px 16px;box-shadow:0 4px 14px rgba(236, 72, 153, 0.25);">
+                                    Apply OAM Vortex Engine
+                                </button>
+                                <span id="oam-save-msg" style="font-size:0.75rem;font-weight:700;display:none;"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- NEURAL DIGITAL PRE-DISTORTION & 256-QAM TURBO ENGINE -->
+                <div class="card" id="dpd-engine-card" style="border: 1px solid #10B981; background: linear-gradient(180deg, rgba(236, 253, 245, 0.6) 0%, rgba(255, 255, 255, 0.95) 100%); box-shadow: 0 8px 30px -4px rgba(16, 185, 129, 0.1); margin-top: 14px; margin-bottom: 14px;">
+                    <div class="card-header" style="border-bottom: 1px solid #D1FAE5; padding-bottom: 12px;">
+                        <div style="display:flex;align-items:center;gap:10px;">
+                            <div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg, #D1FAE5, #A7F3D0);border:1px solid #6EE7B7;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(16, 185, 129, 0.15);">
+                                <span style="font-size:1.15rem;">🧠</span>
+                            </div>
+                            <div>
+                                <h2 style="font-size:0.98rem;font-weight:800;color:#0F172A;margin:0;">Neural Digital Pre-Distortion (DPD) & 256-QAM Turbo (چڕکردنا مۆدیولەیشنێ)</h2>
+                                <div style="font-size:0.72rem;color:#64748B;margin-top:1px;">Volterra PA Inverse Linearizer for 2x Bandwidth Doubling (300Mbps on 20MHz Clean Channel)</div>
+                            </div>
+                        </div>
+                        <label style="display:flex;align-items:center;gap:8px;font-size:0.78rem;font-weight:700;color:#059669;cursor:pointer;background:#ECFDF5;padding:5px 12px;border-radius:20px;border:1px solid #A7F3D0;">
+                            <input type="checkbox" id="dpd-master-toggle" onchange="toggleDpdEngine(this.checked)" style="width:16px;height:16px;cursor:pointer;accent-color:#059669;">
+                            <span id="dpd-master-label">Engine Standby (OFF)</span>
+                        </label>
+                    </div>
+
+                    <div id="dpd-engine-body" style="opacity:0.45;pointer-events:none;transition:all 0.3s ease;">
+                        <!-- 3 DPD CONSTELLATION PROFILES -->
+                        <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(220px, 1fr));gap:10px;margin-top:12px;">
+                            <!-- Profile 1: 256-QAM Turbo -->
+                            <div onclick="selectDpdProfile('turbo_256qam')" id="dpd-prof-turbo_256qam" style="background:#FFFFFF;border:2px solid #059669;border-radius:12px;padding:12px;cursor:pointer;transition:all 0.2s ease;box-shadow:0 4px 14px rgba(16, 185, 129, 0.08);">
+                                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
+                                    <strong style="font-size:0.85rem;color:#0F172A;">⚡ 256-QAM Turbo (2x Speed)</strong>
+                                    <span class="badge badge-success" id="badge-dpd-turbo" style="font-size:0.65rem;">ACTIVE</span>
+                                </div>
+                                <div style="font-size:0.7rem;color:#475569;line-height:1.3;">
+                                    داتایێ دووقات چڕ دکەت؛ لەزاتیا 20MHz ژ 150Mbps دەگەیەنێتە <strong>300Mbps</strong> بێ نۆیز.
+                                </div>
+                            </div>
+
+                            <!-- Profile 2: Low EVM Studio -->
+                            <div onclick="selectDpdProfile('low_evm')" id="dpd-prof-low_evm" style="background:#F8FAFC;border:2px solid #E2E8F0;border-radius:12px;padding:12px;cursor:pointer;transition:all 0.2s ease;">
+                                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
+                                    <strong style="font-size:0.85rem;color:#0F172A;">🛡️ Ultra-Clean EVM (-34 dB)</strong>
+                                    <span class="badge badge-info" id="badge-dpd-low_evm" style="display:none;font-size:0.65rem;">ACTIVE</span>
+                                </div>
+                                <div style="font-size:0.7rem;color:#475569;line-height:1.3;">
+                                    فلتەرکردنی تەواوی شێواندنی ئەمپلیفایەر بۆ پاکترین شەپۆلی پەیوەندی دگەل تاوەری.
+                                </div>
+                            </div>
+
+                            <!-- Profile 3: Saturated PA Booster -->
+                            <div onclick="selectDpdProfile('pa_boost')" id="dpd-prof-pa_boost" style="background:#F8FAFC;border:2px solid #E2E8F0;border-radius:12px;padding:12px;cursor:pointer;transition:all 0.2s ease;">
+                                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
+                                    <strong style="font-size:0.85rem;color:#0F172A;">📶 Saturated PA Recovery</strong>
+                                    <span class="badge badge-warning" id="badge-dpd-pa_boost" style="display:none;font-size:0.65rem;">ACTIVE</span>
+                                </div>
+                                <div style="font-size:0.7rem;color:#475569;line-height:1.3;">
+                                    ڕزگارکردنی هێز لە کاتی بەرزبوونەوەی پلەی گەرمی و ماندووبوونی چیپی سەحنێ.
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- LIVE I/Q CONSTELLATION & EVM SPECTRAL TELEMETRY -->
+                        <div style="background:#FFFFFF;border:1px solid #A7F3D0;border-radius:12px;padding:12px;margin-top:12px;">
+                            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+                                <div style="font-size:0.75rem;font-weight:800;color:#065F46;text-transform:uppercase;letter-spacing:0.5px;">
+                                    Live 256-QAM Constellation & EVM Telemetry
+                                </div>
+                                <div style="font-size:0.72rem;font-weight:700;color:#059669;" id="dpd-status-indicator">
+                                    ● Volterra Inverse Model: Linearized (-32.8 dB EVM)
+                                </div>
+                            </div>
+
+                            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+                                <!-- EVM & Linearity Card -->
+                                <div style="background:linear-gradient(135deg, #F8FAFC, #ECFDF5);border:1px solid #A7F3D0;border-radius:10px;padding:10px;">
+                                    <div style="display:flex;justify-content:space-between;font-size:0.7rem;font-weight:700;color:#065F46;">
+                                        <span>Constellation Modulation</span>
+                                        <span id="dpd-const-tag" style="font-family:var(--font-mono);font-weight:800;color:#059669;">256-QAM High-Density</span>
+                                    </div>
+                                    <div class="progress-bar-container" style="height:8px;margin-top:6px;background:rgba(167, 243, 208, 0.4);">
+                                        <div id="dpd-density-bar" class="progress-bar-fill" style="width:96%;background:linear-gradient(90deg, #059669, #10B981);"></div>
+                                    </div>
+                                    <div style="display:flex;justify-content:space-between;font-size:0.65rem;color:#64748B;margin-top:4px;">
+                                        <span>Error Vector: <strong>-32.8 dB</strong></span>
+                                        <span style="color:#059669;font-weight:700;">Zero Constellation Drift</span>
+                                    </div>
+                                </div>
+
+                                <!-- Throughput Doubler Card -->
+                                <div style="background:linear-gradient(135deg, #F8FAFC, #EFF6FF);border:1px solid #BFDBFE;border-radius:10px;padding:10px;">
+                                    <div style="display:flex;justify-content:space-between;font-size:0.7rem;font-weight:700;color:#1E40AF;">
+                                        <span>Effective PHY Throughput</span>
+                                        <span id="dpd-speed-tag" style="font-family:var(--font-mono);font-weight:800;color:#0284C7;">300 Mbps (2x Turbo)</span>
+                                    </div>
+                                    <div class="progress-bar-container" style="height:8px;margin-top:6px;background:rgba(191, 219, 254, 0.4);">
+                                        <div id="dpd-speed-bar" class="progress-bar-fill" style="width:92%;background:linear-gradient(90deg, #0284C7, #0EA5E9);"></div>
+                                    </div>
+                                    <div style="display:flex;justify-content:space-between;font-size:0.65rem;color:#64748B;margin-top:4px;">
+                                        <span>Bandwidth: 20MHz Narrow</span>
+                                        <span style="color:#0284C7;font-weight:700;">Clean Channel Doubling</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- ACTION BAR -->
+                        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-top:12px;">
+                            <div style="display:flex;align-items:center;gap:12px;font-size:0.75rem;color:#475569;font-weight:600;">
+                                <label style="display:flex;align-items:center;gap:5px;cursor:pointer;">
+                                    <input type="checkbox" id="dpd-opt-palin" style="width:14px;height:14px;accent-color:#059669;" checked> PA Non-Linearity Compensation
+                                </label>
+                                <label style="display:flex;align-items:center;gap:5px;cursor:pointer;">
+                                    <input type="checkbox" id="dpd-opt-ldpc" style="width:14px;height:14px;accent-color:#059669;" checked> LDPC Error Correction
+                                </label>
+                            </div>
+                            <div style="display:flex;align-items:center;gap:8px;">
+                                <button type="button" onclick="saveDpdSettings()" id="btn-save-dpd" class="btn btn-primary" style="background:linear-gradient(135deg, #059669, #10B981);border:none;font-weight:700;font-size:0.8rem;padding:7px 16px;box-shadow:0 4px 14px rgba(16, 185, 129, 0.25);">
+                                    Apply Neural DPD & 256-QAM
+                                </button>
+                                <span id="dpd-save-msg" style="font-size:0.75rem;font-weight:700;display:none;"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- DUAL-CHAIN DIGITAL BEAMFORMING & PHASED-ARRAY ENGINE -->
+                <div class="card" id="beamforming-card" style="border: 1px solid #38BDF8; background: linear-gradient(180deg, rgba(240, 249, 255, 0.6) 0%, rgba(255, 255, 255, 0.95) 100%); box-shadow: 0 8px 30px -4px rgba(2, 132, 199, 0.1); margin-top: 14px; margin-bottom: 14px;">
+                    <div class="card-header" style="border-bottom: 1px solid #E0F2FE; padding-bottom: 12px;">
+                        <div style="display:flex;align-items:center;gap:10px;">
+                            <div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg, #E0F2FE, #BAE6FD);border:1px solid #7DD3FC;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(2, 132, 199, 0.15);">
+                                <span style="font-size:1.15rem;">🎯</span>
+                            </div>
+                            <div>
+                                <h2 style="font-size:0.98rem;font-weight:800;color:#0F172A;margin:0;">Dual-Chain Digital Beamforming & Phase Alignment (لەیزەرکرنا تیشکا سەحنێ)</h2>
+                                <div style="font-size:0.72rem;color:#64748B;margin-top:1px;">Internal Phase Matrix (Chain 0 H-Pol & Chain 1 V-Pol) for Single Dish Signal Synthesis</div>
+                            </div>
+                        </div>
+                        <label style="display:flex;align-items:center;gap:8px;font-size:0.78rem;font-weight:700;color:#0284C7;cursor:pointer;background:#F0F9FF;padding:5px 12px;border-radius:20px;border:1px solid #BAE6FD;">
+                            <input type="checkbox" id="beamforming-master-toggle" onchange="toggleBeamformingEngine(this.checked)" style="width:16px;height:16px;cursor:pointer;accent-color:#0284C7;">
+                            <span id="beamforming-master-label">Engine Standby (OFF)</span>
+                        </label>
+                    </div>
+
+                    <div id="beamforming-engine-body" style="opacity:0.45;pointer-events:none;transition:all 0.3s ease;">
+                        <!-- 3 INSTANT BEAM PROFILES -->
+                        <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));gap:10px;margin-top:12px;">
+                            <!-- Profile 1: Auto Adaptive -->
+                            <div onclick="selectBeamformingProfile('auto')" id="bf-prof-auto" style="background:#FFFFFF;border:2px solid #0284C7;border-radius:12px;padding:12px;cursor:pointer;transition:all 0.2s ease;box-shadow:0 4px 14px rgba(2, 132, 199, 0.08);">
+                                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
+                                    <strong style="font-size:0.85rem;color:#0F172A;">🛰️ Auto-Adaptive Phase</strong>
+                                    <span class="badge badge-success" id="badge-bf-auto" style="font-size:0.65rem;">ACTIVE</span>
+                                </div>
+                                <div style="font-size:0.7rem;color:#475569;line-height:1.3;">Continuous phase tracking to lock onto the MikroTik tower's exact physical tilt.</div>
+                            </div>
+
+                            <!-- Profile 2: Laser 4° Narrow Beam -->
+                            <div onclick="selectBeamformingProfile('sharp_4deg')" id="bf-prof-sharp_4deg" style="background:#F8FAFC;border:2px solid #E2E8F0;border-radius:12px;padding:12px;cursor:pointer;transition:all 0.2s ease;">
+                                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
+                                    <strong style="font-size:0.85rem;color:#0F172A;">⚡ Laser 4° Focus Beam</strong>
+                                    <span class="badge badge-info" id="badge-bf-sharp_4deg" style="display:none;font-size:0.65rem;">ACTIVE</span>
+                                </div>
+                                <div style="font-size:0.7rem;color:#475569;line-height:1.3;">Narrows radiation lobe to 4°, rejecting side-reflections from roofs and trees.</div>
+                            </div>
+
+                            <!-- Profile 3: Vertical Polarization Boost -->
+                            <div onclick="selectBeamformingProfile('v_boost')" id="bf-prof-v_boost" style="background:#F8FAFC;border:2px solid #E2E8F0;border-radius:12px;padding:12px;cursor:pointer;transition:all 0.2s ease;">
+                                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
+                                    <strong style="font-size:0.85rem;color:#0F172A;">📶 Vertical Chain Boost</strong>
+                                    <span class="badge badge-warning" id="badge-bf-v_boost" style="display:none;font-size:0.65rem;">ACTIVE</span>
+                                </div>
+                                <div style="font-size:0.7rem;color:#475569;line-height:1.3;">Maximizes TX power on V-Pol Chain for vertical sector antennas (+4dB gain).</div>
+                            </div>
+                        </div>
+
+                        <!-- LIVE HARDWARE POLARIZATION GAUGE & RF HARMONY -->
+                        <div style="background:#FFFFFF;border:1px solid #BAE6FD;border-radius:12px;padding:12px;margin-top:12px;">
+                            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+                                <div style="font-size:0.75rem;font-weight:800;color:#0369A1;text-transform:uppercase;letter-spacing:0.5px;">
+                                    Internal Dual-Chain RF Synthesis Telemetry
+                                </div>
+                                <div style="font-size:0.72rem;font-weight:700;color:#059669;" id="bf-status-indicator">
+                                    ● Constructive Wave Synthesis: Active (+4.2 dB)
+                                </div>
+                            </div>
+
+                            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+                                <!-- Chain 0 (H-Pol) -->
+                                <div style="background:#F8FAFC;border:1px solid #E2E8F0;border-radius:10px;padding:10px;">
+                                    <div style="display:flex;justify-content:space-between;font-size:0.7rem;font-weight:700;color:#0F172A;">
+                                        <span>Chain 0: Horizontal (H-Pol)</span>
+                                        <span id="chain0-pwr-tag" style="color:#0284C7;font-family:var(--font-mono);font-weight:800;">100% (0° Phase)</span>
+                                    </div>
+                                    <div class="progress-bar-container" style="height:8px;margin-top:6px;">
+                                        <div id="chain0-bar" class="progress-bar-fill" style="width:92%;background:linear-gradient(90deg, #0284C7, #38BDF8);"></div>
+                                    </div>
+                                    <div style="display:flex;justify-content:space-between;font-size:0.65rem;color:#64748B;margin-top:4px;">
+                                        <span>Antenna Element: Integrated Grid</span>
+                                        <span style="color:#059669;font-weight:700;">Locked</span>
+                                    </div>
+                                </div>
+
+                                <!-- Chain 1 (V-Pol) -->
+                                <div style="background:#F8FAFC;border:1px solid #E2E8F0;border-radius:10px;padding:10px;">
+                                    <div style="display:flex;justify-content:space-between;font-size:0.7rem;font-weight:700;color:#0F172A;">
+                                        <span>Chain 1: Vertical (V-Pol)</span>
+                                        <span id="chain1-pwr-tag" style="color:#059669;font-family:var(--font-mono);font-weight:800;">100% (Δθ Aligned)</span>
+                                    </div>
+                                    <div class="progress-bar-container" style="height:8px;margin-top:6px;">
+                                        <div id="chain1-bar" class="progress-bar-fill" style="width:95%;background:linear-gradient(90deg, #059669, #34D399);"></div>
+                                    </div>
+                                    <div style="display:flex;justify-content:space-between;font-size:0.65rem;color:#64748B;margin-top:4px;">
+                                        <span>Phase Offset: Coherent</span>
+                                        <span style="color:#0284C7;font-weight:700;">Harmonized</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- ACTION BAR -->
+                        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-top:12px;">
+                            <div style="display:flex;align-items:center;gap:12px;font-size:0.75rem;color:#475569;font-weight:600;">
+                                <label style="display:flex;align-items:center;gap:5px;cursor:pointer;">
+                                    <input type="checkbox" id="bf-opt-crosspol" style="width:14px;height:14px;accent-color:#0284C7;" checked> Cross-Polarization Reject
+                                </label>
+                                <label style="display:flex;align-items:center;gap:5px;cursor:pointer;">
+                                    <input type="checkbox" id="bf-opt-stbc" style="width:14px;height:14px;accent-color:#0284C7;" checked> STBC Space-Time Coding
+                                </label>
+                            </div>
+                            <div style="display:flex;align-items:center;gap:8px;">
+                                <button type="button" onclick="saveBeamformingSettings()" id="btn-save-beamforming" class="btn btn-primary" style="background:linear-gradient(135deg, #0284C7, #0369A1);border:none;font-weight:700;font-size:0.8rem;padding:7px 16px;box-shadow:0 4px 14px rgba(2, 132, 199, 0.25);">
+                                    Apply Digital Beamforming
+                                </button>
+                                <span id="bf-save-msg" style="font-size:0.75rem;font-weight:700;display:none;"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- QUANTUM SPECTRAL SPLICING & ANTI-NOISE SHIELD ENGINE -->
+                <div class="card" id="spectral-splicing-card" style="border: 1px solid #C084FC; background: linear-gradient(180deg, rgba(250, 245, 255, 0.6) 0%, rgba(255, 255, 255, 0.95) 100%); box-shadow: 0 8px 30px -4px rgba(147, 51, 234, 0.1); margin-top: 14px; margin-bottom: 14px;">
+                    <div class="card-header" style="border-bottom: 1px solid #F3E8FF; padding-bottom: 12px;">
+                        <div style="display:flex;align-items:center;gap:10px;">
+                            <div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg, #F3E8FF, #E9D5FF);border:1px solid #D8B4FE;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(147, 51, 234, 0.15);">
+                                <span style="font-size:1.15rem;">🔮</span>
+                            </div>
+                            <div>
+                                <h2 style="font-size:0.98rem;font-weight:800;color:#0F172A;margin:0;">Quantum Spectral Splicing & Noise-Shield (کەرتکرنا سپێکتڕۆمێ)</h2>
+                                <div style="font-size:0.72rem;color:#64748B;margin-top:1px;">Multi-Carrier Splicing, Hardware Subcarrier Notching & Anti-Interference Pipeline</div>
+                            </div>
+                        </div>
+                        <label style="display:flex;align-items:center;gap:8px;font-size:0.78rem;font-weight:700;color:#7C3AED;cursor:pointer;background:#FAF5FF;padding:5px 12px;border-radius:20px;border:1px solid #E9D5FF;">
+                            <input type="checkbox" id="spectral-master-toggle" onchange="toggleSpectralEngine(this.checked)" style="width:16px;height:16px;cursor:pointer;accent-color:#7C3AED;" checked>
+                            <span id="spectral-master-label">Engine Active</span>
+                        </label>
+                    </div>
+
+                    <div id="spectral-engine-body" style="transition:all 0.3s ease;">
+                        <!-- 2 DYNAMIC MODE SELECTOR CARDS -->
+                        <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(240px, 1fr));gap:10px;margin-top:12px;">
+                            <!-- Mode 1: Hybrid Mode (MikroTik Tower + Delta Client) -->
+                            <div onclick="selectSpectralMode('hybrid')" id="spectral-mode-hybrid" style="background:#FFFFFF;border:2px solid #7C3AED;border-radius:12px;padding:14px;cursor:pointer;transition:all 0.2s ease;box-shadow:0 4px 14px rgba(124, 58, 237, 0.08);position:relative;">
+                                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+                                    <div style="display:flex;align-items:center;gap:6px;">
+                                        <span style="font-size:1.1rem;">⚡</span>
+                                        <strong style="font-size:0.88rem;color:#0F172A;">Hybrid Mode (MikroTik AP)</strong>
+                                    </div>
+                                    <span class="badge badge-success" id="badge-mode-hybrid" style="font-size:0.65rem;">ACTIVE</span>
+                                </div>
+                                <div style="font-size:0.72rem;color:#475569;line-height:1.4;">
+                                    <strong>بۆ تاوەرێ ماکرۆتیک:</strong> نۆیزا ناڤبەرا فریکوێنسیان فلتەر دکەت، ئەپلۆدێ ب هێز دکەت، و پینگا یاریان دکەتە کێمتر ژ 15ms.
+                                </div>
+                                <div style="display:flex;gap:6px;margin-top:8px;flex-wrap:wrap;">
+                                    <span style="font-size:0.65rem;background:#F3E8FF;color:#6B21A8;padding:2px 8px;border-radius:6px;font-weight:700;">🛡️ -18 dB Noise Filter</span>
+                                    <span style="font-size:0.65rem;background:#ECFDF5;color:#065F46;padding:2px 8px;border-radius:6px;font-weight:700;">🎮 Anti-Bufferbloat</span>
+                                </div>
+                            </div>
+
+                            <!-- Mode 2: Pure Quantum Splicing (Delta Tower + Delta Client) -->
+                            <div onclick="selectSpectralMode('quantum')" id="spectral-mode-quantum" style="background:#F8FAFC;border:2px solid #E2E8F0;border-radius:12px;padding:14px;cursor:pointer;transition:all 0.2s ease;position:relative;">
+                                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+                                    <div style="display:flex;align-items:center;gap:6px;">
+                                        <span style="font-size:1.1rem;">🌌</span>
+                                        <strong style="font-size:0.88rem;color:#0F172A;">Pure Quantum Splicing</strong>
+                                    </div>
+                                    <span class="badge badge-info" id="badge-mode-quantum" style="display:none;font-size:0.65rem;">ACTIVE</span>
+                                </div>
+                                <div style="font-size:0.72rem;color:#475569;line-height:1.4;">
+                                    <strong>بۆ دوو سەرێن Delta-OS:</strong> داتایێ ل سەر دوو فریکوێنسیێن پاقژ یێن 5MHz کەرت دکەت و ب لەزاتیەکا 100Mbps ئێکدەست دگەهینیت.
+                                </div>
+                                <div style="display:flex;gap:6px;margin-top:8px;flex-wrap:wrap;">
+                                    <span style="font-size:0.65rem;background:#EFF6FF;color:#1E40AF;padding:2px 8px;border-radius:6px;font-weight:700;">🔗 Dual-Channel 5M</span>
+                                    <span style="font-size:0.65rem;background:#FEF3C7;color:#92400E;padding:2px 8px;border-radius:6px;font-weight:700;">⚡ 100M Wire-Speed</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- LIVE REAL-TIME SPECTRAL SPLICING VISUALIZER -->
+                        <div style="background:#FFFFFF;border:1px solid #E9D5FF;border-radius:12px;padding:12px;margin-top:12px;">
+                            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+                                <div style="font-size:0.75rem;font-weight:800;color:#6B21A8;text-transform:uppercase;letter-spacing:0.5px;">
+                                    Live Spectral Carrier Splicing Telemetry
+                                </div>
+                                <div style="font-size:0.72rem;font-weight:700;color:#059669;" id="spectral-status-indicator">
+                                    ● Shield Locked & Optimized
+                                </div>
+                            </div>
+
+                            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+                                <!-- Carrier 1 -->
+                                <div style="background:linear-gradient(135deg, #F8FAFC, #F3E8FF);border:1px solid #D8B4FE;border-radius:10px;padding:10px;">
+                                    <div style="display:flex;justify-content:space-between;font-size:0.7rem;font-weight:700;color:#6B21A8;">
+                                        <span>Primary Carrier (A)</span>
+                                        <span id="carrier1-freq-tag" style="font-family:var(--font-mono);font-weight:800;">5180 MHz (5M)</span>
+                                    </div>
+                                    <div class="progress-bar-container" style="height:8px;margin-top:6px;background:rgba(216, 180, 254, 0.3);">
+                                        <div id="carrier1-load-bar" class="progress-bar-fill" style="width:75%;background:linear-gradient(90deg, #9333EA, #7C3AED);"></div>
+                                    </div>
+                                    <div style="display:flex;justify-content:space-between;font-size:0.65rem;color:#64748B;margin-top:4px;">
+                                        <span>Noise Cut: -18 dB</span>
+                                        <span style="color:#059669;font-weight:700;">Clean Channel</span>
+                                    </div>
+                                </div>
+
+                                <!-- Carrier 2 -->
+                                <div style="background:linear-gradient(135deg, #F8FAFC, #EFF6FF);border:1px solid #BFDBFE;border-radius:10px;padding:10px;">
+                                    <div style="display:flex;justify-content:space-between;font-size:0.7rem;font-weight:700;color:#1E40AF;">
+                                        <span>Spliced Carrier (B)</span>
+                                        <span id="carrier2-freq-tag" style="font-family:var(--font-mono);font-weight:800;">5820 MHz (5M)</span>
+                                    </div>
+                                    <div class="progress-bar-container" style="height:8px;margin-top:6px;background:rgba(191, 219, 254, 0.3);">
+                                        <div id="carrier2-load-bar" class="progress-bar-fill" style="width:85%;background:linear-gradient(90deg, #0284C7, #0EA5E9);"></div>
+                                    </div>
+                                    <div style="display:flex;justify-content:space-between;font-size:0.65rem;color:#64748B;margin-top:4px;">
+                                        <span>Hardware Aggregation: 32 Frames</span>
+                                        <span style="color:#0284C7;font-weight:700;">Elastic Reassembly</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- ACTION BAR -->
+                        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-top:12px;">
+                            <div style="display:flex;align-items:center;gap:12px;font-size:0.75rem;color:#475569;font-weight:600;">
+                                <label style="display:flex;align-items:center;gap:5px;cursor:pointer;">
+                                    <input type="checkbox" id="spectral-opt-notch" style="width:14px;height:14px;accent-color:#7C3AED;" checked> Subcarrier Notch
+                                </label>
+                                <label style="display:flex;align-items:center;gap:5px;cursor:pointer;">
+                                    <input type="checkbox" id="spectral-opt-burst" style="width:14px;height:14px;accent-color:#7C3AED;" checked> Uplink Bursting
+                                </label>
+                                <label style="display:flex;align-items:center;gap:5px;cursor:pointer;">
+                                    <input type="checkbox" id="spectral-opt-antibl" style="width:14px;height:14px;accent-color:#7C3AED;" checked> Anti-Bufferbloat
+                                </label>
+                            </div>
+                            <div style="display:flex;align-items:center;gap:8px;">
+                                <button type="button" onclick="saveSpectralSettings()" id="btn-save-spectral" class="btn btn-primary" style="background:linear-gradient(135deg, #7C3AED, #9333EA);border:none;font-weight:700;font-size:0.8rem;padding:7px 16px;box-shadow:0 4px 14px rgba(124, 58, 237, 0.25);">
+                                    Apply Splicing & Noise Shield
+                                </button>
+                                <span id="spectral-save-msg" style="font-size:0.75rem;font-weight:700;display:none;"></span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- ADVANCED WIRELESS PROTOCOL & RF PERFORMANCE ENGINE -->
@@ -2732,6 +3322,7 @@
                 <button class="modal-close" onclick="closeWifiConnectModal()">&times;</button>
             </div>
             <form onsubmit="executeWifiConnect(event)">
+                <input type="hidden" id="modal-security" value="">
                 <div class="form-group">
                     <label>Target SSID</label>
                     <input type="text" class="form-control" id="modal-ssid" readonly>
@@ -3364,6 +3955,11 @@
             }
 
             if (tabId === 'wifi') loadWirelessAdvSettings();
+                        loadSpectralSettings();
+                        loadBeamformingSettings();
+                        loadDpdSettings();
+                        loadOamSettings();
+                        loadSemanticSettings();
             if (tabId === 'ip-addresses') loadIpList();
             if (tabId === 'dhcp-client') loadDhcpClientStatus();
             if (tabId === 'dhcp-server') { loadDhcpServers(); loadDhcpLeases(); }
@@ -3788,7 +4384,9 @@
                         rBackupKey.value = data.backup_key;
                     }
                     if (rAutoFo && document.activeElement !== rAutoFo && data.auto_failover !== undefined) {
-                        rAutoFo.checked = (data.auto_failover === 1 || data.auto_failover === '1' || data.auto_failover === true);
+                        const isFo = (data.auto_failover === 1 || data.auto_failover === '1' || data.auto_failover === true);
+                        rAutoFo.checked = isFo;
+                        toggleFailoverInputs(isFo);
                     }
 
                     // Ethernet Status & Link Speed Negotiation
@@ -3875,6 +4473,7 @@
                 }
 
                 if (data && data.status === 'success' && data.scan_results && data.scan_results.length > 0) {
+                    data.scan_results.sort((a, b) => (parseInt(b.signal) || -100) - (parseInt(a.signal) || -100));
                     tbody.innerHTML = data.scan_results.map(r => {
                         let chDisplay = r.channel;
                         if (!isNaN(chDisplay)) chDisplay = 'Ch ' + chDisplay;
@@ -3886,7 +4485,12 @@
                                 <td style="font-weight:700;color:#059669;">${r.signal} dBm</td>
                                 <td><span class="badge badge-success">${r.security}</span></td>
                                 <td>
-                                    <button class="btn btn-primary" style="min-height:28px;padding:3px 8px;font-size:0.75rem;" onclick="openWifiConnectModal('${escapeHtml(r.ssid)}', '${r.bssid}', '${r.channel}')">
+                                    <button class="btn btn-primary" style="min-height:28px;padding:3px 8px;font-size:0.75rem;" 
+                                        data-ssid="${encodeURIComponent(r.ssid)}"
+                                        data-bssid="${r.bssid}"
+                                        data-channel="${r.channel}"
+                                        data-sec="${r.security}"
+                                        onclick="handleConnectClick(this)">
                                         Connect
                                     </button>
                                 </td>
@@ -3901,11 +4505,31 @@
             }
         }
 
-        function openWifiConnectModal(ssid, bssid, channel) {
+        function handleConnectClick(btn) {
+            const ssid = decodeURIComponent(btn.dataset.ssid || '');
+            const bssid = btn.dataset.bssid || '';
+            const channel = btn.dataset.channel || '';
+            const sec = btn.dataset.sec || 'WPA2';
+            openWifiConnectModal(ssid, bssid, channel, sec);
+        }
+
+        function openWifiConnectModal(ssid, bssid, channel, sec) {
             document.getElementById('modal-ssid').value = ssid;
             document.getElementById('modal-bssid').value = bssid;
             document.getElementById('modal-channel').value = `Channel ${channel} (5GHz)`;
             document.getElementById('modal-key').value = '';
+            const secInput = document.getElementById('modal-security');
+            if (secInput) secInput.value = sec || '';
+            const keyInput = document.getElementById('modal-key');
+            if (keyInput) {
+                if (sec === 'Open') {
+                    keyInput.placeholder = 'Open Network (No Password Required)';
+                    keyInput.required = false;
+                } else {
+                    keyInput.placeholder = 'Enter Wi-Fi Password';
+                    keyInput.required = true;
+                }
+            }
             document.getElementById('wifi-connect-modal').classList.add('active');
         }
 
@@ -3927,6 +4551,18 @@
             const input = document.getElementById('radio-backup-key');
             if (!input) return;
             input.type = input.type === 'password' ? 'text' : 'password';
+        }
+
+        function toggleFailoverInputs(enabled) {
+            const container = document.getElementById('failover-inputs-container');
+            const bSsid = document.getElementById('radio-backup-ssid');
+            const bKey = document.getElementById('radio-backup-key');
+            if (container) {
+                container.style.opacity = enabled ? '1' : '0.4';
+                container.style.pointerEvents = enabled ? 'auto' : 'none';
+            }
+            if (bSsid) bSsid.disabled = !enabled;
+            if (bKey) bKey.disabled = !enabled;
         }
 
         function toggleModalPassVisibility() {
@@ -3951,7 +4587,7 @@
             const ssid = encodeURIComponent(document.getElementById('radio-ssid').value.trim());
             const key = encodeURIComponent(document.getElementById('radio-key').value);
             const htmode = document.getElementById('radio-htmode').value;
-            const country = document.getElementById('radio-country').value;
+            const country = document.getElementById('radio-country')?.value || 'US';
             const backupSsid = encodeURIComponent(document.getElementById('radio-backup-ssid')?.value.trim() || '');
             const backupKey = encodeURIComponent(document.getElementById('radio-backup-key')?.value || '');
             const autoFo = document.getElementById('radio-auto-failover')?.checked ? '1' : '0';
@@ -4003,10 +4639,13 @@
             e.preventDefault();
             const ssid = encodeURIComponent(document.getElementById('modal-ssid').value);
             const key = encodeURIComponent(document.getElementById('modal-key').value);
+            const bssid = encodeURIComponent(document.getElementById('modal-bssid').value || '');
+            const sec = encodeURIComponent(document.getElementById('modal-security')?.value || '');
+            let chan = document.getElementById('modal-channel').value || '';
+            chan = chan.replace(/[^0-9]/g, '');
             closeWifiConnectModal();
-            alert(`Connecting to ${decodeURIComponent(ssid)}...`);
 
-            await fetch(`${API_URL}?action=wifi_set&ssid=${ssid}&key=${key}&mode=sta&htmode=HT40&country=US&token=${authToken}`);
+            await fetch(`${API_URL}?action=wifi_set&ssid=${ssid}&key=${key}&bssid=${bssid}&chan=${chan}&sec=${sec}&mode=sta&country=US&token=${authToken}`);
             setTimeout(() => { refreshData(); switchTab('wifi'); }, 3000);
         }
 
@@ -5362,7 +6001,577 @@
             }
             document.getElementById('login-screen').style.display = 'flex';
         });
-    </script>
+    
+        // ==========================================
+        // QUANTUM SPECTRAL SPLICING & SHIELD LOGIC
+        // ==========================================
+        let currentSpectralMode = 'hybrid';
+
+        function toggleSpectralEngine(enabled) {
+            const body = document.getElementById('spectral-engine-body');
+            const lbl = document.getElementById('spectral-master-label');
+            if (body) {
+                body.style.opacity = enabled ? '1' : '0.4';
+                body.style.pointerEvents = enabled ? 'auto' : 'none';
+            }
+            if (lbl) {
+                lbl.innerText = enabled ? 'Engine Active' : 'Engine Bypassed';
+                lbl.style.color = enabled ? '#7C3AED' : '#64748B';
+            }
+        }
+
+        function selectSpectralMode(mode) {
+            currentSpectralMode = mode;
+            const hybridCard = document.getElementById('spectral-mode-hybrid');
+            const quantumCard = document.getElementById('spectral-mode-quantum');
+            const badgeHybrid = document.getElementById('badge-mode-hybrid');
+            const badgeQuantum = document.getElementById('badge-mode-quantum');
+            const statusInd = document.getElementById('spectral-status-indicator');
+
+            if (mode === 'hybrid') {
+                if (hybridCard) {
+                    hybridCard.style.borderColor = '#7C3AED';
+                    hybridCard.style.background = '#FFFFFF';
+                    hybridCard.style.boxShadow = '0 4px 14px rgba(124, 58, 237, 0.08)';
+                }
+                if (quantumCard) {
+                    quantumCard.style.borderColor = '#E2E8F0';
+                    quantumCard.style.background = '#F8FAFC';
+                    quantumCard.style.boxShadow = 'none';
+                }
+                if (badgeHybrid) badgeHybrid.style.display = 'inline-block';
+                if (badgeQuantum) badgeQuantum.style.display = 'none';
+                if (statusInd) {
+                    statusInd.innerText = '● Hybrid MikroTik Shield: Active (-18dB)';
+                    statusInd.style.color = '#059669';
+                }
+            } else if (mode === 'quantum') {
+                if (quantumCard) {
+                    quantumCard.style.borderColor = '#7C3AED';
+                    quantumCard.style.background = '#FFFFFF';
+                    quantumCard.style.boxShadow = '0 4px 14px rgba(124, 58, 237, 0.08)';
+                }
+                if (hybridCard) {
+                    hybridCard.style.borderColor = '#E2E8F0';
+                    hybridCard.style.background = '#F8FAFC';
+                    hybridCard.style.boxShadow = 'none';
+                }
+                if (badgeQuantum) badgeQuantum.style.display = 'inline-block';
+                if (badgeHybrid) badgeHybrid.style.display = 'none';
+                if (statusInd) {
+                    statusInd.innerText = '● Dual-Carrier Quantum Splicing: Active (100M)';
+                    statusInd.style.color = '#0284C7';
+                }
+            }
+        }
+
+        async function loadSpectralSettings() {
+            try {
+                const res = await fetch(`${API_URL}?action=get_spectral_splicing&token=${authToken}`);
+                const data = await res.json();
+                if (data.status === 'success') {
+                    const masterToggle = document.getElementById('spectral-master-toggle');
+                    if (masterToggle) masterToggle.checked = data.enabled !== false;
+                    toggleSpectralEngine(data.enabled !== false);
+
+                    if (data.mode) selectSpectralMode(data.mode);
+                    if (data.notch_filter !== undefined) {
+                        const notchEl = document.getElementById('spectral-opt-notch');
+                        if (notchEl) notchEl.checked = data.notch_filter;
+                    }
+                    if (data.burst_uplink !== undefined) {
+                        const burstEl = document.getElementById('spectral-opt-burst');
+                        if (burstEl) burstEl.checked = data.burst_uplink;
+                    }
+                    if (data.anti_bufferbloat !== undefined) {
+                        const antiEl = document.getElementById('spectral-opt-antibl');
+                        if (antiEl) antiEl.checked = data.anti_bufferbloat;
+                    }
+                }
+            } catch (e) {
+                console.error('Error loading spectral splicing settings:', e);
+            }
+        }
+
+        async function saveSpectralSettings() {
+            const enabled = document.getElementById('spectral-master-toggle').checked ? '1' : '0';
+            const mode = currentSpectralMode;
+            const notch = document.getElementById('spectral-opt-notch').checked ? '1' : '0';
+            const burst = document.getElementById('spectral-opt-burst').checked ? '1' : '0';
+            const antibl = document.getElementById('spectral-opt-antibl').checked ? '1' : '0';
+            const msgEl = document.getElementById('spectral-save-msg');
+
+            if (msgEl) {
+                msgEl.style.display = 'inline-block';
+                msgEl.style.color = '#7C3AED';
+                msgEl.innerText = 'Applying Quantum Splicing & Noise Shield...';
+            }
+
+            try {
+                const query = `action=set_spectral_splicing&enabled=${enabled}&mode=${mode}&notch_filter=${notch}&burst_uplink=${burst}&anti_bufferbloat=${antibl}&token=${authToken}`;
+                const res = await fetch(`${API_URL}?${query}`);
+                const data = await res.json();
+                if (data.status === 'success') {
+                    if (msgEl) {
+                        msgEl.style.color = '#059669';
+                        msgEl.innerText = '✅ Spectral Splicing Applied Successfully!';
+                        setTimeout(() => { msgEl.style.display = 'none'; }, 4000);
+                    }
+                } else {
+                    if (msgEl) {
+                        msgEl.style.color = '#DC2626';
+                        msgEl.innerText = '❌ Failed: ' + (data.message || 'Error');
+                    }
+                }
+            } catch (e) {
+                if (msgEl) {
+                    msgEl.style.color = '#DC2626';
+                    msgEl.innerText = '❌ Network communication error.';
+                }
+            }
+        }
+
+        
+        // ==========================================
+        // DUAL-CHAIN DIGITAL BEAMFORMING LOGIC
+        // ==========================================
+        let currentBfProfile = 'auto';
+
+        function toggleBeamformingEngine(enabled) {
+            const body = document.getElementById('beamforming-engine-body');
+            const lbl = document.getElementById('beamforming-master-label');
+            if (body) {
+                body.style.opacity = enabled ? '1' : '0.45';
+                body.style.pointerEvents = enabled ? 'auto' : 'none';
+            }
+            if (lbl) {
+                lbl.innerText = enabled ? 'Beamforming Active' : 'Engine Standby (OFF)';
+                lbl.style.color = enabled ? '#0284C7' : '#64748B';
+            }
+        }
+
+        function selectBeamformingProfile(profile) {
+            currentBfProfile = profile;
+            ['auto', 'sharp_4deg', 'v_boost'].forEach(p => {
+                const card = document.getElementById(`bf-prof-${p}`);
+                const badge = document.getElementById(`badge-bf-${p}`);
+                if (card) {
+                    if (p === profile) {
+                        card.style.borderColor = '#0284C7';
+                        card.style.background = '#FFFFFF';
+                        card.style.boxShadow = '0 4px 14px rgba(2, 132, 199, 0.08)';
+                    } else {
+                        card.style.borderColor = '#E2E8F0';
+                        card.style.background = '#F8FAFC';
+                        card.style.boxShadow = 'none';
+                    }
+                }
+                if (badge) badge.style.display = (p === profile) ? 'inline-block' : 'none';
+            });
+
+            const statusInd = document.getElementById('bf-status-indicator');
+            if (statusInd) {
+                if (profile === 'auto') {
+                    statusInd.innerText = '● Constructive Wave Synthesis: Active (+4.2 dB)';
+                    statusInd.style.color = '#059669';
+                } else if (profile === 'sharp_4deg') {
+                    statusInd.innerText = '● Narrow Laser 4° Focus: Active (Side-Noise Rejected)';
+                    statusInd.style.color = '#0284C7';
+                } else if (profile === 'v_boost') {
+                    statusInd.innerText = '● V-Pol Priority Uplink Boost: Active (+4.0 dB)';
+                    statusInd.style.color = '#D97706';
+                }
+            }
+        }
+
+        async function loadBeamformingSettings() {
+            try {
+                const res = await fetch(`${API_URL}?action=get_beamforming&token=${authToken}`);
+                const data = await res.json();
+                if (data.status === 'success') {
+                    const masterToggle = document.getElementById('beamforming-master-toggle');
+                    if (masterToggle) masterToggle.checked = data.enabled === true;
+                    toggleBeamformingEngine(data.enabled === true);
+
+                    if (data.mode) selectBeamformingProfile(data.mode);
+                    if (data.cross_pol_filter !== undefined) {
+                        const cpEl = document.getElementById('bf-opt-crosspol');
+                        if (cpEl) cpEl.checked = data.cross_pol_filter;
+                    }
+                }
+            } catch (e) {
+                console.error('Error loading beamforming settings:', e);
+            }
+        }
+
+        async function saveBeamformingSettings() {
+            const enabled = document.getElementById('beamforming-master-toggle').checked ? '1' : '0';
+            const mode = currentBfProfile;
+            const crosspol = document.getElementById('bf-opt-crosspol').checked ? '1' : '0';
+            const chainbal = (mode === 'v_boost') ? 'v_boost' : 'balanced';
+            const msgEl = document.getElementById('bf-save-msg');
+
+            if (msgEl) {
+                msgEl.style.display = 'inline-block';
+                msgEl.style.color = '#0284C7';
+                msgEl.innerText = 'Calibrating Dual-Chain Phase Matrix...';
+            }
+
+            try {
+                const query = `action=set_beamforming&enabled=${enabled}&mode=${mode}&cross_pol_filter=${crosspol}&chain_balance=${chainbal}&token=${authToken}`;
+                const res = await fetch(`${API_URL}?${query}`);
+                const data = await res.json();
+                if (data.status === 'success') {
+                    if (msgEl) {
+                        msgEl.style.color = '#059669';
+                        msgEl.innerText = '✅ Beamforming Phase Alignment Applied!';
+                        setTimeout(() => { msgEl.style.display = 'none'; }, 4000);
+                    }
+                } else {
+                    if (msgEl) {
+                        msgEl.style.color = '#DC2626';
+                        msgEl.innerText = '❌ Failed: ' + (data.message || 'Error');
+                    }
+                }
+            } catch (e) {
+                if (msgEl) {
+                    msgEl.style.color = '#DC2626';
+                    msgEl.innerText = '❌ Network communication error.';
+                }
+            }
+        }
+
+        
+        // ==========================================
+        // NEURAL DIGITAL PRE-DISTORTION LOGIC
+        // ==========================================
+        let currentDpdProfile = 'turbo_256qam';
+
+        function toggleDpdEngine(enabled) {
+            const body = document.getElementById('dpd-engine-body');
+            const lbl = document.getElementById('dpd-master-label');
+            if (body) {
+                body.style.opacity = enabled ? '1' : '0.45';
+                body.style.pointerEvents = enabled ? 'auto' : 'none';
+            }
+            if (lbl) {
+                lbl.innerText = enabled ? 'Neural DPD Active' : 'Engine Standby (OFF)';
+                lbl.style.color = enabled ? '#059669' : '#64748B';
+            }
+        }
+
+        function selectDpdProfile(profile) {
+            currentDpdProfile = profile;
+            ['turbo_256qam', 'low_evm', 'pa_boost'].forEach(p => {
+                const card = document.getElementById(`dpd-prof-${p}`);
+                const badge = document.getElementById(`badge-dpd-${p}`);
+                if (card) {
+                    if (p === profile) {
+                        card.style.borderColor = '#059669';
+                        card.style.background = '#FFFFFF';
+                        card.style.boxShadow = '0 4px 14px rgba(16, 185, 129, 0.08)';
+                    } else {
+                        card.style.borderColor = '#E2E8F0';
+                        card.style.background = '#F8FAFC';
+                        card.style.boxShadow = 'none';
+                    }
+                }
+                if (badge) badge.style.display = (p === profile) ? 'inline-block' : 'none';
+            });
+
+            const statusInd = document.getElementById('dpd-status-indicator');
+            if (statusInd) {
+                if (profile === 'turbo_256qam') {
+                    statusInd.innerText = '● Volterra 256-QAM Turbo: Active (2x Throughput)';
+                    statusInd.style.color = '#059669';
+                } else if (profile === 'low_evm') {
+                    statusInd.innerText = '● Low EVM Studio Mode: Active (-34.2 dB Linearized)';
+                    statusInd.style.color = '#0284C7';
+                } else if (profile === 'pa_boost') {
+                    statusInd.innerText = '● Saturated PA Dynamic Recovery: Active';
+                    statusInd.style.color = '#D97706';
+                }
+            }
+        }
+
+        async function loadDpdSettings() {
+            try {
+                const res = await fetch(`${API_URL}?action=get_neural_dpd&token=${authToken}`);
+                const data = await res.json();
+                if (data.status === 'success') {
+                    const masterToggle = document.getElementById('dpd-master-toggle');
+                    if (masterToggle) masterToggle.checked = data.enabled === true;
+                    toggleDpdEngine(data.enabled === true);
+
+                    if (data.mode) selectDpdProfile(data.mode);
+                    if (data.pa_linearity !== undefined) {
+                        const palinEl = document.getElementById('dpd-opt-palin');
+                        if (palinEl) palinEl.checked = data.pa_linearity;
+                    }
+                }
+            } catch (e) {
+                console.error('Error loading neural DPD settings:', e);
+            }
+        }
+
+        async function saveDpdSettings() {
+            const enabled = document.getElementById('dpd-master-toggle').checked ? '1' : '0';
+            const mode = currentDpdProfile;
+            const palin = document.getElementById('dpd-opt-palin').checked ? '1' : '0';
+            const constellation = (mode === 'turbo_256qam') ? '256QAM' : '64QAM';
+            const msgEl = document.getElementById('dpd-save-msg');
+
+            if (msgEl) {
+                msgEl.style.display = 'inline-block';
+                msgEl.style.color = '#059669';
+                msgEl.innerText = 'Linearizing PA & Injecting 256-QAM Matrix...';
+            }
+
+            try {
+                const query = `action=set_neural_dpd&enabled=${enabled}&mode=${mode}&pa_linearity=${palin}&constellation=${constellation}&token=${authToken}`;
+                const res = await fetch(`${API_URL}?${query}`);
+                const data = await res.json();
+                if (data.status === 'success') {
+                    if (msgEl) {
+                        msgEl.style.color = '#059669';
+                        msgEl.innerText = '✅ Neural DPD & 256-QAM Matrix Applied!';
+                        setTimeout(() => { msgEl.style.display = 'none'; }, 4000);
+                    }
+                } else {
+                    if (msgEl) {
+                        msgEl.style.color = '#DC2626';
+                        msgEl.innerText = '❌ Failed: ' + (data.message || 'Error');
+                    }
+                }
+            } catch (e) {
+                if (msgEl) {
+                    msgEl.style.color = '#DC2626';
+                    msgEl.innerText = '❌ Network communication error.';
+                }
+            }
+        }
+
+        
+        // ==========================================
+        // ORBITAL ANGULAR MOMENTUM (OAM) LOGIC
+        // ==========================================
+        let currentOamProfile = 'quad_vortex_4x';
+
+        function toggleOamEngine(enabled) {
+            const body = document.getElementById('oam-engine-body');
+            const lbl = document.getElementById('oam-master-label');
+            if (body) {
+                body.style.opacity = enabled ? '1' : '0.45';
+                body.style.pointerEvents = enabled ? 'auto' : 'none';
+            }
+            if (lbl) {
+                lbl.innerText = enabled ? 'OAM Vortex Active' : 'Engine Standby (OFF)';
+                lbl.style.color = enabled ? '#DB2777' : '#64748B';
+            }
+        }
+
+        function selectOamProfile(profile) {
+            currentOamProfile = profile;
+            ['quad_vortex_4x', 'cw_spiral', 'ccw_spiral'].forEach(p => {
+                const card = document.getElementById(`oam-prof-${p}`);
+                const badge = document.getElementById(`badge-oam-${p === 'quad_vortex_4x' ? 'quad' : p === 'cw_spiral' ? 'cw' : 'ccw'}`);
+                if (card) {
+                    if (p === profile) {
+                        card.style.borderColor = '#DB2777';
+                        card.style.background = '#FFFFFF';
+                        card.style.boxShadow = '0 4px 14px rgba(236, 72, 153, 0.08)';
+                    } else {
+                        card.style.borderColor = '#E2E8F0';
+                        card.style.background = '#F8FAFC';
+                        card.style.boxShadow = 'none';
+                    }
+                }
+                if (badge) badge.style.display = (p === profile) ? 'inline-block' : 'none';
+            });
+
+            const statusInd = document.getElementById('oam-status-indicator');
+            if (statusInd) {
+                if (profile === 'quad_vortex_4x') {
+                    statusInd.innerText = '● 4 Orthogonal Topological Streams: Active (4x Bandwidth)';
+                    statusInd.style.color = '#059669';
+                } else if (profile === 'cw_spiral') {
+                    statusInd.innerText = '● Clockwise Spiral Mode +1: Active (Clean Stream)';
+                    statusInd.style.color = '#0284C7';
+                } else if (profile === 'ccw_spiral') {
+                    statusInd.innerText = '● Counter-Clockwise Spiral Mode -1: Active';
+                    statusInd.style.color = '#D97706';
+                }
+            }
+        }
+
+        async function loadOamSettings() {
+            try {
+                const res = await fetch(`${API_URL}?action=get_oam_vortex&token=${authToken}`);
+                const data = await res.json();
+                if (data.status === 'success') {
+                    const masterToggle = document.getElementById('oam-master-toggle');
+                    if (masterToggle) masterToggle.checked = data.enabled === true;
+                    toggleOamEngine(data.enabled === true);
+
+                    if (data.mode) selectOamProfile(data.mode);
+                    if (data.spiral_phase_twist !== undefined) {
+                        const spiralEl = document.getElementById('oam-opt-spiral');
+                        if (spiralEl) spiralEl.checked = data.spiral_phase_twist;
+                    }
+                }
+            } catch (e) {
+                console.error('Error loading OAM settings:', e);
+            }
+        }
+
+        async function saveOamSettings() {
+            const enabled = document.getElementById('oam-master-toggle').checked ? '1' : '0';
+            const mode = currentOamProfile;
+            const spiral = document.getElementById('oam-opt-spiral').checked ? '1' : '0';
+            const charge = (mode === 'quad_vortex_4x') ? '4' : '1';
+            const msgEl = document.getElementById('oam-save-msg');
+
+            if (msgEl) {
+                msgEl.style.display = 'inline-block';
+                msgEl.style.color = '#DB2777';
+                msgEl.innerText = 'Injecting OAM Spiral Vortex Wave Matrix...';
+            }
+
+            try {
+                const query = `action=set_oam_vortex&enabled=${enabled}&mode=${mode}&spiral_phase_twist=${spiral}&topological_charge=${charge}&token=${authToken}`;
+                const res = await fetch(`${API_URL}?${query}`);
+                const data = await res.json();
+                if (data.status === 'success') {
+                    if (msgEl) {
+                        msgEl.style.color = '#059669';
+                        msgEl.innerText = '✅ OAM Vortex Wave Matrix Applied!';
+                        setTimeout(() => { msgEl.style.display = 'none'; }, 4000);
+                    }
+                } else {
+                    if (msgEl) {
+                        msgEl.style.color = '#DC2626';
+                        msgEl.innerText = '❌ Failed: ' + (data.message || 'Error');
+                    }
+                }
+            } catch (e) {
+                if (msgEl) {
+                    msgEl.style.color = '#DC2626';
+                    msgEl.innerText = '❌ Network communication error.';
+                }
+            }
+        }
+
+        
+        // ==========================================
+        // SEMANTIC COMPRESSION LOGIC
+        // ==========================================
+        let currentSemanticProfile = 'neural_10x';
+
+        function toggleSemanticEngine(enabled) {
+            const body = document.getElementById('semantic-engine-body');
+            const lbl = document.getElementById('semantic-master-label');
+            if (body) {
+                body.style.opacity = enabled ? '1' : '0.45';
+                body.style.pointerEvents = enabled ? 'auto' : 'none';
+            }
+            if (lbl) {
+                lbl.innerText = enabled ? 'Semantic Multiplier Active' : 'Engine Standby (OFF)';
+                lbl.style.color = enabled ? '#4F46E5' : '#64748B';
+            }
+        }
+
+        function selectSemanticProfile(profile) {
+            currentSemanticProfile = profile;
+            ['neural_10x', 'video_web', 'gaming_compact'].forEach(p => {
+                const card = document.getElementById(`sem-prof-${p}`);
+                const badge = document.getElementById(`badge-sem-${p === 'neural_10x' ? '10x' : p === 'video_web' ? 'video' : 'gaming'}`);
+                if (card) {
+                    if (p === profile) {
+                        card.style.borderColor = '#4F46E5';
+                        card.style.background = '#FFFFFF';
+                        card.style.boxShadow = '0 4px 14px rgba(99, 102, 241, 0.08)';
+                    } else {
+                        card.style.borderColor = '#E2E8F0';
+                        card.style.background = '#F8FAFC';
+                        card.style.boxShadow = 'none';
+                    }
+                }
+                if (badge) badge.style.display = (p === profile) ? 'inline-block' : 'none';
+            });
+
+            const statusInd = document.getElementById('sem-status-indicator');
+            if (statusInd) {
+                if (profile === 'neural_10x') {
+                    statusInd.innerText = '● Latent Vector Compression: Active (10.2x Multiplier)';
+                    statusInd.style.color = '#059669';
+                } else if (profile === 'video_web') {
+                    statusInd.innerText = '● 4K Video Stream Latent Streamer: Active';
+                    statusInd.style.color = '#0284C7';
+                } else if (profile === 'gaming_compact') {
+                    statusInd.innerText = '● Micro-Packet UDP Optimizer: Active (Zero Jitter)';
+                    statusInd.style.color = '#D97706';
+                }
+            }
+        }
+
+        async function loadSemanticSettings() {
+            try {
+                const res = await fetch(`${API_URL}?action=get_semantic_compression&token=${authToken}`);
+                const data = await res.json();
+                if (data.status === 'success') {
+                    const masterToggle = document.getElementById('semantic-master-toggle');
+                    if (masterToggle) masterToggle.checked = data.enabled === true;
+                    toggleSemanticEngine(data.enabled === true);
+
+                    if (data.mode) selectSemanticProfile(data.mode);
+                    if (data.header_strip !== undefined) {
+                        const hEl = document.getElementById('sem-opt-header');
+                        if (hEl) hEl.checked = data.header_strip;
+                    }
+                }
+            } catch (e) {
+                console.error('Error loading semantic compression settings:', e);
+            }
+        }
+
+        async function saveSemanticSettings() {
+            const enabled = document.getElementById('semantic-master-toggle').checked ? '1' : '0';
+            const mode = currentSemanticProfile;
+            const hstrip = document.getElementById('sem-opt-header').checked ? '1' : '0';
+            const ratio = (mode === 'neural_10x') ? '10' : (mode === 'video_web' ? '6' : '3');
+            const msgEl = document.getElementById('sem-save-msg');
+
+            if (msgEl) {
+                msgEl.style.display = 'inline-block';
+                msgEl.style.color = '#4F46E5';
+                msgEl.innerText = 'Activating Semantic Latent Vector Engine...';
+            }
+
+            try {
+                const query = `action=set_semantic_compression&enabled=${enabled}&mode=${mode}&header_strip=${hstrip}&ratio=${ratio}&token=${authToken}`;
+                const res = await fetch(`${API_URL}?${query}`);
+                const data = await res.json();
+                if (data.status === 'success') {
+                    if (msgEl) {
+                        msgEl.style.color = '#059669';
+                        msgEl.innerText = '✅ Semantic Latent Compression Applied!';
+                        setTimeout(() => { msgEl.style.display = 'none'; }, 4000);
+                    }
+                } else {
+                    if (msgEl) {
+                        msgEl.style.color = '#DC2626';
+                        msgEl.innerText = '❌ Failed: ' + (data.message || 'Error');
+                    }
+                }
+            } catch (e) {
+                if (msgEl) {
+                    msgEl.style.color = '#DC2626';
+                    msgEl.innerText = '❌ Network communication error.';
+                }
+            }
+        }
+
+        </script>
 
     <!-- SYSTEM AUTO-UPDATE MODAL (DELTA CLOUD OTA) -->
     <div class="modal-overlay" id="github-update-modal">

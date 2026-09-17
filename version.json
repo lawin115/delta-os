@@ -1,8 +1,8 @@
 {
     "status": "success",
-    "latest_version": "v2.7",
+    "latest_version": "v2.8",
     "update_available": true,
-    "release_date": "2026-08-26",
+    "release_date": "2026-09-17",
     "firmware_url": "https://raw.githubusercontent.com/lawin115/delta-os/main/sysupgrade.bin",
-    "changelog": "Delta OS Pro v2.7: 0ms Parallel Async UI Load, Unified Web & SSH Credentials Sync, Password Eye Toggles, Zero-RAM Direct NOR Flash & Enhanced MikroTik NetInstall Engine."
+    "changelog": "Delta OS Pro v2.8: Ultra-reliable 5GHz WiFi scanning & connection engine, fast boot sequence, and web dashboard improvements."
 }
